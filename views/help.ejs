@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Ayuda y Preguntas Frecuentes — Möno</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background-color: #14181C;
+            color: #FFFFFF;
+            font-family: 'Satoshi', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .help-hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(255, 85, 0, 0.05) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .help-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,85,0,0.15);
+            border: 1px solid rgba(255,85,0,0.3);
+            padding: 5px 14px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 16px;
+        }
+        .help-title {
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            margin: 0 0 12px 0;
+            color: #FFFFFF;
+        }
+        .help-subtitle {
+            font-size: 16px;
+            color: var(--muted);
+            max-width: 540px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin: 48px 0;
+        }
+        .help-card {
+            background: #181D22;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .help-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 85, 0, 0.3);
+        }
+        .help-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: #14181C;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+        .help-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.4px;
+        }
+        .help-card p {
+            font-size: 14px;
+            color: #CAD2D9;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .faq-section {
+            margin: 60px auto;
+            max-width: 800px;
+        }
+        .faq-item {
+            background: #181D22;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            margin-bottom: 14px;
+            padding: 20px 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+        .faq-q {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin: 0 0 8px 0;
+        }
+        .faq-a {
+            font-size: 14px;
+            color: #CAD2D9;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .faq-a a {
+            color: var(--orange);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .faq-a a:hover {
+            text-decoration: underline;
+        }
+        .faq-a code {
+            background: #14181C;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #FF5500;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="help-hero">
+        <div class="wrap">
+            <div class="help-badge">
+                <span>✦</span> Centro de Ayuda & FAQ
+            </div>
+            <h1 class="help-title">¿Cómo podemos ayudarte?</h1>
+            <p class="help-subtitle">Guías rápidas sobre cómo registrar tus animes, calificar episodios, crear listas y aprovechar al máximo Möno.</p>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="help-grid">
+            <div class="help-card">
+                <div class="help-card-icon">★</div>
+                <h3>Calificaciones de 0 a 5 Estrellas</h3>
+                <p>Podés calificar cada anime con medias estrellas (desde 0.5 hasta 5.0). Cada calificación actualiza automáticamente tu promedio y se sincroniza en tu perfil.</p>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-icon">📑</div>
+                <h3>Una Sola Entrada por Anime</h3>
+                <p>En Möno tus reseñas y calificaciones se concentran en una sola solapa por anime. Si modificás tu opinión o tu nota, tu entrada se actualiza directamente.</p>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-icon">⏳</div>
+                <h3>Animes en Emisión</h3>
+                <p>Para animes en emisión (como Frieren o One Piece), el contador de episodios está protegido para que no marques episodios que aún no se han transmitido.</p>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-icon">🗂️</div>
+                <h3>Listas Personalizadas</h3>
+                <p>Crea listas temáticas, ordenalas, agregá descripciones y compartilas con amigos o la comunidad cinéfila del anime.</p>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-icon">💬</div>
+                <h3>Reseñas y Spoilers</h3>
+                <p>Escribe lo que sentiste en cada temporada o episodio. Si tu comentario contiene spoilers, marcalo con la casilla correspondiente para proteger a otros miembros.</p>
+            </div>
+
+            <div class="help-card">
+                <div class="help-card-icon">⚙️</div>
+                <h3>Perfil & Top 5</h3>
+                <p>Personalizá tu bio, avatar y tus 5 animes favoritos destacados para que todos conozcan tu gusto visual al ingresar a tu perfil.</p>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2 style="font-size:26px; font-weight:800; letter-spacing:-0.8px; margin-bottom:24px; text-align:center; color:#FFFFFF;">Preguntas Frecuentes</h2>
+            
+            <div class="faq-item">
+                <div class="faq-q">¿Möno es gratuito?</div>
+                <div class="faq-a">Sí, Möno es 100% gratuito para todos los usuarios. Podés registrar una cuenta, catalogar todo tu historial y compartir tus listas libremente.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-q">¿Cómo busco un anime o película?</div>
+                <div class="faq-a">Presiona la tecla <code>/</code> en cualquier parte de la web o haz clic en el ícono de búsqueda en la barra superior para abrir el buscador en tiempo real.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-q">¿Cómo edito o borro un comentario?</div>
+                <div class="faq-a">En tus comentarios de cada episodio o en la solapa de tu reseña, verás los botones de "Editar" y "Eliminar" para gestionar tus aportes cuando quieras.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-q">¿Tienen API para desarrolladores?</div>
+                <div class="faq-a">Sí, contamos con endpoints REST para consultar el catálogo de animes, listas y estadísticas públicas. Consulta nuestra sección de <a href="/api-docs">API & Documentación</a>.</div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

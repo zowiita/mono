@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title><%= locals.anime ? anime.title : 'Anime' %> — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+/* Banner with fade effect */
+.banner {
+    width: 100%;
+    height: 450px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 60%, transparent 100%);
+    position: absolute;
+    top: 56px; left: 0; z-index: 1;
+}
+
+/* Page Layout */
+.page-wrap {
+    position: relative; z-index: 10;
+    padding-bottom: 80px;
+    margin-top: 420px; /* Title below banner */
+}
+.content-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px; align-items: start;
+}
+
+/* Sidebar */
+.sidebar {
+    display: flex; flex-direction: column; gap: 16px;
+    margin-top: -150px;
+}
+.poster-img {
+    width: 100%; aspect-ratio: 2/3; object-fit: cover;
+    border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Stats Row */
+.stats-row {
+    display: flex; justify-content: center; gap: 16px;
+    font-size: 13px; font-weight: 600; color: var(--muted);
+}
+.stat-item {
+    display: flex; align-items: center; gap: 4px;
+    position: relative; cursor: default; transition: color 0.15s;
+}
+.stat-item:hover { color: var(--ink); }
+.stat-item svg { width: 14px; height: 14px; fill: currentColor; }
+
+/* Tooltip for stats */
+.stat-tooltip {
+    position: absolute; bottom: 100%; left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background: var(--ink); color: #fff;
+    padding: 6px 10px; border-radius: 4px;
+    font-size: 11px; white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 0.15s; z-index: 20;
+}
+.stat-item:hover .stat-tooltip { opacity: 1; }
+
+/* Actions Panel */
+.btn-log-huge {
+    background: var(--blue); color: #fff; width: 100%; padding: 12px;
+    border-radius: 6px; font-size: 15px; font-weight: 700;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-log-huge:hover {
+    transform: translateY(-2px); box-shadow: 0 4px 12px rgba(40, 13, 194, 0.3);
+}
+
+.secondary-actions {
+    display: flex; gap: 8px; justify-content: center;
+}
+.btn-icon {
+    flex: 1; background: transparent; border: none; color: var(--muted);
+    padding: 10px 0; border-radius: 6px; display: flex; justify-content: center;
+    align-items: center; cursor: pointer; transition: color 0.15s;
+}
+.btn-icon:hover, .btn-icon.active { color: var(--orange); }
+.btn-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; transition: all 0.2s; }
+#btn-like.active svg { fill: currentColor; }
+
+/* Where to Watch */
+.watch-box {
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+    background: #1C2228; overflow: hidden;
+}
+.watch-header {
+    background: #181D22; padding: 10px 14px;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.watch-body { padding: 16px 14px; font-size: 14px; font-weight: 500; color: #FFFFFF; }
+.watch-footer {
+    padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px; font-weight: 600; color: var(--orange);
+}
+
+.info-block {
+    background: #1C2228; border-radius: 8px; padding: 16px;
+    border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 12px;
+}
+.info-item { display: flex; flex-direction: column; }
+.info-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; margin-bottom: 2px; }
+.info-value { font-size: 13px; font-weight: 600; color: #FFFFFF; line-height: 1.4; }
+
+.genre-link {
+    font-size: 13px; font-weight: 600; color: #8B7CFF;
+    text-decoration: none; transition: color 0.15s; margin-right: 6px;
+}
+.genre-link:hover { color: var(--orange); }
+
+/* Main Content */
+.main-content {
+    display: flex; flex-direction: column; gap: 40px; min-width: 0;
+}
+.title { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; color: #FFFFFF; line-height: 1.1; }
+.description { font-size: 15px; color: #CAD2D9; line-height: 1.65; }
+.section-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; color: #FFFFFF; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
+
+/* Character Grid */
+.char-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.char-card {
+    display: flex; background: #1C2228; border-radius: 8px;
+    height: 72px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);
+}
+.char-img { width: 52px; height: 100%; object-fit: cover; flex-shrink: 0; }
+.char-details {
+    padding: 8px 12px; display: flex; flex-direction: column;
+    justify-content: center; flex: 1; min-width: 0;
+}
+.char-name { font-size: 14px; font-weight: 700; color: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.char-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* Reviews List */
+.review-item {
+    display: flex; gap: 16px; padding: 20px; background: #181D22; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 16px;
+}
+.review-item:last-child { margin-bottom: 0; }
+.review-av { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+.review-body { flex: 1; }
+.review-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.review-user { font-weight: 700; font-size: 14px; color: #CAD2D9; }
+.review-rating { color: var(--orange); font-size: 13px; letter-spacing: 1px; }
+.review-text { font-size: 14px; color: #E1E7ED; line-height: 1.6; }
+.review-like-btn {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 12px;
+    font-weight: 600; color: var(--muted); cursor: pointer; transition: color 0.15s; margin-top: 8px;
+}
+.review-like-btn:hover { color: var(--orange); }
+.review-like-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+/* Sliders */
+.slider-wrapper {
+    position: relative; display: flex; align-items: center; min-width: 0; max-width: 100%;
+}
+.slider-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 32px; height: 32px; background: transparent; border: none;
+    color: var(--muted); font-size: 36px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 10; transition: color 0.15s, transform 0.15s;
+}
+.slider-btn:hover { color: #FFFFFF; transform: translateY(-50%) scale(1.1); }
+.slider-btn.left { left: -32px; }
+.slider-btn.right { right: -32px; }
+
+.lists-slider, .similar-slider {
+    display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
+    padding: 8px 4px 16px 4px; scrollbar-width: none;
+}
+.lists-slider::-webkit-scrollbar, .similar-slider::-webkit-scrollbar { display: none; }
+
+.list-card {
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px;
+    background: #1C2228; transition: border-color 0.15s; flex: 0 0 300px; scroll-snap-align: start;
+}
+.list-card:hover { border-color: rgba(255,255,255,0.25); }
+.list-covers { display: flex; gap: 4px; margin-bottom: 12px; }
+.list-cover-img { width: calc(25% - 3px); aspect-ratio: 2/3; object-fit: cover; border-radius: 2px; }
+.list-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; color: #FFFFFF; }
+.list-author { font-size: 12px; color: var(--muted); }
+
+.similar-item { position: relative; display: block; flex: 0 0 140px; scroll-snap-align: start; }
+.similar-poster {
+    width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08); transition: transform 0.15s; position: relative;
+}
+.similar-item:hover .similar-poster { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.7); }
+.similar-tooltip {
+    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-8px);
+    background: #14181C; color: #fff; padding: 6px 10px; border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.15);
+    font-size: 11px; font-weight: 600; white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 0.15s, transform 0.15s; z-index: 20;
+}
+.similar-item:hover .similar-tooltip { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+/* Modals */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10,12,16,0.85); backdrop-filter: blur(8px);
+    z-index: 1000; display: none; align-items: center; justify-content: center;
+    padding: 20px; box-sizing: border-box;
+}
+.modal-content {
+    background: #1C2228; width: 92%; max-width: 760px; border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7); overflow: hidden;
+    max-height: 90vh; display: flex; flex-direction: column;
+}
+.modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); background: #181D22;
+}
+.modal-title { font-size: 16px; font-weight: 800; color: #FFFFFF; }
+.modal-close { font-size: 24px; color: var(--muted); cursor: pointer; line-height: 1; transition: color 0.15s; }
+.modal-close:hover { color: #FFFFFF; }
+.modal-body { padding: 28px; display: flex; gap: 28px; overflow-y: auto; }
+.modal-poster { width: 170px; aspect-ratio: 2/3; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); flex-shrink: 0; align-self: flex-start; }
+.modal-form { flex: 1; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.modal-textarea {
+    width: 100%; min-width: 100%; max-width: 100%;
+    min-height: 80px; max-height: 180px;
+    background: #14181C;
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 8px;
+    color: #FFFFFF;
+    padding: 10px 12px; font-family: 'Satoshi', sans-serif; font-size: 13.5px;
+    resize: vertical; box-sizing: border-box;
+}
+.modal-textarea:focus { outline: none; border-color: var(--orange); }
+.modal-like-btn { cursor: pointer; color: rgba(255,255,255,0.2); transition: color 0.15s, transform 0.15s; display: flex; align-items: center; justify-content: center; }
+.modal-like-btn svg { width: 30px; height: 30px; fill: currentColor; stroke: none; }
+.modal-like-btn:hover { transform: scale(1.1); color: var(--orange); }
+.modal-like-btn.active { color: #FF5500; }
+
+/* Half-Star Rating Component */
+.star-rating-widget {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.stars-track {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+.star-unit {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.star-hit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 5;
+}
+.star-hit.left { left: 0; }
+.star-hit.right { right: 0; }
+.star-svg {
+    width: 26px;
+    height: 26px;
+    pointer-events: none;
+}
+.star-bg {
+    fill: rgba(255,255,255,0.15);
+}
+.star-fill {
+    fill: var(--orange);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.08s ease-out;
+}
+.rating-display-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.rating-num-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange);
+    background: var(--orange-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    min-width: 64px;
+    text-align: center;
+}
+.rating-num-badge.empty {
+    color: var(--muted);
+    background: rgba(255,255,255,0.08);
+}
+.rating-clear-btn {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.15s;
+}
+.rating-clear-btn:hover {
+    color: #FF5500;
+    background: rgba(255,85,0,0.15);
+}
+
+/* Modal action footer */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.btn-modal-cancel {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #CAD2D9;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.btn-modal-cancel:hover {
+    background: rgba(255,255,255,0.14);
+    color: #FFFFFF;
+}
+.btn-modal-save {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    border-radius: var(--r-full);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--orange);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255,85,0,0.35);
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.btn-modal-save:hover {
+    transform: translateY(-1px);
+    background: #E54B00;
+    box-shadow: 0 6px 20px rgba(255,85,0,0.5);
+}
+
+/* Add to List Dropdown Modal (Like Letterboxd) */
+.list-dropdown {
+    position: absolute; background: #1C2228; border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; box-shadow: 0 12px 36px rgba(0,0,0,0.6); width: 220px;
+    z-index: 100; display: none; flex-direction: column; overflow: hidden;
+}
+.ld-header { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; background: #181D22; }
+.ld-item { padding: 10px 12px; font-size: 13px; font-weight: 500; color: #CAD2D9; cursor: pointer; transition: background 0.1s, color 0.1s; }
+.ld-item:hover { background: rgba(255,255,255,0.08); color: #FFFFFF; }
+
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+    
+    <div class="banner" style="background-image: url('<%= locals.anime ? (anime.banner_image || anime.cover_image) : "" %>')"></div>
+    
+    <div class="wrap page-wrap">
+        <div class="content-grid">
+            
+            <!-- Left Sidebar -->
+            <div class="sidebar">
+                <div style="position: relative;">
+                    <img src="<%= locals.anime ? anime.cover_image : '' %>" alt="<%= locals.anime ? anime.title : 'Anime' %>" class="poster-img">
+                </div>
+
+                <!-- Stats like Letterboxd -->
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        456K
+                        <div class="stat-tooltip">Watched by 456K members</div>
+                    </div>
+                    <div class="stat-item">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        102K
+                        <div class="stat-tooltip">Appears in 102K lists</div>
+                    </div>
+                    <div class="stat-item">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        231K
+                        <div class="stat-tooltip">Liked by 231K members</div>
+                    </div>
+                </div>
+                
+                               <!-- Live Episode Tracker Box -->
+                <div class="tracker-card" style="background:#1C2228; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px; margin-top:16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted);">Episode Progress</span>
+                        <div style="display:flex; gap:6px; align-items:center;">
+                            <% if (locals.anime && anime.airing_status === 'RELEASING') { %>
+                                <span style="font-size:10px; font-weight:800; text-transform:uppercase; padding:2px 6px; border-radius:4px; background:rgba(255,85,0,0.15); color:#FF5500; border:1px solid rgba(255,85,0,0.3);">
+                                    En emisión (<%= anime.aired_episodes || '?' %>/<%= anime.episodes_count || '?' %>)
+                                </span>
+                            <% } %>
+                            <span id="tracker-status-tag" style="font-size:10px; font-weight:800; text-transform:uppercase; padding:2px 6px; border-radius:4px; background:<%= locals.userProgress ? (userProgress.status === 'completed' ? 'rgba(0, 224, 84, 0.15)' : 'rgba(40,13,194,0.3)') : 'rgba(255,255,255,0.08)' %>; color:<%= locals.userProgress ? (userProgress.status === 'completed' ? '#00E054' : '#8B7CFF') : 'var(--muted)' %>;">
+                                <%= locals.userProgress ? userProgress.status.replace('_', ' ') : 'Not Started' %>
+                            </span>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">
+                        <button type="button" onclick="quickStepEp(-1)" style="width:32px; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:#14181C; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#CAD2D9;" title="Episodio anterior">−</button>
+                        
+                        <div style="text-align:center;">
+                            <div style="font-size:18px; font-weight:800; color:#FFFFFF;">
+                                <span id="tracker-current-ep"><%= locals.userProgress ? userProgress.current_episode : 0 %></span> 
+                                <span style="font-size:13px; font-weight:600; color:var(--muted);">/ <%= (locals.anime && anime.episodes_count) ? anime.episodes_count : 24 %></span>
+                            </div>
+                            <% if (locals.anime && anime.airing_status === 'RELEASING') { %>
+                                <div style="font-size:10px; color:#FF5500; font-weight:700; margin-top:2px;">Disponibles: <%= anime.aired_episodes || '?' %> eps</div>
+                            <% } %>
+                        </div>
+
+                        <button type="button" onclick="quickStepEp(1)" style="width:32px; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:#14181C; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#CAD2D9;" title="Siguiente episodio">+</button>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <% 
+                        const maxEps = (locals.anime && anime.episodes_count) ? anime.episodes_count : 24;
+                        const curEps = (locals.userProgress && userProgress.current_episode) ? userProgress.current_episode : 0;
+                        const pct = Math.min(100, Math.round((curEps / maxEps) * 100));
+                    %>
+                    <div style="width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden;">
+                        <div id="tracker-progress-bar" style="width:<%= pct %>%; height:100%; background:var(--orange); border-radius:3px; transition:width 0.2s ease;"></div>
+                    </div>
+                </div>
+
+                <button class="btn-log-huge" id="btn-open-log" style="margin-top:14px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <%= locals.userLog ? 'Edit Review / Log' : 'Log Anime' %>
+                </button>
+                
+                <div class="secondary-actions" style="position: relative;">
+                    <button class="btn-icon <%= locals.isLiked ? 'active' : '' %>" id="btn-like" title="Like">
+                        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </button>
+                    
+                    <button class="btn-icon" id="btn-add-list" onclick="openAddToListModal()" title="Add to List">
+                        <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    </button>
+
+                    <button class="btn-icon <%= locals.inWatchlist ? 'active' : '' %>" id="btn-watchlist" title="Watchlist">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </button>
+                </div>
+
+                <!-- Ratings Box -->
+                <div class="watch-box" style="padding:16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid var(--cream-dk); padding-bottom:8px; margin-bottom:16px;">
+                        <span style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;">Ratings</span>
+                        <span style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;">58K Fans</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <!-- Mock Histogram -->
+                        <div style="flex:1; display:flex; align-items:flex-end; gap:2px; height:40px;">
+                            <div style="flex:1; background:var(--blue-soft); height:4px; border-radius:2px 2px 0 0;"></div>
+                            <div style="flex:1; background:var(--blue-soft); height:6px; border-radius:2px 2px 0 0;"></div>
+                            <div style="flex:1; background:var(--blue-soft); height:8px; border-radius:2px 2px 0 0;"></div>
+                            <div style="flex:1; background:var(--blue-soft); height:12px; border-radius:2px 2px 0 0;"></div>
+                            <div style="flex:1; background:var(--blue-soft); height:16px; border-radius:2px 2px 0 0;"></div>
+                            <div style="flex:1; background:var(--blue-soft); height:24px; border-radius:2px 2px 0 0;"></div>
+                            <div style="flex:1; background:var(--blue-soft); height:40px; border-radius:2px 2px 0 0;"></div>
+                            <div style="flex:1; background:var(--blue-soft); height:32px; border-radius:2px 2px 0 0;"></div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-size:24px; font-weight:500; color:var(--ink); line-height:1;"><%= locals.anime && anime.score ? anime.score.toFixed(1) : '4.4' %></div>
+                            <div style="color:#F37510; font-size:12px; margin-top:4px;">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Where to watch -->
+                <div class="watch-box">
+                    <div class="watch-header">
+                        <span>Where to watch</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="2" y1="17" x2="7" y2="17"/></svg>
+                    </div>
+                    <div class="watch-body">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <svg viewBox="0 0 24 24" style="width:24px; height:24px; border-radius:4px; background:#E50914;"><path d="M7 6v12l10-12v12" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="bevel" stroke-linecap="square"/></svg>
+                            Streaming on Crunchyroll / Netflix
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-block">
+                    <div class="info-item">
+                        <span class="info-label">Format</span>
+                        <span class="info-value"><%= locals.anime && anime.type ? anime.type.toUpperCase() : 'TV' %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Episodes</span>
+                        <span class="info-value"><%= locals.anime && anime.episodes_count ? anime.episodes_count : (locals.anime && anime.type === 'movie' ? '1 Film' : '24') %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Release Year</span>
+                        <span class="info-value"><%= locals.anime ? anime.release_year : '2023' %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Studio</span>
+                        <span class="info-value">
+                            <% if (locals.anime && anime.studio) { %>
+                                <a href="/studio/<%= encodeURIComponent(anime.studio) %>" style="color:var(--blue); text-decoration:none; font-weight:700;"><%= anime.studio %> →</a>
+                            <% } else { %>
+                                Official Animation
+                            <% } %>
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Rating</span>
+                        <span class="info-value" style="color:var(--orange); font-weight:700;">★ <%= locals.anime && anime.score ? anime.score.toFixed(1) : '4.5' %></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div>
+                    <h1 class="title"><%= locals.anime ? anime.title : 'Anime' %> <span style="color:var(--muted); font-weight:500; font-size:24px;"><%= locals.anime ? anime.release_year : '' %></span></h1>
+                    <p class="description">
+                        <%= locals.anime ? (anime.synopsis || 'An acclaimed animated production featuring compelling story arcs and stunning art.') : '' %>
+                    </p>
+                </div>
+                
+                <!-- Characters (Cast Preview) -->
+                <div>
+                    <h2 class="section-title">Main Characters</h2>
+                    <div class="char-grid">
+                        <div class="char-card">
+                            <img src="https://s4.anilist.co/file/anilistcdn/character/large/b89-6uE3e3p9r5fP.png" class="char-img" alt="Main Character" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
+                            <div class="char-details">
+                                <span class="char-name">Protagonist</span>
+                                <span class="char-role">Main</span>
+                            </div>
+                        </div>
+                        <div class="char-card">
+                            <img src="https://s4.anilist.co/file/anilistcdn/character/large/b90-x5h3XzRkKkI5.png" class="char-img" alt="Deuteragonist" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
+                            <div class="char-details">
+                                <span class="char-name">Deuteragonist</span>
+                                <span class="char-role">Main</span>
+                            </div>
+                        </div>
+                        <div class="char-card">
+                            <img src="https://s4.anilist.co/file/anilistcdn/character/large/b86-h7Z4q6fU5p2l.png" class="char-img" alt="Supporting" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
+                            <div class="char-details">
+                                <span class="char-name">Key Ally</span>
+                                <span class="char-role">Supporting</span>
+                            </div>
+                        </div>
+                        <div class="char-card">
+                            <img src="https://s4.anilist.co/file/anilistcdn/character/large/b1258-5d4k1L6g7gK4.png" class="char-img" alt="Supporting" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
+                            <div class="char-details">
+                                <span class="char-name">Mentor</span>
+                                <span class="char-role">Supporting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews -->
+                <div>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px;">
+                        <h2 class="section-title" style="margin:0; border:none; padding:0;">Popular Reviews</h2>
+                        <a href="/anime/<%= locals.anime ? anime.slug : 'nge' %>/reviews" style="font-size:13px; font-weight:600; color:var(--blue);">More reviews →</a>
+                    </div>
+                    <div style="border-top:2px solid var(--cream); padding-top:24px;">
+                        <% if (locals.recentReviews && recentReviews.length > 0) { %>
+                            <% recentReviews.forEach(r => { %>
+                                <div class="review-item" id="review-item-<%= r.id %>" style="margin-bottom: 24px;">
+                                    <div class="review-av g1"><%= r.username ? r.username.charAt(0).toUpperCase() : 'U' %></div>
+                                    <div class="review-body">
+                                        <div class="review-meta">
+                                            <a href="/u/<%= r.username %>" class="review-user" style="text-decoration:none; color:inherit;"><%= r.username %></a>
+                                            <span class="review-rating" style="color:var(--orange);">
+                                                <% const full = Math.floor(r.rating || 0); %>
+                                                <% for(let i=0; i<full; i++) { %>★<% } %>
+                                                <% if ((r.rating || 0) % 1 !== 0) { %>½<% } %>
+                                            </span>
+                                            <span style="font-size:12px; color:var(--muted); margin-left:auto;"><%= new Date(r.created_at).toLocaleDateString() %></span>
+                                        </div>
+                                        <p class="review-text"><%= r.review_text %></p>
+                                        
+                                        <!-- Review Actions -->
+                                        <div style="margin-top:12px; display:flex; align-items:center; gap:16px;">
+                                            <button class="review-like-btn" id="review-like-<%= r.id %>" onclick="toggleReviewLike(<%= r.id %>, this)" style="background:none; border:none; padding:0; cursor:pointer;">
+                                                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                                <span class="like-label">Like</span>
+                                            </button>
+
+                                            <button class="review-like-btn" onclick="toggleReviewComments(<%= r.id %>)" style="background:none; border:none; padding:0; cursor:pointer;">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                                <span>Comments</span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Comments Container (Collapsible) -->
+                                        <div class="review-comments-section" id="comments-box-<%= r.id %>" style="display:none; margin-top:14px; background:#181D22; border-radius:8px; padding:16px; border:1px solid rgba(255,255,255,0.08);">
+                                            <div class="comments-list" id="comments-list-<%= r.id %>">
+                                                <div style="font-size:12px; color:var(--muted);">Loading comments...</div>
+                                            </div>
+                                            
+                                            <!-- Add Comment Form -->
+                                            <form onsubmit="submitReviewComment(event, <%= r.id %>)" style="display:flex; gap:8px; margin-top:14px;">
+                                                <input type="text" id="comment-input-<%= r.id %>" placeholder="Write a reply..." style="flex:1; padding:9px 12px; font-size:13px; border:1px solid rgba(255,255,255,0.12); border-radius:6px; background:#14181C; color:#FFFFFF; font-family:inherit; outline:none;" required>
+                                                <button type="submit" style="background:var(--orange); color:#fff; border:none; border-radius:6px; padding:0 16px; font-size:13px; font-weight:700; cursor:pointer;">Reply</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="review-item">
+                                <div class="review-av g1">Z</div>
+                                <div class="review-body">
+                                    <div class="review-meta">
+                                        <span class="review-user">Zoe</span>
+                                        <span class="review-rating">★★★★★</span>
+                                    </div>
+                                    <p class="review-text">An absolute masterpiece that redefined the mecha genre and anime as a whole. The psychological depth is unmatched.</p>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Popular Lists -->
+                <div>
+                    <h2 class="section-title">Popular Lists</h2>
+                    <div class="slider-wrapper">
+                        <button class="slider-btn left" onclick="document.getElementById('list-slider').scrollBy({left: -320, behavior: 'smooth'})">‹</button>
+                        <div class="lists-slider" id="list-slider">
+                            <a href="/lists" class="list-card">
+                                <div class="list-covers">
+                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-73IhOXpJZiDY.png" class="list-cover-img" alt="AoT">
+                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-9NOxwhXBDoFk.png" class="list-cover-img" alt="NGE">
+                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-n2bQEuhioMyq.jpg" class="list-cover-img" alt="Frieren">
+                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101348-8H2Q9vHjUa4r.jpg" class="list-cover-img" alt="Vinland">
+                                </div>
+                                <div class="list-title">Masterpieces of Anime</div>
+                                <div class="list-author">by ShinjiFan</div>
+                            </a>
+                            <a href="/lists" class="list-card">
+                                <div class="list-covers">
+                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-9NOxwhXBDoFk.png" class="list-cover-img" alt="NGE">
+                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxLz.jpg" class="list-cover-img" alt="One Piece">
+                                    <div class="list-cover-img" style="background:var(--cream-dk);"></div>
+                                    <div class="list-cover-img" style="background:var(--cream-dk);"></div>
+                                </div>
+                                <div class="list-title">Psychological & Epic Sagas</div>
+                                <div class="list-author">by AnimeGuru</div>
+                            </a>
+                            <a href="/lists" class="list-card">
+                                <div class="list-covers">
+                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-9NOxwhXBDoFk.png" class="list-cover-img" alt="NGE">
+                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21519-7cxzH3wUdfcR.png" class="list-cover-img" alt="Your Name">
+                                    <div class="list-cover-img" style="background:var(--cream-dk);"></div>
+                                    <div class="list-cover-img" style="background:var(--cream-dk);"></div>
+                                </div>
+                                <div class="list-title">Classic Masterpieces</div>
+                                <div class="list-author">by RobotLover</div>
+                            </a>
+                        </div>
+                        <button class="slider-btn right" onclick="document.getElementById('list-slider').scrollBy({left: 320, behavior: 'smooth'})">›</button>
+                    </div>
+                </div>
+
+                <!-- Similar Anime -->
+                <div>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px;">
+                        <h2 class="section-title" style="margin:0; border:none; padding:0;">Similar Anime</h2>
+                        <a href="/anime" style="font-size:13px; font-weight:600; color:var(--blue);">View all →</a>
+                    </div>
+                    <div style="border-top:2px solid var(--cream); padding-top:16px;">
+                        <div class="slider-wrapper">
+                            <button class="slider-btn left" onclick="document.getElementById('similar-slider').scrollBy({left: -152, behavior: 'smooth'})">‹</button>
+                            <div class="similar-slider" id="similar-slider">
+                                <% if (locals.similarAnime && similarAnime.length > 0) { %>
+                                    <% similarAnime.forEach(sim => { %>
+                                        <a href="/anime/<%= sim.slug %>" class="similar-item">
+                                            <img src="<%= sim.cover_image %>" class="similar-poster" alt="<%= sim.title %>" loading="lazy">
+                                            <span class="similar-tooltip"><%= sim.title %></span>
+                                        </a>
+                                    <% }); %>
+                                <% } %>
+                            </div>
+                            <button class="slider-btn right" onclick="document.getElementById('similar-slider').scrollBy({left: 152, behavior: 'smooth'})">›</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- LOG MODAL (Letterboxd & AniList Style) -->
+    <div class="modal-overlay" id="log-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="log-modal-heading">Log or Track Anime</div>
+                <div class="modal-close" id="btn-close-log">×</div>
+            </div>
+            <div class="modal-body">
+                <img src="<%= locals.anime ? anime.cover_image : '' %>" class="modal-poster" alt="<%= locals.anime ? anime.title : '' %>">
+                <form class="modal-form" id="main-log-form" onsubmit="handleLogSubmit(event)">
+                    
+                    <div style="font-size:22px; font-weight:700; color:var(--ink); line-height:1.2;">
+                        <%= locals.anime ? anime.title : 'Neon Genesis Evangelion' %> 
+                        <span style="font-size:15px; font-weight:500; color:var(--muted);"><%= locals.anime ? anime.release_year : '1995' %></span>
+                    </div>
+
+                    <!-- Status Selector Tabs -->
+                    <div>
+                        <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px; letter-spacing:0.5px;">Estado</div>
+                        <div style="display:flex; gap:6px; background:var(--cream); padding:4px; border-radius:8px;">
+                            <button type="button" class="status-tab-btn <%= (!locals.userProgress || userProgress.status === 'watching') ? 'active' : '' %>" data-status="watching" onclick="selectStatus('watching')">Watching</button>
+                            <button type="button" class="status-tab-btn <%= (locals.userProgress && userProgress.status === 'completed') ? 'active' : '' %>" data-status="completed" onclick="selectStatus('completed')">Completed</button>
+                            <button type="button" class="status-tab-btn <%= (locals.userProgress && userProgress.status === 'plan_to_watch') ? 'active' : '' %>" data-status="plan_to_watch" onclick="selectStatus('plan_to_watch')">Plan to Watch</button>
+                            <button type="button" class="status-tab-btn <%= (locals.userProgress && userProgress.status === 'dropped') ? 'active' : '' %>" data-status="dropped" onclick="selectStatus('dropped')">Dropped</button>
+                        </div>
+                    </div>
+
+                    <!-- Watching Progress Section -->
+                    <div id="watching-progress-section" style="background:#fff; border:1px solid var(--cream-dk); border-radius:8px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+                        <div style="display:flex; flex-direction:column;">
+                            <span style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--muted); letter-spacing:0.5px;">Episodio Actual</span>
+                            <span style="font-size:13px; font-weight:600; color:var(--ink);">¿Por qué capítulo vas?</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="button" onclick="adjustEp(-1)" style="width:30px; height:30px; border-radius:6px; border:1px solid var(--cream-dk); background:var(--cream); font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
+                            <input type="number" id="log-current-ep" value="<%= (locals.userProgress && userProgress.current_episode != null) ? userProgress.current_episode : 1 %>" min="0" max="<%= locals.anime ? anime.episodes_count : 26 %>" style="width:45px; text-align:center; font-size:15px; font-weight:700; padding:4px; border:1px solid var(--cream-dk); border-radius:6px; background:#fff; font-family:'Satoshi', sans-serif;">
+                            <span style="font-size:14px; font-weight:600; color:var(--muted);">/ <%= locals.anime ? anime.episodes_count : 26 %></span>
+                            <button type="button" onclick="adjustEp(1)" style="width:30px; height:30px; border-radius:6px; border:1px solid var(--cream-dk); background:var(--cream); font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Watched Date Section (for Completed) -->
+                    <div id="completed-date-section" style="display:none; gap:20px; align-items:center;">
+                        <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; cursor:pointer;">
+                            <span>Watched on:</span>
+                            <input type="date" id="log-date" value="<%= (locals.userLog && userLog.watched_date) ? userLog.watched_date : new Date().toISOString().split('T')[0] %>" style="background:var(--cream); border:none; padding:6px 10px; border-radius:6px; font-family:'Satoshi', sans-serif; font-size:13px; font-weight:600; cursor:pointer; color:var(--ink);">
+                        </label>
+                    </div>
+
+                    <!-- Review Textarea -->
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                            <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;">Reseña / Comentarios</div>
+                            <label style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--muted); cursor:pointer;">
+                                <input type="checkbox" id="log-spoilers" <%= (locals.userLog && userLog.contains_spoilers) ? 'checked' : '' %>> Contiene spoilers
+                            </label>
+                        </div>
+                        <textarea id="log-text" class="modal-textarea" placeholder="Escribe tu opinión sobre el anime o sobre los capítulos que vas viendo..."><%= (locals.userLog && userLog.review_text) ? userLog.review_text : '' %></textarea>
+                    </div>
+
+                    <!-- Rating & Favorite Row -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#FAF7F4; border:1px solid var(--cream-dk); padding:12px 18px; border-radius:8px;">
+                        <div>
+                            <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px; letter-spacing:0.5px;">Calificación</div>
+                            <div class="star-rating-widget" id="anime-star-widget" onmouseleave="resetDetailStarRating()">
+                                <div class="stars-track">
+                                    <% for(let s=1; s<=5; s++) { %>
+                                    <div class="star-unit" data-star="<%= s %>">
+                                        <div class="star-hit left" onmousemove="previewDetailStarRating(<%= s - 0.5 %>)" onclick="setDetailStarRating(<%= s - 0.5 %>)"></div>
+                                        <div class="star-hit right" onmousemove="previewDetailStarRating(<%= s %>)" onclick="setDetailStarRating(<%= s %>)"></div>
+                                        <svg class="star-svg" viewBox="0 0 24 24">
+                                            <path class="star-bg" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                            <path class="star-fill" id="detail-star-fill-<%= s %>" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                        </svg>
+                                    </div>
+                                    <% } %>
+                                </div>
+                                <div class="rating-display-wrap">
+                                    <button type="button" class="rating-clear-btn" id="detail-rating-clear-btn" onclick="clearDetailStarRating()" style="display:none;" title="Borrar calificación">✕</button>
+                                </div>
+                                <input type="hidden" id="detail-rating-value" value="<%= (locals.userLog && userLog.rating) ? userLog.rating : 0 %>">
+                            </div>
+                        </div>
+
+                        <div style="text-align:center;">
+                            <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px; letter-spacing:0.5px;">Favorito</div>
+                            <div class="modal-like-btn <%= ((locals.userLog && userLog.is_liked) || locals.isLiked) ? 'active' : '' %>" id="log-like-btn" onclick="this.classList.toggle('active')" title="Marcar como favorito">
+                                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Actions Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn-modal-cancel" onclick="closeDetailLogModal()">Cancelar</button>
+                        <button type="submit" class="btn-modal-save" id="btn-save-detail-log">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>Guardar Entrada</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+                    
+    <!-- ADD TO LIST MODAL -->
+    <div class="modal-overlay" id="modal-add-to-list" style="z-index: 1100;">
+        <div class="modal-content" style="max-width: 440px; background:#1C2228; border:1px solid rgba(255,255,255,0.12); border-radius:12px; box-shadow:0 16px 40px rgba(0,0,0,0.7);">
+            <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,0.08); padding:16px 20px;">
+                <span class="modal-title" style="color:#FFFFFF; font-size:16px; font-weight:800;">Add to List</span>
+                <span class="modal-close" onclick="closeAddToListModal()" style="color:var(--muted); cursor:pointer; font-size:22px; line-height:1;">×</span>
+            </div>
+            <div style="padding: 20px;">
+                <div id="user-lists-checklist" style="max-height: 240px; overflow-y: auto; margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="font-size: 13px; color: var(--muted); text-align: center; padding: 20px 0;">Loading lists...</div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+                    <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Create New List</span>
+                    <form onsubmit="createNewListInline(event)" style="display: flex; gap: 8px;">
+                        <input type="text" id="inline-new-list-title" placeholder="List title..." style="flex: 1; padding: 10px 14px; background:#14181C; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; font-size: 13px; font-family: inherit; color:#FFFFFF; outline: none;" required>
+                        <button type="submit" style="background: var(--orange); color: #fff; border: none; border-radius: 6px; padding: 0 16px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s;">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .status-tab-btn {
+            flex: 1;
+            padding: 8px 4px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            font-family: 'Satoshi', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .status-tab-btn.active {
+            background: rgba(255,255,255,0.15);
+            color: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            font-weight: 700;
+        }
+        .list-check-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: #14181C;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s ease;
+        }
+        .list-check-row:hover {
+            border-color: rgba(255,85,0,0.4);
+            background: #181D22;
+        }
+        .list-check-row.active-in-list {
+            background: rgba(255,85,0,0.15);
+            border-color: var(--orange);
+        }
+        .list-check-custom {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid rgba(255,255,255,0.25);
+            background: #1C2228;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+        }
+        .list-check-custom svg {
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            stroke: #fff;
+        }
+        .list-check-row.active-in-list .list-check-custom {
+            background: var(--orange);
+            border-color: var(--orange);
+        }
+        .list-check-row.active-in-list .list-check-custom svg {
+            opacity: 1;
+        }
+        .btn-comment-action {
+            background: none;
+            border: none;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+        .btn-comment-action:hover {
+            color: var(--orange);
+            background: rgba(255,85,0,0.15);
+        }
+        .btn-comment-action.btn-comment-del:hover {
+            color: #ff4d4f;
+            background: rgba(255,77,79,0.15);
+        }
+    </style>
+
+    <script>
+        const animeSlug = '<%= locals.anime ? anime.slug : "nge" %>';
+        const totalAnimeEpisodes = <%= locals.anime ? (anime.episodes_count || 1) : 26 %>;
+        const animeAiringStatus = '<%= locals.anime ? (anime.airing_status || "FINISHED") : "FINISHED" %>';
+        const animeAiredEpisodes = <%= locals.anime && anime.aired_episodes != null ? anime.aired_episodes : (locals.anime ? anime.episodes_count || 9999 : 26) %>;
+        let activeStatus = '<%= (locals.userProgress && userProgress.status) ? userProgress.status : "watching" %>';
+
+        function showAiringToast(message) {
+            let toast = document.getElementById('airing-toast-notification');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'airing-toast-notification';
+                toast.style.cssText = 'position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#1C1917; color:#fff; padding:12px 22px; border-radius:10px; font-size:13px; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,0.35); z-index:99999; display:flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,0.15); transition:all 0.25s ease; opacity:0; pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `<span style="font-size:16px;">⏳</span> <span>${message}</span>`;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            
+            if (window._toastTimer) clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(10px)';
+            }, 4000);
+        }
+
+        function selectStatus(status) {
+            activeStatus = status;
+            document.querySelectorAll('.status-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-status') === status);
+            });
+            const progSection = document.getElementById('watching-progress-section');
+            const dateSection = document.getElementById('completed-date-section');
+            
+            if (status === 'watching') {
+                progSection.style.display = 'flex';
+                dateSection.style.display = 'none';
+            } else if (status === 'completed') {
+                progSection.style.display = 'none';
+                dateSection.style.display = 'flex';
+            } else {
+                progSection.style.display = 'none';
+                dateSection.style.display = 'none';
+            }
+        }
+
+        async function quickStepEp(delta) {
+            const currentEpSpan = document.getElementById('tracker-current-ep');
+            const progBar = document.getElementById('tracker-progress-bar');
+            const statusTag = document.getElementById('tracker-status-tag');
+            const modalEpInput = document.getElementById('log-current-ep');
+
+            let current = parseInt(currentEpSpan.innerText, 10) || 0;
+            let target = current + delta;
+            if (target < 0) target = 0;
+
+            // Cap if anime is currently airing
+            if (delta > 0 && animeAiringStatus === 'RELEASING' && target > animeAiredEpisodes) {
+                showAiringToast(`¡Todavía no se puede! Este anime está en emisión y solo han salido ${animeAiredEpisodes} episodios.`);
+                return;
+            }
+
+            if (target > totalAnimeEpisodes) target = totalAnimeEpisodes;
+            if (target === current) return;
+
+            let newStatus = (animeAiringStatus !== 'RELEASING' && target >= totalAnimeEpisodes) ? 'completed' : (target > 0 ? 'watching' : 'plan_to_watch');
+
+            // Optimistic update
+            currentEpSpan.innerText = target;
+            if (modalEpInput) modalEpInput.value = target;
+            if (progBar) {
+                const maxDenominator = animeAiringStatus === 'RELEASING' ? Math.max(animeAiredEpisodes, totalAnimeEpisodes) : totalAnimeEpisodes;
+                const pct = Math.min(100, Math.round((target / maxDenominator) * 100));
+                progBar.style.width = pct + '%';
+            }
+            if (statusTag) {
+                statusTag.innerText = newStatus.replace('_', ' ');
+                statusTag.style.background = newStatus === 'completed' ? 'rgba(0, 224, 84, 0.15)' : 'var(--blue-soft)';
+                statusTag.style.color = newStatus === 'completed' ? '#00A83E' : 'var(--blue)';
+            }
+
+            try {
+                const res = await fetch('/api/progress/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        slug: animeSlug,
+                        episode: target,
+                        status: newStatus
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    currentEpSpan.innerText = current;
+                    if (modalEpInput) modalEpInput.value = current;
+                    if (data.message) {
+                        showAiringToast(data.message);
+                    }
+                }
+            } catch (err) {
+                console.error('Network error during quick episode update:', err);
+            }
+        }
+
+        function adjustEp(delta) {
+            const epInput = document.getElementById('log-current-ep');
+            let current = parseInt(epInput.value, 10) || 0;
+            let target = current + delta;
+            if (target < 0) target = 0;
+            if (delta > 0 && animeAiringStatus === 'RELEASING' && target > animeAiredEpisodes) {
+                showAiringToast(`Este anime está en emisión. Solo van ${animeAiredEpisodes} episodios emitidos.`);
+                return;
+            }
+            if (target > totalAnimeEpisodes) target = totalAnimeEpisodes;
+            epInput.value = target;
+        }
+
+        // Actions Logic
+        const btnLike = document.getElementById('btn-like');
+        const btnWatchlist = document.getElementById('btn-watchlist');
+
+        if (btnLike) {
+            btnLike.addEventListener('click', async () => {
+                btnLike.classList.toggle('active');
+                // Persist like / favorite state if desired
+            });
+        }
+
+        if (btnWatchlist) {
+            btnWatchlist.addEventListener('click', async () => {
+                btnWatchlist.classList.toggle('active');
+                try {
+                    await fetch('/api/watchlist/toggle', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ slug: animeSlug })
+                    });
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+        }
+
+        // Half-Star Rating State & Handlers
+        let detailRating = <%= (locals.userLog && userLog.rating) ? userLog.rating : 0 %>;
+
+        function setDetailStarRating(val) {
+            detailRating = (detailRating === val) ? 0 : val;
+            document.getElementById('detail-rating-value').value = detailRating;
+            renderDetailStars(detailRating);
+        }
+
+        function previewDetailStarRating(val) {
+            renderDetailStars(val);
+        }
+
+        function resetDetailStarRating() {
+            renderDetailStars(detailRating);
+        }
+
+        function clearDetailStarRating() {
+            detailRating = 0;
+            document.getElementById('detail-rating-value').value = 0;
+            renderDetailStars(0);
+        }
+
+        function renderDetailStars(val) {
+            const label = document.getElementById('detail-rating-label');
+            const clearBtn = document.getElementById('detail-rating-clear-btn');
+            
+            for (let s = 1; s <= 5; s++) {
+                const fill = document.getElementById('detail-star-fill-' + s);
+                if (!fill) continue;
+                
+                if (val >= s) {
+                    fill.style.clipPath = 'inset(0 0 0 0)';
+                } else if (val === s - 0.5) {
+                    fill.style.clipPath = 'inset(0 50% 0 0)';
+                } else {
+                    fill.style.clipPath = 'inset(0 100% 0 0)';
+                }
+            }
+
+            if (val > 0) {
+                if (label) {
+                    label.innerText = '★ ' + val.toFixed(1) + ' / 5.0';
+                    label.classList.remove('empty');
+                }
+                if (clearBtn) clearBtn.style.display = 'inline-block';
+            } else {
+                if (label) {
+                    label.innerText = 'Sin calificar';
+                    label.classList.add('empty');
+                }
+                if (clearBtn) clearBtn.style.display = 'none';
+            }
+        }
+
+        // Render initial rating & status
+        if (detailRating > 0) {
+            renderDetailStars(detailRating);
+        }
+        selectStatus(activeStatus);
+
+        // Modal Open / Close Logic
+        const logBtn = document.getElementById('btn-open-log');
+        const closeBtn = document.getElementById('btn-close-log');
+        const modal = document.getElementById('log-modal');
+
+        function openDetailLogModal() {
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeDetailLogModal() {
+            if (modal) modal.style.display = 'none';
+        }
+
+        if (logBtn) logBtn.addEventListener('click', openDetailLogModal);
+        if (closeBtn) closeBtn.addEventListener('click', closeDetailLogModal);
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeDetailLogModal();
+            });
+        }
+
+        async function handleLogSubmit(e) {
+            e.preventDefault();
+            const rating = detailRating;
+            const reviewText = document.getElementById('log-text').value;
+            const containsSpoilers = document.getElementById('log-spoilers').checked;
+            const isLiked = document.getElementById('log-like-btn').classList.contains('active');
+            const watchedDate = document.getElementById('log-date') ? document.getElementById('log-date').value : '';
+            const currentEpisode = parseInt(document.getElementById('log-current-ep').value, 10) || 0;
+
+            const saveBtn = document.getElementById('btn-save-detail-log');
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.innerText = 'Guardando...';
+            }
+
+            try {
+                const res = await fetch(`/api/anime/${animeSlug}/log`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        status: activeStatus,
+                        currentEpisode,
+                        rating,
+                        reviewText,
+                        containsSpoilers,
+                        isLiked,
+                        watchedDate
+                    })
+                });
+
+                if (res.ok) {
+                    closeDetailLogModal();
+                    window.location.reload();
+                } else {
+                    alert('Error al guardar el estado del anime');
+                    if (saveBtn) {
+                        saveBtn.disabled = false;
+                        saveBtn.innerText = 'Guardar Entrada';
+                    }
+                }
+            } catch (err) {
+                alert('Error de conexión al registrar');
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerText = 'Guardar Entrada';
+                }
+            }
+        }
+
+        // ADD TO LIST MODAL LOGIC
+        async function openAddToListModal() {
+            const modal = document.getElementById('modal-add-to-list');
+            const container = document.getElementById('user-lists-checklist');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            container.innerHTML = '<div style="font-size:13px; color:var(--muted); text-align:center; padding:20px 0;">Loading lists...</div>';
+
+            try {
+                const res = await fetch(`/api/user/lists?animeSlug=${encodeURIComponent(animeSlug)}`);
+                if (!res.ok) {
+                    container.innerHTML = '<div style="font-size:13px; color:var(--muted); text-align:center; padding:20px 0;">Please log in to manage lists.</div>';
+                    return;
+                }
+                const lists = await res.json();
+                if (!lists || lists.length === 0) {
+                    container.innerHTML = '<div style="font-size:13px; color:var(--muted); text-align:center; padding:20px 0;">You have no lists yet. Create one below!</div>';
+                    return;
+                }
+
+                let html = '';
+                lists.forEach(l => {
+                    const isChecked = !!(l.inList || l.contains_anime);
+                    html += `
+                        <div class="list-check-row ${isChecked ? 'active-in-list' : ''}" id="list-row-${l.id}" onclick="handleListRowToggle(${l.id}, this)">
+                            <div>
+                                <strong style="font-size:14px; color:var(--ink);">${l.title}</strong>
+                                <span class="list-count-badge" style="font-size:11px; color:var(--muted); margin-left:6px;" data-count="${l.item_count}">(${l.item_count} items)</span>
+                            </div>
+                            <div class="list-check-custom">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (err) {
+                container.innerHTML = '<div style="font-size:13px; color:red; text-align:center; padding:20px 0;">Failed to load lists.</div>';
+            }
+        }
+
+        function closeAddToListModal() {
+            const modal = document.getElementById('modal-add-to-list');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function handleListRowToggle(listId, rowElement) {
+            if (rowElement.dataset.busy === 'true') return;
+            rowElement.dataset.busy = 'true';
+
+            const countSpan = rowElement.querySelector('.list-count-badge');
+            let currentCount = parseInt(countSpan.getAttribute('data-count'), 10) || 0;
+            const wasActive = rowElement.classList.contains('active-in-list');
+            const targetActive = !wasActive;
+
+            // Instant optimistic UI update
+            rowElement.classList.toggle('active-in-list', targetActive);
+            const newCount = targetActive ? currentCount + 1 : Math.max(0, currentCount - 1);
+            countSpan.setAttribute('data-count', newCount);
+            countSpan.innerText = `(${newCount} items)`;
+
+            try {
+                const res = await fetch(`/api/list/${listId}/toggle-item`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ slug: animeSlug })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    rowElement.classList.toggle('active-in-list', !!data.inList);
+                    if (typeof data.totalItems === 'number') {
+                        countSpan.setAttribute('data-count', data.totalItems);
+                        countSpan.innerText = `(${data.totalItems} items)`;
+                    }
+                } else {
+                    // Revert
+                    rowElement.classList.toggle('active-in-list', wasActive);
+                    countSpan.setAttribute('data-count', currentCount);
+                    countSpan.innerText = `(${currentCount} items)`;
+                }
+            } catch (err) {
+                console.error(err);
+                rowElement.classList.toggle('active-in-list', wasActive);
+                countSpan.setAttribute('data-count', currentCount);
+                countSpan.innerText = `(${currentCount} items)`;
+            } finally {
+                delete rowElement.dataset.busy;
+            }
+        }
+
+        async function createNewListInline(e) {
+            e.preventDefault();
+            const input = document.getElementById('inline-new-list-title');
+            const title = input.value.trim();
+            if (!title) return;
+
+            try {
+                const res = await fetch('/api/list/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, animeSlugs: [animeSlug] })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    input.value = '';
+                    openAddToListModal();
+                }
+            } catch (err) {
+                alert('Failed to create list');
+            }
+        }
+
+        // REVIEWS: LIKE & COMMENTS LOGIC
+        const loggedInUserId = <%= locals.user ? user.id : 1 %>;
+
+        async function toggleReviewLike(logId, btn) {
+            try {
+                const res = await fetch(`/api/review/${logId}/like`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    btn.style.color = data.isLiked ? 'var(--orange)' : 'var(--muted)';
+                    const label = btn.querySelector('.like-label');
+                    if (label) {
+                        label.innerText = data.likesCount > 0 ? `${data.likesCount} Likes` : 'Like';
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function toggleReviewComments(logId) {
+            const box = document.getElementById(`comments-box-${logId}`);
+            if (!box) return;
+            const isShowing = box.style.display === 'block';
+            if (isShowing) {
+                box.style.display = 'none';
+            } else {
+                box.style.display = 'block';
+                loadReviewComments(logId);
+            }
+        }
+
+        async function loadReviewComments(logId) {
+            const list = document.getElementById(`comments-list-${logId}`);
+            if (!list) return;
+
+            try {
+                const res = await fetch(`/api/review/${logId}/comments`);
+                const comments = await res.json();
+
+                if (!comments || comments.length === 0) {
+                    list.innerHTML = '<div style="font-size:12px; color:var(--muted); padding:4px 0;">No replies yet. Start the conversation!</div>';
+                    return;
+                }
+
+                let html = '';
+                comments.forEach(c => {
+                    const av = c.avatar_url ? `<img src="${c.avatar_url}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">` : `<div style="width:22px; height:22px; border-radius:50%; background:var(--blue); color:#fff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center;">${c.username.charAt(0).toUpperCase()}</div>`;
+                    
+                    const isOwner = (c.user_id === loggedInUserId);
+                    const actionsHtml = isOwner ? `
+                        <div style="display:flex; gap:4px; margin-left:auto;">
+                            <button type="button" class="btn-comment-action" onclick="startEditComment(${c.id}, ${logId})">Editar</button>
+                            <button type="button" class="btn-comment-action btn-comment-del" onclick="deleteCommentItem(${c.id}, ${logId})">Borrar</button>
+                        </div>
+                    ` : '';
+
+                    html += `
+                        <div class="comment-row-item" id="comment-row-${c.id}" style="display:flex; gap:10px; margin-bottom:12px; font-size:13px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.06);">
+                            ${av}
+                            <div style="flex:1; min-width:0;">
+                                <div style="display:flex; align-items:center; gap:6px;">
+                                    <strong style="color:#FFFFFF;">${c.username}</strong> 
+                                    <span style="font-size:11px; color:var(--muted);">${new Date(c.created_at).toLocaleDateString()}</span>
+                                    ${actionsHtml}
+                                </div>
+                                <div id="comment-body-${c.id}" style="color:#CAD2D9; margin-top:4px; word-break:break-word; line-height:1.4;">${c.content}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                list.innerHTML = html;
+            } catch (err) {
+                list.innerHTML = '<div style="font-size:12px; color:red;">Failed to load replies.</div>';
+            }
+        }
+
+        function startEditComment(commentId, logId) {
+            const bodyDiv = document.getElementById(`comment-body-${commentId}`);
+            if (!bodyDiv) return;
+            const originalText = bodyDiv.innerText;
+
+            bodyDiv.innerHTML = `
+                <div style="margin-top:8px;">
+                    <textarea id="edit-input-${commentId}" style="width:100%; background:#14181C; color:#FFFFFF; border:1px solid rgba(255,85,0,0.5); border-radius:6px; padding:8px 10px; font-family:inherit; font-size:13px; resize:vertical; min-height:55px; outline:none; box-sizing:border-box;">${originalText}</textarea>
+                    <div style="display:flex; justify-content:flex-end; gap:6px; margin-top:6px;">
+                        <button type="button" onclick="cancelEditComment(${commentId}, '${encodeURIComponent(originalText)}')" style="font-size:11px; padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.12); background:#1C2228; color:#CAD2D9; cursor:pointer; font-weight:600;">Cancelar</button>
+                        <button type="button" onclick="saveEditComment(${commentId}, ${logId})" style="font-size:11px; padding:4px 12px; border-radius:4px; border:none; background:var(--orange); color:#fff; cursor:pointer; font-weight:700;">Guardar</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function cancelEditComment(commentId, encodedOriginal) {
+            const bodyDiv = document.getElementById(`comment-body-${commentId}`);
+            if (!bodyDiv) return;
+            bodyDiv.innerText = decodeURIComponent(encodedOriginal);
+        }
+
+        async function saveEditComment(commentId, logId) {
+            const input = document.getElementById(`edit-input-${commentId}`);
+            if (!input) return;
+            const content = input.value.trim();
+            if (!content) return alert('El comentario no puede estar vacío');
+
+            try {
+                const res = await fetch(`/api/comment/${commentId}/edit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const bodyDiv = document.getElementById(`comment-body-${commentId}`);
+                    if (bodyDiv) bodyDiv.innerText = data.content;
+                } else {
+                    alert(data.error || 'Error al editar comentario');
+                }
+            } catch (err) {
+                alert('Error al guardar comentario');
+            }
+        }
+
+        async function deleteCommentItem(commentId, logId) {
+            if (!confirm('¿Estás seguro de que deseas borrar este comentario?')) return;
+            try {
+                const res = await fetch(`/api/comment/${commentId}/delete`, {
+                    method: 'POST'
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const row = document.getElementById(`comment-row-${commentId}`);
+                    if (row) {
+                        row.remove();
+                    }
+                    const list = document.getElementById(`comments-list-${logId}`);
+                    if (list && list.children.length === 0) {
+                        list.innerHTML = '<div style="font-size:12px; color:var(--muted); padding:4px 0;">No replies yet. Start the conversation!</div>';
+                    }
+                } else {
+                    alert(data.error || 'Error al borrar comentario');
+                }
+            } catch (err) {
+                alert('Error de conexión al borrar');
+            }
+        }
+
+        async function submitReviewComment(e, logId) {
+            e.preventDefault();
+            const input = document.getElementById(`comment-input-${logId}`);
+            const content = input.value.trim();
+            if (!content) return;
+
+            try {
+                const res = await fetch(`/api/review/${logId}/comment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    input.value = '';
+                    loadReviewComments(logId);
+                }
+            } catch (err) {
+                alert('Failed to post reply');
+            }
+        }
+    </script>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

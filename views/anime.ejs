@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Explore Anime — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+/* Page Layout */
+.page-wrap {
+    padding-top: 40px; padding-bottom: 80px;
+}
+
+/* Browse Header */
+.browse-header {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-wrap: wrap;
+}
+.browse-title {
+    font-size: 14px; font-weight: 800; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; margin-right: 8px;
+}
+.browse-select {
+    appearance: none; background: #1C2228; border: 1px solid rgba(255,255,255,0.12);
+    padding: 8px 32px 8px 14px; border-radius: 6px; font-family: 'Satoshi', sans-serif;
+    font-size: 13px; font-weight: 600; color: #CAD2D9; cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%239B9593%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;
+    transition: border-color 0.15s, color 0.15s;
+}
+.browse-select:hover { border-color: var(--orange); color: #FFFFFF; }
+.browse-select:focus { outline: none; border-color: var(--orange); }
+
+/* Section Title */
+.section-title {
+    font-size: 14px; font-weight: 800; color: #FFFFFF; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline;
+}
+.section-title a { color: var(--orange); font-size: 12px; text-transform: none; font-weight: 600; }
+.section-title a:hover { text-decoration: underline; }
+
+/* Horizontal Strip */
+.featured-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+@media (max-width: 900px) {
+    .featured-strip { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 500px) {
+    .featured-strip { grid-template-columns: repeat(2, 1fr); }
+}
+
+.strip-item {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    min-width: 0;
+    width: 100%;
+}
+.strip-poster-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2/3;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #181D22;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.strip-item:hover .strip-poster-wrap {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    border-color: rgba(255,85,0,0.4);
+}
+.strip-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Main Content Split */
+.content-split {
+    display: flex; gap: 36px; align-items: start; width: 100%;
+}
+.main-col { flex: 1; min-width: 0; }
+.side-col { width: 320px; flex-shrink: 0; display: flex; flex-direction: column; gap: 36px; }
+
+@media (max-width: 860px) {
+    .content-split { flex-direction: column; }
+    .side-col { width: 100%; }
+}
+
+/* Search Bar */
+.search-box {
+    position: relative; margin-bottom: 24px; display: flex; align-items: center;
+}
+.search-input {
+    width: 100%; padding: 11px 16px 11px 40px !important; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12);
+    background: #1C2228; font-family: 'Satoshi', sans-serif; font-size: 14px; color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3); box-sizing: border-box; transition: border-color 0.15s, box-shadow 0.15s;
+    line-height: normal;
+}
+.search-input:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 2px rgba(255,85,0,0.25); }
+.search-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; width: 16px; height: 16px; z-index: 2; display: flex; align-items: center; justify-content: center;
+}
+
+/* Catalog Grid */
+.popular-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+.card-poster-wrap {
+    position: relative;
+    aspect-ratio: 2/3;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #181D22;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover .card-poster-wrap {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    border-color: rgba(255,85,0,0.4);
+}
+.card-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.card-badge {
+    position: absolute; top: 8px; right: 8px; background: rgba(20,24,28,0.85);
+    border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px);
+    color: #fff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+.card-title {
+    font-size: 13px; font-weight: 700; color: #FFFFFF; margin-top: 8px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
+}
+.card-meta {
+    font-size: 12px; color: var(--muted); margin-top: 2px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.card-score { color: var(--orange); font-weight: 700; }
+
+/* Sidebar: Popular Reviews */
+.sidebar-review {
+    display: flex; gap: 12px; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px;
+}
+.sidebar-review:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+.sr-poster { width: 48px; aspect-ratio: 2/3; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.4); flex-shrink: 0; background: #181D22; border: 1px solid rgba(255,255,255,0.08); }
+.sr-content { flex: 1; min-width: 0; }
+.sr-title { font-size: 13px; font-weight: 700; color: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.sr-meta { font-size: 11px; color: var(--muted); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.sr-rating { color: var(--orange); font-weight: 700; }
+.sr-text { font-size: 12px; color: #CAD2D9; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Sidebar: Crew Picks */
+.crew-pick {
+    position: relative; border-radius: 6px; overflow: hidden; display: block; text-decoration: none;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.5); background: #181D22; border: 1px solid rgba(255,255,255,0.08);
+}
+.crew-pick img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; opacity: 0.85; transition: opacity 0.2s, transform 0.2s; }
+.crew-pick:hover img { opacity: 1; transform: scale(1.02); }
+.crew-pick-overlay {
+    position: absolute; bottom: 0; left: 0; width: 100%; padding: 14px;
+    background: linear-gradient(to top, rgba(20,24,28,0.95), transparent);
+    color: #fff;
+}
+.crew-pick-title { font-size: 15px; font-weight: 800; margin-bottom: 2px; }
+.crew-pick-desc { font-size: 12px; opacity: 0.85; color: #CAD2D9; }
+
+/* Info Box */
+.info-box {
+    background: #181D22; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 16px; text-align: center;
+    font-size: 13px; color: var(--muted); line-height: 1.5;
+}
+.info-box a { color: var(--orange); font-weight: 600; }
+.info-box a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+    
+    <div class="wrap page-wrap">
+        
+        <!-- Browse Header -->
+        <div class="browse-header">
+            <span class="browse-title">Browse By</span>
+            
+            <!-- Genre Filter -->
+            <select class="browse-select" id="genre-select" onchange="applyFilters()">
+                <option value="">All Genres</option>
+                <% if (locals.genres) { %>
+                    <% genres.forEach(g => { %>
+                        <option value="<%= g.slug %>" <%= locals.activeGenre === g.slug ? 'selected' : '' %>><%= g.name %></option>
+                    <% }); %>
+                <% } %>
+            </select>
+
+            <!-- Season Filter -->
+            <select class="browse-select" id="season-select" onchange="applyFilters()">
+                <option value="">All Seasons</option>
+                <option value="winter" <%= (locals.activeSeason && locals.activeSeason.toLowerCase() === 'winter') ? 'selected' : '' %>>Winter</option>
+                <option value="spring" <%= (locals.activeSeason && locals.activeSeason.toLowerCase() === 'spring') ? 'selected' : '' %>>Spring</option>
+                <option value="summer" <%= (locals.activeSeason && locals.activeSeason.toLowerCase() === 'summer') ? 'selected' : '' %>>Summer</option>
+                <option value="fall" <%= (locals.activeSeason && locals.activeSeason.toLowerCase() === 'fall') ? 'selected' : '' %>>Fall</option>
+            </select>
+
+            <!-- Year Filter (1940 - 2026) -->
+            <select class="browse-select" id="year-select" onchange="applyFilters()">
+                <option value="">All Years</option>
+                <% for(let y = 2026; y >= 1940; y--) { %>
+                    <option value="<%= y %>" <%= (locals.activeYear == y) ? 'selected' : '' %>><%= y %></option>
+                <% } %>
+            </select>
+
+            <!-- Sort Filter -->
+            <select class="browse-select" id="sort-select" onchange="applyFilters()">
+                <option value="popular" <%= locals.activeSort === 'popular' ? 'selected' : '' %>>Most Popular</option>
+                <option value="score" <%= locals.activeSort === 'score' ? 'selected' : '' %>>Highest Score</option>
+                <option value="recent" <%= locals.activeSort === 'recent' ? 'selected' : '' %>>Recently Released</option>
+                <option value="title" <%= locals.activeSort === 'title' ? 'selected' : '' %>>Alphabetical (A-Z)</option>
+            </select>
+        </div>
+
+        <script>
+            function applyFilters() {
+                const genre = document.getElementById('genre-select').value;
+                const season = document.getElementById('season-select').value;
+                const year = document.getElementById('year-select').value;
+                const sort = document.getElementById('sort-select').value;
+                const params = new URLSearchParams();
+                if (genre) params.append('genre', genre);
+                if (season) params.append('season', season);
+                if (year) params.append('year', year);
+                if (sort) params.append('sort', sort);
+                window.location.href = '/anime' + (params.toString() ? '?' + params.toString() : '');
+            }
+        </script>
+
+        <!-- Featured Strip -->
+        <div>
+            <div class="section-title">
+                <span>Featured Anime</span>
+                <span style="font-size:12px; color:var(--muted); text-transform:none; font-weight:500;">Masterworks & Fan Favorites</span>
+            </div>
+            <div class="featured-strip">
+                <% if (locals.items && items.length > 0) { %>
+                    <% items.slice(0, 6).forEach(a => { %>
+                        <a href="/anime/<%= a.slug %>" class="strip-item" title="<%= a.title %>">
+                            <div class="strip-poster-wrap">
+                                <img src="<%= a.cover_image %>" class="strip-poster" alt="<%= a.title %>" loading="lazy">
+                            </div>
+                            <div class="card-title"><%= a.title %></div>
+                            <div class="card-meta">
+                                <span><%= a.release_year %></span>
+                                <span class="card-score">★ <%= a.score ? a.score.toFixed(1) : '4.5' %></span>
+                            </div>
+                        </a>
+                    <% }); %>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Main Content Split -->
+        <div class="content-split">
+            
+            <!-- Left: Main Grid -->
+            <div class="main-col">
+                <form action="/search" method="GET" class="search-box">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" name="q" class="search-input" placeholder="Search anime catalog...">
+                </form>
+
+                <div class="section-title">
+                    <span>Explore Anime (<%= locals.items ? items.length : 0 %> titles)</span>
+                </div>
+                
+                <div class="popular-grid">
+                    <% if (locals.items && items.length > 0) { %>
+                        <% items.forEach(anime => { %>
+                            <a href="/anime/<%= anime.slug %>" class="card" title="<%= anime.title %> (<%= anime.release_year %>)">
+                                <div class="card-poster-wrap">
+                                    <img src="<%= anime.cover_image %>" class="card-poster" alt="<%= anime.title %>" loading="lazy">
+                                    <span class="card-badge"><%= anime.type ? anime.type.toUpperCase() : 'TV' %></span>
+                                </div>
+                                <div class="card-title"><%= anime.title %></div>
+                                <div class="card-meta">
+                                    <span><%= anime.release_year %></span>
+                                    <span class="card-score">★ <%= anime.score ? anime.score.toFixed(1) : '4.5' %></span>
+                                </div>
+                            </a>
+                        <% }); %>
+                    <% } else { %>
+                        <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: var(--muted); background: var(--cream); border-radius: 8px;">
+                            No anime found matching your filter criteria.
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Right: Sidebar -->
+            <div class="side-col">
+                
+                <!-- Staff Picks -->
+                <div>
+                    <div class="section-title">
+                        <span>Spotlight Masterpiece</span>
+                    </div>
+                    <a href="/anime/frieren-beyond-journeys-end" class="crew-pick">
+                        <img src="/images/frieren_cover_1785281175713.png" alt="Frieren Banner" style="max-height:160px; object-fit:cover;">
+                        <div class="crew-pick-overlay">
+                            <div class="crew-pick-title">Frieren: Beyond Journey's End</div>
+                            <div class="crew-pick-desc">Highest Rated Fantasy Series · Madhouse</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Popular Reviews -->
+                <div>
+                    <div class="section-title">
+                        <span>Community Reviews</span>
+                    </div>
+                    
+                    <div class="sidebar-review">
+                        <a href="/anime/neon-genesis-evangelion"><img src="/images/nge_cover_1785281259269.png" class="sr-poster" alt="Evangelion"></a>
+                        <div class="sr-content">
+                            <div class="sr-title"><a href="/anime/neon-genesis-evangelion" style="color:inherit;">Neon Genesis Evangelion</a></div>
+                            <div class="sr-meta">
+                                <strong>Zoe</strong> <span class="sr-rating">★★★★★</span>
+                            </div>
+                            <div class="sr-text">An absolute masterpiece that redefined the psychological mecha genre. The character introspection is unmatched.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-review">
+                        <a href="/anime/frieren-beyond-journeys-end"><img src="/images/frieren_cover_1785281175713.png" class="sr-poster" alt="Frieren"></a>
+                        <div class="sr-content">
+                            <div class="sr-title"><a href="/anime/frieren-beyond-journeys-end" style="color:inherit;">Frieren: Beyond Journey's End</a></div>
+                            <div class="sr-meta">
+                                <strong>Miwazoe</strong> <span class="sr-rating">★★★★★</span>
+                            </div>
+                            <div class="sr-text">A beautiful reflection on time, memory, and the connections we make. Stunning animation by Madhouse.</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-review">
+                        <a href="/anime/attack-on-titan"><img src="/images/aot_cover_1785281191397.png" class="sr-poster" alt="Attack on Titan"></a>
+                        <div class="sr-content">
+                            <div class="sr-title"><a href="/anime/attack-on-titan" style="color:inherit;">Attack on Titan</a></div>
+                            <div class="sr-meta">
+                                <strong>AnimeGuru</strong> <span class="sr-rating">★★★★★</span>
+                            </div>
+                            <div class="sr-text">Incredible world-building and plot twists. The narrative tension is relentless from the very first episode.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Box -->
+                <div class="info-box">
+                    Looking for a specific anime or movie? Use the search bar above or log an entry to your personal diary.
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

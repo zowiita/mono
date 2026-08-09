@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Untitled — Track, Review & Discover Anime</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#280DC2;--blue-soft:#E8E4FF;--blue-mid:#C4BEFF;
+  --white:#FDF8F4;--orange:#F37510;--orange-soft:#FDEBD8;
+  --ink:#222224;--cream:#F0EAE3;--cream-dk:#E4DDD5;--muted:#9B9593;
+  --t-xs:11px;--t-sm:13px;--t-base:15px;--t-md:16px;--t-lg:20px;
+  --t-xl:28px;--t-2xl:38px;
+  --r-xs:3px;--r-sm:5px;--r-md:8px;--r-lg:10px;
+  --sh-sm:0 1px 3px rgba(34,34,36,.07),0 1px 5px rgba(34,34,36,.04);
+  --sh-md:0 3px 12px rgba(34,34,36,.09),0 1px 4px rgba(34,34,36,.05);
+  --sh-lg:0 6px 24px rgba(34,34,36,.12),0 2px 8px rgba(34,34,36,.06);
+  --sh-blue:0 4px 16px rgba(40,13,194,.32);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:"Satoshi",-apple-system,sans-serif;background:var(--white);color:var(--ink);font-size:var(--t-base);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+ul{list-style:none;}
+img{display:block;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px;}
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;height:56px;background:rgba(253,248,244,.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--cream);}
+.nav-in{height:100%;display:flex;align-items:center;}
+.logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--blue);letter-spacing:-.5px;flex-shrink:0;}
+.logo-sq{width:20px;height:20px;border-radius:4px;background:var(--blue);display:flex;align-items:center;justify-content:center;}
+.logo-dot{width:5px;height:5px;border-radius:50%;background:var(--orange);display:block;}
+.nav-mid{flex:1;display:flex;justify-content:center;}
+.nav-links{display:flex;gap:2px;}
+.nav-links a{font-size:13px;font-weight:500;color:var(--ink);padding:5px 12px;border-radius:5px;opacity:.6;transition:opacity .15s,background .15s;}
+.nav-links a:hover{opacity:1;background:var(--cream);}
+.nav-links a.active{opacity:1;color:var(--blue);background:var(--blue-soft);font-weight:600;}
+.nav-end{flex-shrink:0;display:flex;align-items:center;gap:10px;}
+.nav-btn-icon{width:32px;height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s,background .15s;}
+.nav-btn-icon:hover{opacity:1;background:var(--cream);}
+.btn-log{display:flex;align-items:center;gap:5px;background:var(--blue);color:#fff;font-size:13px;font-weight:600;padding:7px 15px;border-radius:6px;transition:transform .15s,box-shadow .15s;}
+.btn-log:hover{transform:translateY(-1px);box-shadow:var(--sh-blue);}
+.btn-log .plus{display:inline-flex;transition:transform .2s cubic-bezier(.34,1.56,.64,1);}
+.btn-log:hover .plus{transform:rotate(45deg);}
+.nav-av{width:30px;height:30px;border-radius:50%;border:2px solid var(--cream-dk);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;}
+/* SECTION */
+.main{padding:48px 0 96px;}
+.sec{margin-bottom:64px;}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;}
+.sec-label{display:flex;align-items:center;gap:10px;}
+.sec-bar{width:4px;height:24px;background:var(--orange);border-radius:2px;flex-shrink:0;}
+.sec-title{font-size:var(--t-xl);font-weight:700;letter-spacing:-.6px;line-height:1;}
+.sec-right{display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.see-all{font-size:13px;font-weight:600;color:var(--blue);opacity:.7;transition:opacity .15s;}
+.see-all:hover{opacity:1;}
+.tog{display:inline-flex;background:var(--cream);border-radius:5px;padding:3px;gap:2px;}
+.tog button{font-size:13px;font-weight:500;color:var(--ink);opacity:.55;padding:4px 12px;border-radius:4px;transition:all .18s;white-space:nowrap;}
+.tog button.on{background:#fff;opacity:1;color:var(--blue);font-weight:600;box-shadow:0 1px 3px rgba(34,34,36,.10);}
+.bdg{display:inline-flex;align-items:center;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border-radius:3px;line-height:1;}
+.bdg-tv{background:var(--blue-soft);color:var(--blue);}
+.bdg-film{background:var(--orange-soft);color:var(--orange);}
+.bdg-new{background:var(--orange);color:#fff;}
+.bdg-dark{background:rgba(0,0,0,.65);color:#fff;backdrop-filter:blur(4px);}
+.rot-p{transform:rotate(1.5deg);}.rot-n{transform:rotate(-1.5deg);}
+.strip{display:flex;gap:14px;overflow-x:auto;padding-bottom:14px;scrollbar-width:thin;scrollbar-color:var(--cream-dk) transparent;}
+.strip::-webkit-scrollbar{height:4px;} .strip::-webkit-scrollbar-thumb{background:var(--cream-dk);border-radius:2px;}
+.pc{flex-shrink:0;width:148px;cursor:pointer;}
+.pc-img{position:relative;width:148px;height:212px;border-radius:var(--r-md);overflow:hidden;background:var(--cream);box-shadow:var(--sh-sm);transition:transform .2s cubic-bezier(.4,0,.2,1),box-shadow .2s;}
+.pc:hover .pc-img{transform:translateY(-5px);box-shadow:var(--sh-lg);}
+.pc-img img,.pc-img .pc-fill{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.pc-rank{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;z-index:2;}
+.pc-badge{position:absolute;bottom:8px;right:8px;z-index:2;}
+.pc-grad{position:absolute;bottom:0;left:0;right:0;height:64px;background:linear-gradient(to top,rgba(0,0,0,.8),transparent);z-index:1;}
+.pc-info{margin-top:8px;}
+.pc-title{font-size:13px;font-weight:600;line-height:1.3;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.pc-meta{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.pc-yr{font-size:11px;font-weight:500;color:var(--muted);}
+.pc-rat{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--blue);}
+.pc-rat svg{width:11px;height:11px;fill:var(--blue);}
+.g1{background:linear-gradient(155deg,#0d1b2a,#1b3a5c,#2a6494);}
+.g2{background:linear-gradient(155deg,#1a0608,#4a1018,#8b2030);}
+.g3{background:linear-gradient(155deg,#1c1008,#3d2210,#6e3c18);}
+.g4{background:linear-gradient(155deg,#080a1c,#14183c,#1e2862);}
+.g5{background:linear-gradient(155deg,#0c0808,#241010,#3c1818);}
+.g6{background:linear-gradient(155deg,#081c18,#143830,#1e5848);}
+.g7{background:linear-gradient(155deg,#18080a,#38121a,#581e28);}
+.g8{background:linear-gradient(155deg,#141408,#303018,#585830);}
+/* PROMO BANNER */
+.promo{position:relative;width:100%;height:320px;border-radius:var(--r-lg);overflow:hidden;margin-bottom:0;cursor:pointer;box-shadow:var(--sh-md);transition:box-shadow .2s;}
+.promo:hover{box-shadow:var(--sh-lg);}
+.promo-img{width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;}
+.promo-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(10,8,20,.92) 0%,rgba(10,8,20,.7) 40%,rgba(10,8,20,.15) 70%,transparent 100%);}
+.promo-body{position:absolute;top:0;left:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:32px 40px;max-width:560px;z-index:2;}
+.promo-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.promo-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--orange);}
+.promo-dot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.4);flex-shrink:0;}
+.promo-status{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.6);}
+.promo-title{font-size:32px;font-weight:700;color:#fff;letter-spacing:-.6px;line-height:1.1;margin-bottom:12px;}
+.promo-desc{font-size:13px;color:rgba(255,255,255,.72);line-height:1.6;margin-bottom:20px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.promo-actions{display:flex;align-items:center;gap:12px;}
+.promo-btn-primary{display:flex;align-items:center;gap:6px;background:#fff;color:var(--ink);font-size:13px;font-weight:700;padding:10px 20px;border-radius:6px;transition:background .15s;}
+.promo-btn-primary:hover{background:rgba(255,255,255,.88);}
+.promo-btn-secondary{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);font-size:13px;font-weight:600;padding:10px 18px;border-radius:6px;backdrop-filter:blur(4px);transition:background .15s;}
+.promo-btn-secondary:hover{background:rgba(255,255,255,.18);}
+.promo-score{position:absolute;bottom:24px;right:32px;text-align:right;z-index:2;}
+.promo-score-num{font-size:36px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;}
+.promo-score-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.5);margin-top:2px;}
+.promo-stars{display:flex;gap:2px;justify-content:flex-end;margin-top:4px;}
+.promo-stars svg{width:13px;height:13px;fill:var(--orange);}
+/* TRAILERS */
+.tc{flex-shrink:0;width:270px;cursor:pointer;}
+.tc-thumb{position:relative;width:270px;height:152px;border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-sm);transition:transform .2s cubic-bezier(.4,0,.2,1),box-shadow .2s;}
+.tc:hover .tc-thumb{transform:translateY(-3px);box-shadow:var(--sh-lg);}
+.tc-fill{position:absolute;inset:0;width:100%;height:100%;}
+.tc-dark{position:absolute;inset:0;background:rgba(0,0,0,.32);display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.tc:hover .tc-dark{background:rgba(0,0,0,.18);}
+.tc-play{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+.tc:hover .tc-play{transform:scale(1.1);box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.tc-dur{position:absolute;bottom:7px;right:8px;background:rgba(0,0,0,.75);color:#fff;font-size:10px;font-weight:700;padding:2px 5px;border-radius:3px;}
+.tc-top{position:absolute;top:8px;left:8px;display:flex;gap:4px;}
+.tc-info{margin-top:9px;}
+.tc-title{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;}
+.tc-meta{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px;}
+.v1{background:linear-gradient(155deg,#0d1b2a,#1b3a5c,#2a5080);}
+.v2{background:linear-gradient(155deg,#1a0608,#5a1020,#8b2030);}
+.v3{background:linear-gradient(155deg,#100818,#2a1040,#5b2090);}
+.v4{background:linear-gradient(155deg,#1c1008,#4d2810,#7e4018);}
+.v5{background:linear-gradient(155deg,#0a1c10,#1a4030,#2d6440);}
+/* SEASON */
+.sg{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;}
+.day-h{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.day-h.td{color:var(--blue);}
+.ep{position:relative;background:#fff;border:1px solid var(--cream);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-sm);cursor:pointer;transition:transform .15s,box-shadow .15s;}
+.ep:hover{transform:translateY(-2px);box-shadow:var(--sh-md);}
+.ep-cov{width:100%;aspect-ratio:2/3;position:relative;overflow:hidden;}
+.ep-cov-fill,.ep-cov img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.ep:hover .ep-cov-fill,.ep:hover .ep-cov img{transform:scale(1.05);}
+.ep.wd .ep-cov::after{content:"";position:absolute;inset:0;background:rgba(40,13,194,.12);}
+.ep.na .ep-cov{filter:grayscale(40%) opacity(.72);}
+.ep-chk{position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;z-index:3;}
+.ep-body{padding:6px 7px 8px;}
+.ep-name{font-size:10px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ep-time{font-size:10px;font-weight:500;color:var(--muted);margin-top:2px;}
+.ep-time.up{color:var(--orange);}
+.ep-btn{display:flex;align-items:center;justify-content:center;gap:3px;width:100%;margin-top:5px;padding:4px;font-size:10px;font-weight:600;color:var(--blue);background:var(--blue-soft);border-radius:4px;transition:background .15s;}
+.ep-btn:hover{background:var(--blue-mid);}
+/* LOGGED */
+.rl-live{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:10px 14px;background:var(--cream);border-radius:var(--r-sm);}
+.rl-pulse{width:7px;height:7px;border-radius:50%;background:#E03535;animation:pulse 1.8s ease infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.8);}}
+.rl-txt{font-size:12px;font-weight:600;color:var(--ink);}
+.rl-cnt{font-size:12px;font-weight:700;color:var(--blue);}
+.rl-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:8px;}
+.rl-item{position:relative;border-radius:var(--r-sm);overflow:hidden;aspect-ratio:2/3;cursor:pointer;box-shadow:var(--sh-sm);transition:transform .15s;}
+.rl-item:hover{transform:scale(1.05);z-index:2;}
+.rl-item-fill{width:100%;height:100%;}
+.rl-av{position:absolute;bottom:4px;left:4px;width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,.9);font-size:7px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;z-index:2;}
+.rl-rating{position:absolute;top:3px;right:4px;background:rgba(0,0,0,.68);color:var(--orange);font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;z-index:2;}
+/* REVIEWS */
+.rfeed{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.rc{display:flex;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--cream);}
+.rc:nth-last-child(-n+2){border-bottom:none;padding-bottom:0;}
+.rc-th{width:85px;height:125px;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;box-shadow:var(--sh-sm);border:1px solid var(--cream-dk);}
+.rc-th img{width:100%;height:100%;object-fit:cover;display:block;}
+.rc-body{flex:1;}
+.rc-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.rc-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.rc-user{font-size:13px;font-weight:700;color:var(--ink);}
+.rc-title{font-size:18px;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:2px;}
+.rc-yr{font-size:13px;font-weight:500;color:var(--muted);margin-left:4px;}
+.rc-stars{display:flex;align-items:center;gap:2px;margin-bottom:10px;}
+.si{width:14px;height:14px;} .sf{fill:var(--orange);} .sh{fill:var(--orange);opacity:.5;} .se{fill:var(--cream-dk);}
+.rc-score{font-size:12px;font-weight:700;color:var(--orange);margin-left:6px;}
+.rc-txt{font-size:13px;line-height:1.55;color:var(--ink);opacity:.9;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.rc-foot{display:flex;align-items:center;gap:16px;margin-top:12px;}
+.rc-like{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:color .15s;}
+.rc-like:hover{color:var(--ink);}
+.rc-like svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;}
+.rc-like.lkd{color:#E03535;} .rc-like.lkd svg{fill:currentColor;stroke:none;}
+.rc-comments{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--muted);}
+.rc-comments svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;}
+/* LISTS */
+.lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.lc{cursor:pointer;}
+.lc-coll{display:flex;position:relative;height:150px;width:100%;overflow:hidden;margin-bottom:12px;padding-left:15px;}
+.lc-cell{width:100px;height:150px;position:absolute;border:1px solid rgba(255,255,255,.4);border-radius:var(--r-sm);overflow:hidden;box-shadow:-4px 0 12px rgba(0,0,0,.15);transition:transform .2s cubic-bezier(.4,0,.2,1);background:var(--cream);}
+.lc-cell img{width:100%;height:100%;object-fit:cover;display:block;}
+.lc-cell:nth-child(1){left:0;z-index:5;}
+.lc-cell:nth-child(2){left:35px;z-index:4;}
+.lc-cell:nth-child(3){left:70px;z-index:3;}
+.lc-cell:nth-child(4){left:105px;z-index:2;}
+.lc-cell:nth-child(5){left:140px;z-index:1;}
+.lc:hover .lc-cell:nth-child(1){transform:translateX(-6px);}
+.lc:hover .lc-cell:nth-child(2){transform:translateX(-3px);}
+.lc-title{font-size:15px;font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:6px;}
+.lc-auth{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.lc-av{width:16px;height:16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;}
+.lc-an{font-size:12px;font-weight:600;color:var(--ink);}
+.lc-stats{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:600;color:var(--muted);}
+.lc-stat{display:flex;align-items:center;gap:3px;} .lc-stat svg{width:12px;height:12px;fill:currentColor;}
+.lc-stat.lk{fill:none;stroke:currentColor;stroke-width:2;}
+/* NEWS */
+.nws-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.nc{cursor:pointer;}
+.nc-img{position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-sm);transition:transform .2s, box-shadow .2s;margin-bottom:12px;}
+.nc:hover .nc-img{transform:translateY(-2px);box-shadow:var(--sh-md);}
+.nc-img img{width:100%;height:100%;object-fit:cover;}
+.nc-cat{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;}
+.nc-title{font-size:14px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.nc-date{font-size:11px;font-weight:500;color:var(--muted);}
+.av1{background:linear-gradient(135deg,#280DC2,#5030D8);}
+.av2{background:linear-gradient(135deg,#F37510,#E05500);}
+.av3{background:linear-gradient(135deg,#0a7060,#0d5548);}
+.av4{background:linear-gradient(135deg,#8e24aa,#5c1891);}
+.av5{background:linear-gradient(135deg,#b5451b,#8b2810);}
+/* FOOTER */
+.ft{background:var(--cream);padding:64px 0 32px;margin-top:32px;}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;}
+.ft-brand{display:flex;flex-direction:column;gap:12px;}
+.ft-logo{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;color:var(--blue);letter-spacing:-.5px;}
+.ft-desc{font-size:13px;color:var(--muted);line-height:1.6;max-width:280px;}
+.ft-col-title{font-size:12px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.ft-links{display:flex;flex-direction:column;gap:10px;}
+.ft-links a{font-size:13px;font-weight:500;color:var(--muted);transition:color .15s;}
+.ft-links a:hover{color:var(--blue);}
+.ft-bottom{padding-top:24px;border-top:1px solid var(--cream-dk);display:flex;align-items:center;justify-content:space-between;}
+.ft-copy{font-size:12px;font-weight:500;color:var(--muted);}
+</style></head><body>
+<nav class="nav">
+<div class="wrap nav-in">
+<a href="/" class="logo"><div class="logo-sq"><span class="logo-dot"></span></div>untitled</a>
+<div class="nav-mid"><ul class="nav-links"><li><a href="/" class="active">Home</a></li><li><a href="/series" >Series</a></li><li><a href="/movies" >Movies</a></li><li><a href="/profile" >Profile</a></li></ul></div>
+<div class="nav-end"><button class="nav-btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button><button class="btn-log"><span class="plus"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>Log</button><div class="nav-av av1">M</div></div>
+</div>
+</nav>
+<main class="main">
+<section class="sec" style="margin-top:48px;"><div class="wrap">
+<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Popular Right Now</h2></div><div class="sec-right"><div class="tog" id="tp"><button class="on" onclick="tog(this,'tp')">This Season</button><button onclick="tog(this,'tp')">All Time</button></div><a href="/series?sort=popular" class="see-all">See all &rarr;</a></div></div>
+<div class="strip">
+<article class="pc">
+<div class="pc-img">
+<img src="images/frieren.jpg" loading="lazy">
+<span class="pc-rank">#1</span>
+<span class="pc-badge bdg bdg-tv rot-n">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Frieren: Beyond Journey's End</p><div class="pc-meta"><span class="pc-yr">2023</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>9.4</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<img src="images/aot.jpg" loading="lazy">
+<span class="pc-rank">#2</span>
+<span class="pc-badge bdg bdg-tv rot-p">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Attack on Titan: Final Season</p><div class="pc-meta"><span class="pc-yr">2023</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>9.2</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<img src="images/violet.jpg" loading="lazy">
+<span class="pc-rank">#3</span>
+<span class="pc-badge bdg bdg-tv rot-n">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Violet Evergarden</p><div class="pc-meta"><span class="pc-yr">2018</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>9.1</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<img src="images/nge.jpg" loading="lazy">
+<span class="pc-rank">#4</span>
+<span class="pc-badge bdg bdg-tv rot-p">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Neon Genesis Evangelion</p><div class="pc-meta"><span class="pc-yr">1995</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>9.0</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<img src="images/vinland.png" loading="lazy">
+<span class="pc-rank">#5</span>
+<span class="pc-badge bdg bdg-tv rot-n">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Vinland Saga</p><div class="pc-meta"><span class="pc-yr">2019</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>8.9</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<img src="images/mushishi.jpg" loading="lazy">
+<span class="pc-rank">#6</span>
+<span class="pc-badge bdg bdg-tv rot-p">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Mushishi</p><div class="pc-meta"><span class="pc-yr">2005</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>8.8</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<img src="images/chainsaw.jpg" loading="lazy">
+<span class="pc-rank">#7</span>
+<span class="pc-badge bdg bdg-tv rot-n">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Chainsaw Man</p><div class="pc-meta"><span class="pc-yr">2022</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>8.7</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<img src="images/mob.jpg" loading="lazy">
+<span class="pc-rank">#8</span>
+<span class="pc-badge bdg bdg-tv rot-p">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Mob Psycho 100</p><div class="pc-meta"><span class="pc-yr">2016</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>8.7</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<div class="pc-fill g6"></div>
+<span class="pc-rank">#9</span>
+<span class="pc-badge bdg bdg-tv rot-n">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Dandadan</p><div class="pc-meta"><span class="pc-yr">2024</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>8.6</span></div></div>
+</article>
+<article class="pc">
+<div class="pc-img">
+<div class="pc-fill g7"></div>
+<span class="pc-rank">#10</span>
+<span class="pc-badge bdg bdg-tv rot-p">TV</span>
+<div class="pc-grad"></div>
+</div>
+<div class="pc-info"><p class="pc-title">Delicious in Dungeon</p><div class="pc-meta"><span class="pc-yr">2024</span><span class="pc-rat"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>8.6</span></div></div>
+</article>
+</div>
+</div></section>
+<section class="sec"><div class="wrap">
+<div class="promo">
+<img src="images/banner.jpg" class="promo-img">
+<div class="promo-overlay"></div>
+<div class="promo-body">
+  <div class="promo-eyebrow"><span class="promo-label">Sponsored</span><span class="promo-dot"></span><span class="promo-status">Currently Airing</span></div>
+  <h3 class="promo-title">Frieren: Beyond<br>Journey's End</h3>
+  <p class="promo-desc">An elven mage journeys through a world she once saved, reckoning with time, grief, and what it means to truly know another person.</p>
+  <div class="promo-actions">
+    <a href="/anime/frieren" class="promo-btn-primary"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>View series</a>
+    <button class="promo-btn-secondary"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add to list</button>
+  </div>
+</div>
+<div class="promo-score">
+  <div class="promo-score-num">9.4</div>
+  <div class="promo-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+  <div class="promo-score-label">Community score</div>
+</div>
+</div>
+</div></section>
+<section class="sec"><div class="wrap">
+<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">New Trailers</h2></div><a href="/trailers" class="see-all">See all &rarr;</a></div>
+<div class="strip">
+<article class="tc"><div class="tc-thumb"><div class="tc-fill v1"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">TRAILER</span></div><span class="tc-dur">1:32</span></div><div class="tc-info"><p class="tc-title">Frieren: Beyond Journey's End</p><p class="tc-meta">Madhouse · Fall 2023</p></div></article>
+<article class="tc"><div class="tc-thumb"><div class="tc-fill v2"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">TRAILER</span></div><span class="tc-dur">2:01</span></div><div class="tc-info"><p class="tc-title">Attack on Titan: The Final Chapters</p><p class="tc-meta">MAPPA · 2023</p></div></article>
+<article class="tc"><div class="tc-thumb"><div class="tc-fill v3"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">TEASER</span></div><span class="tc-dur">0:45</span></div><div class="tc-info"><p class="tc-title">Vinland Saga Season 3</p><p class="tc-meta">MAPPA · Coming 2025</p></div></article>
+<article class="tc"><div class="tc-thumb"><div class="tc-fill v4"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">TRAILER</span></div><span class="tc-dur">1:48</span></div><div class="tc-info"><p class="tc-title">Delicious in Dungeon S2</p><p class="tc-meta">Trigger · 2025</p></div></article>
+<article class="tc"><div class="tc-thumb"><div class="tc-fill v5"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">PV</span></div><span class="tc-dur">1:14</span></div><div class="tc-info"><p class="tc-title">Dandadan Season 2</p><p class="tc-meta">Science SARU · Announced</p></div></article>
+</div>
+</div></section>
+<section class="sec"><div class="wrap">
+<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">This Season</h2></div><div class="sec-right"><div class="tog" id="ts"><button class="on" onclick="tog(this,'ts')">Weekly</button><button onclick="tog(this,'ts')">Full Season</button></div></div></div>
+<div class="sg">
+<div>
+<p class="day-h">Mon</p>
+<article class="ep">
+<div class="ep-cov">
+<img src="images/frieren.jpg" loading="lazy">
+</div>
+<div class="ep-body">
+<p class="ep-name">Spy x Family</p>
+<p class="ep-time">Ep 28 &middot; 23:00</p>
+<button class="ep-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Mark watched</button>
+</div>
+</article>
+</div>
+<div>
+<p class="day-h">Tue</p>
+<article class="ep wd">
+<div class="ep-cov" style="position:relative">
+<div class="ep-cov-fill g1"></div>
+<div class="ep-chk"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+</div>
+<div class="ep-body">
+<p class="ep-name">Dandadan</p>
+<p class="ep-time">Ep 14 &middot; 00:30</p>
+</div>
+</article>
+</div>
+<div>
+<p class="day-h td">Wed</p>
+<article class="ep">
+<div class="ep-cov">
+<div class="ep-cov-fill g3"></div>
+</div>
+<div class="ep-body">
+<p class="ep-name">Delicious in Dungeon</p>
+<p class="ep-time">Ep 22 &middot; 23:30</p>
+<button class="ep-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Mark watched</button>
+</div>
+</article>
+</div>
+<div>
+<p class="day-h">Thu</p>
+<article class="ep">
+<div class="ep-cov">
+<img src="images/frieren.jpg" loading="lazy">
+</div>
+<div class="ep-body">
+<p class="ep-name">Frieren</p>
+<p class="ep-time">Ep 27 &middot; 23:00</p>
+<button class="ep-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Mark watched</button>
+</div>
+</article>
+</div>
+<div>
+<p class="day-h">Fri</p>
+<article class="ep na">
+<div class="ep-cov">
+<img src="images/vinland.png" loading="lazy">
+</div>
+<div class="ep-body">
+<p class="ep-name">Vinland Saga S3</p>
+<p class="ep-time up">Fri · 24:00</p>
+</div>
+</article>
+</div>
+<div>
+<p class="day-h">Sat</p>
+<article class="ep na">
+<div class="ep-cov">
+<img src="images/mob.jpg" loading="lazy">
+</div>
+<div class="ep-body">
+<p class="ep-name">Mob Psycho 100 S3</p>
+<p class="ep-time up">Sat · 23:30</p>
+</div>
+</article>
+</div>
+<div>
+<p class="day-h">Sun</p>
+<article class="ep na">
+<div class="ep-cov">
+<div class="ep-cov-fill g7"></div>
+</div>
+<div class="ep-body">
+<p class="ep-name">Bleach: TYBW</p>
+<p class="ep-time up">Sun · 17:30</p>
+</div>
+</article>
+</div>
+</div>
+</div></section>
+<section class="sec"><div class="wrap">
+<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Recently Logged</h2></div><a href="/activity" class="see-all">See all &rarr;</a></div>
+<div class="rl-live"><span class="rl-pulse"></span><span class="rl-txt">Live &nbsp;—&nbsp;</span><span class="rl-cnt" id="cnt">2,847</span><span class="rl-txt">&nbsp;entries logged in the last hour</span></div>
+<div class="rl-grid">
+<div class="rl-item">
+<img src="images/frieren.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;">
+<div class="rl-av av1">M</div>
+<span class="rl-rating">5.0</span>
+</div>
+<div class="rl-item">
+<img src="images/aot.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;">
+<div class="rl-av av2">R</div>
+<span class="rl-rating">4.0</span>
+</div>
+<div class="rl-item">
+<img src="images/violet.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;">
+<div class="rl-av av3">T</div>
+<span class="rl-rating">4.5</span>
+</div>
+<div class="rl-item">
+<img src="images/nge.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;">
+<div class="rl-av av4">J</div>
+<span class="rl-rating">3.5</span>
+</div>
+<div class="rl-item">
+<img src="images/vinland.png" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;">
+<div class="rl-av av5">K</div>
+<span class="rl-rating">5.0</span>
+</div>
+<div class="rl-item">
+<div class="rl-item-fill g7"></div>
+<div class="rl-av av1">A</div>
+<span class="rl-rating">4.0</span>
+</div>
+<div class="rl-item">
+<div class="rl-item-fill g4"></div>
+<div class="rl-av av2">S</div>
+<span class="rl-rating">3.0</span>
+</div>
+<div class="rl-item">
+<img src="images/mushishi.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;">
+<div class="rl-av av3">L</div>
+<span class="rl-rating">4.5</span>
+</div>
+<div class="rl-item">
+<img src="images/chainsaw.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;">
+<div class="rl-av av4">N</div>
+<span class="rl-rating">5.0</span>
+</div>
+<div class="rl-item">
+<img src="images/mob.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;">
+<div class="rl-av av5">V</div>
+<span class="rl-rating">4.0</span>
+</div>
+<div class="rl-item">
+<div class="rl-item-fill v3"></div>
+<div class="rl-av av1">C</div>
+<span class="rl-rating">3.5</span>
+</div>
+<div class="rl-item">
+<div class="rl-item-fill v4"></div>
+<div class="rl-av av2">D</div>
+<span class="rl-rating">4.5</span>
+</div>
+</div>
+</div></section>
+<section class="sec"><div class="wrap">
+<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">From People You Follow</h2></div><a href="/reviews/following" class="see-all">See all &rarr;</a></div>
+<div class="rfeed">
+<article class="rc">
+<div class="rc-th"><img src="images/frieren.jpg" loading="lazy"></div>
+<div class="rc-body">
+<div class="rc-meta"><div class="rc-av av1">M</div><span class="rc-user">maisie.watches</span></div><h3 class="rc-title">Frieren: Beyond Journey's End <span class="rc-yr">2023</span></h3><div class="rc-stars"><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="rc-score">5.0</span></div>
+<p class="rc-txt">There is something quietly devastating about a story that measures time in centuries. Frieren does not mourn loudly — it lets grief accumulate the way sediment does, slowly and imperceptibly, until you realize the weight of it. The most emotionally honest anime I have seen in years.</p>
+<div class="rc-foot"><button class="rc-like lkd"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Liked</span> 142 likes</button><span class="rc-comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 18</span></div>
+</div></article>
+<article class="rc">
+<div class="rc-th"><img src="images/vinland.png" loading="lazy"></div>
+<div class="rc-body">
+<div class="rc-meta"><div class="rc-av av2">R</div><span class="rc-user">reelhouse_rina</span></div><h3 class="rc-title">Vinland Saga Season 2 <span class="rc-yr">2023</span></h3><div class="rc-stars"><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si se" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="rc-score">4.0</span></div>
+<p class="rc-txt">Season 2 asks you to sit with boredom on purpose — one of the bravest structural choices I have seen in anime. After the relentless violence of S1, watching Thorfinn work a field is almost confrontational. The show trusts you. Most people won’t have the patience. That is their loss.</p>
+<div class="rc-foot"><button class="rc-like "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Like review</span> 87 likes</button><span class="rc-comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 11</span></div>
+</div></article>
+<article class="rc">
+<div class="rc-th"><img src="images/aot.jpg" loading="lazy"></div>
+<div class="rc-body">
+<div class="rc-meta"><div class="rc-av av3">T</div><span class="rc-user">tankobonista</span></div><h3 class="rc-title">Chainsaw Man <span class="rc-yr">2022</span></h3><div class="rc-stars"><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sh" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="rc-score">4.5</span></div>
+<p class="rc-txt">MAPPA decided every episode would look like a feature film and they delivered. Chainsaw Man is cinema cosplaying as a seasonal anime. Fujimoto’s nightmare logic translates better than anyone had the right to expect. The OP alone justifies a full tier list reconsideration.</p>
+<div class="rc-foot"><button class="rc-like "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Like review</span> 63 likes</button><span class="rc-comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 7</span></div>
+</div></article>
+<article class="rc">
+<div class="rc-th"><img src="images/nge.jpg" loading="lazy"></div>
+<div class="rc-body">
+<div class="rc-meta"><div class="rc-av av4">J</div><span class="rc-user">joshuacaine</span></div><h3 class="rc-title">Neon Genesis Evangelion <span class="rc-yr">1995</span></h3><div class="rc-stars"><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="rc-score">5.0</span></div>
+<p class="rc-txt">Mecha: My Dad's Coming Home</p>
+<div class="rc-foot"><button class="rc-like "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Like review</span> 204 likes</button><span class="rc-comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 45</span></div>
+</div></article>
+</div>
+</div></section>
+<section class="sec"><div class="wrap">
+<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Popular Lists</h2></div><a href="/lists" class="see-all">Browse all &rarr;</a></div>
+<div class="lgrid">
+<article class="lc">
+<div class="lc-coll">
+<div class="lc-cell"><img src="images/frieren.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/aot.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/vinland.png" loading="lazy"></div>
+<div class="lc-cell"><img src="images/nge.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/violet.jpg" loading="lazy"></div>
+</div>
+<h3 class="lc-title">The definitive ranking of every MAPPA production (2011–2024)</h3><div class="lc-auth"><div class="lc-av av1">M</div><span class="lc-an">animelogger</span></div><div class="lc-stats"><span class="lc-stat"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>34 titles</span><span class="lc-stat"><svg class="lk" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>2.4k</span></div>
+</article>
+<article class="lc">
+<div class="lc-coll">
+<div class="lc-cell"><img src="images/mushishi.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/chainsaw.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/mob.jpg" loading="lazy"></div>
+<div class="lc-cell"><div class="g4" style="width:100%;height:100%"></div></div>
+<div class="lc-cell"><div class="g5" style="width:100%;height:100%"></div></div>
+</div>
+<h3 class="lc-title">Anime I'd recommend to people who hate anime</h3><div class="lc-auth"><div class="lc-av av2">R</div><span class="lc-an">reelhouse_rina</span></div><div class="lc-stats"><span class="lc-stat"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>12 titles</span><span class="lc-stat"><svg class="lk" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>1.8k</span></div>
+</article>
+<article class="lc">
+<div class="lc-coll">
+<div class="lc-cell"><img src="images/nge.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/violet.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/frieren.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/aot.jpg" loading="lazy"></div>
+<div class="lc-cell"><img src="images/vinland.png" loading="lazy"></div>
+</div>
+<h3 class="lc-title">Films that made me pause and just stare at the ceiling</h3><div class="lc-auth"><div class="lc-av av3">T</div><span class="lc-an">tankobonista</span></div><div class="lc-stats"><span class="lc-stat"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>19 titles</span><span class="lc-stat"><svg class="lk" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>1.1k</span></div>
+</article>
+</div>
+</div></section>
+<section class="sec"><div class="wrap">
+<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Anime News & Updates</h2></div><a href="/news" class="see-all">Read more &rarr;</a></div>
+<div class="nws-grid">
+<article class="nc">
+<div class="nc-img"><img src="images/mushishi.jpg" loading="lazy"></div>
+<div class="nc-cat">Feature</div>
+<h3 class="nc-title">The Quiet Mastery of Mushishi: Why we still need slow anime in 2024</h3>
+<div class="nc-date">Oct 12, 2024</div>
+</article>
+<article class="nc">
+<div class="nc-img"><img src="images/chainsaw.jpg" loading="lazy"></div>
+<div class="nc-cat">Industry</div>
+<h3 class="nc-title">MAPPA announces major restructuring following Chainsaw Man production cycle</h3>
+<div class="nc-date">Oct 10, 2024</div>
+</article>
+<article class="nc">
+<div class="nc-img"><img src="images/mob.jpg" loading="lazy"></div>
+<div class="nc-cat">Review</div>
+<h3 class="nc-title">Looking back at Mob Psycho 100: A perfect trilogy of coming-of-age stories</h3>
+<div class="nc-date">Oct 08, 2024</div>
+</article>
+<article class="nc">
+<div class="nc-img"><div class="g1" style="width:100%;height:100%"></div></div>
+<div class="nc-cat">Announcement</div>
+<h3 class="nc-title">Delicious in Dungeon Season 2 officially greenlit by Studio Trigger</h3>
+<div class="nc-date">Oct 05, 2024</div>
+</article>
+</div>
+</div></section>
+</main>
+<footer class="ft"><div class="wrap">
+<div class="ft-grid">
+  <div class="ft-brand">
+    <div class="ft-logo"><div class="logo-sq"><span class="logo-dot"></span></div>untitled</div>
+    <p class="ft-desc">The anime community for people who take watching seriously. Track your series, write reviews, and discover what is truly worth your time.</p>
+  </div>
+  <div>
+    <h4 class="ft-col-title">Platform</h4>
+    <div class="ft-links"><a href="#">About Us</a><a href="#">Features</a><a href="#">Pro Subscriptions</a><a href="#">API Documentation</a><a href="#">Contact</a></div>
+  </div>
+  <div>
+    <h4 class="ft-col-title">Community</h4>
+    <div class="ft-links"><a href="#">Guidelines</a><a href="#">Discussions</a><a href="#">Leaderboards</a><a href="#">Help Center</a></div>
+  </div>
+  <div>
+    <h4 class="ft-col-title">Legal</h4>
+    <div class="ft-links"><a href="#">Terms of Service</a><a href="#">Privacy Policy</a><a href="#">Cookie Policy</a></div>
+  </div>
+</div>
+<div class="ft-bottom">
+  <div class="ft-copy">&copy; 2026 Untitled Anime Platform. All rights reserved.</div>
+  <div style="display:flex;gap:12px;color:var(--muted);">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+  </div>
+</div>
+</div></footer>
+<script>
+function tog(btn,id){document.getElementById(id).querySelectorAll("button").forEach(b=>b.classList.remove("on"));btn.classList.add("on");}
+document.querySelectorAll(".ep-btn").forEach(b=>{b.addEventListener("click",function(e){e.stopPropagation();const card=this.closest(".ep");card.classList.add("wd");const cov=card.querySelector(".ep-cov");cov.style.position="relative";const chk=document.createElement("div");chk.className="ep-chk";chk.innerHTML='<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';cov.appendChild(chk);this.remove();});});
+document.querySelectorAll(".rc-like").forEach(b=>{b.addEventListener("click",function(){const wasLiked=this.classList.contains("lkd");this.classList.toggle("lkd");const span=this.querySelector("span");if(span)span.textContent=wasLiked?"Like review":"Liked";});});
+const cnt=document.getElementById("cnt");if(cnt){setInterval(()=>{const n=parseInt(cnt.textContent.replace(/,/g,""));cnt.textContent=(n+Math.floor(Math.random()*4+1)).toLocaleString();},3800);}
+</script>
+</body></html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= review.username %>'s review of <%= review.anime_title %> — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', sans-serif;
+  background-color: #14181C;
+  color: #FFFFFF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+
+.review-page-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.anime-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.anime-poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.anime-link {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.anime-title {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #FFFFFF;
+}
+
+.anime-sub {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.review-card {
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.reviewer-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.reviewer-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--orange);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.reviewer-meta {
+  flex: 1;
+}
+
+.reviewer-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.reviewer-name:hover {
+  color: var(--orange);
+}
+
+.review-date {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.rating-stars {
+  color: var(--orange);
+  font-size: 20px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.review-text-content {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #CAD2D9;
+  white-space: pre-wrap;
+  margin-bottom: 28px;
+}
+
+.review-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.btn-review-like {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #14181C;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #FFFFFF;
+  transition: all 0.15s;
+}
+
+.btn-review-like:hover {
+  border-color: var(--orange);
+}
+
+.btn-review-like.active {
+  background: rgba(255,85,0,0.15);
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.btn-review-like svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Comments Section */
+.comments-section {
+  margin-top: 36px;
+}
+
+.comments-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+}
+
+.comment-item {
+  display: flex;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.comment-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #202830;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.comment-body {
+  flex: 1;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.comment-user {
+  font-size: 14px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.comment-user:hover {
+  color: var(--orange);
+}
+
+.comment-time {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.comment-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #CAD2D9;
+}
+
+.comment-form-wrap {
+  margin-top: 24px;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-textarea {
+  width: 100%;
+  background: #181D22;
+  color: #FFFFFF;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 80px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.comment-textarea:focus {
+  border-color: var(--orange);
+}
+
+.btn-post-comment {
+  align-self: flex-end;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-full, 9999px);
+  padding: 8px 22px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255,85,0,0.35);
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn-post-comment:hover {
+  background: #E54B00;
+  transform: translateY(-1px);
+}
+
+.btn-comment-action {
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.btn-comment-action:hover {
+  color: #FFFFFF;
+  background: rgba(255,255,255,0.1);
+}
+.btn-comment-action.btn-comment-del:hover {
+  color: #FF4D4F;
+  background: rgba(255,77,79,0.15);
+}
+
+@media (max-width: 650px) {
+  .review-page-grid { grid-template-columns: 1fr; }
+  .anime-side { max-width: 200px; margin: 0 auto; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<%- include('partials/nav') %>
+
+<main class="main-content">
+  <div class="review-page-grid">
+    <!-- Anime Sidebar -->
+    <div class="anime-side">
+      <a href="/anime/<%= review.anime_slug %>">
+        <img src="<%= review.cover_image %>" alt="<%= review.anime_title %>" class="anime-poster">
+      </a>
+      <div>
+        <a href="/anime/<%= review.anime_slug %>" class="anime-link">
+          <h2 class="anime-title"><%= review.anime_title %></h2>
+        </a>
+        <div class="anime-sub"><%= review.release_year %> • <%= review.type ? review.type.toUpperCase() : 'TV' %></div>
+      </div>
+    </div>
+
+    <!-- Review Main Content -->
+    <div>
+      <div class="review-card">
+        <div class="reviewer-header">
+          <% if (review.avatar_url) { %>
+            <img src="<%= review.avatar_url %>" class="reviewer-avatar">
+          <% } else { %>
+            <div class="reviewer-avatar"><%= review.username.charAt(0).toUpperCase() %></div>
+          <% } %>
+          <div class="reviewer-meta">
+            <div>
+              Review by <a href="/u/<%= review.username %>" class="reviewer-name"><%= review.username %></a>
+            </div>
+            <div class="review-date">
+              Watched <%= review.watched_date || new Date(review.created_at).toLocaleDateString() %>
+            </div>
+          </div>
+        </div>
+
+        <% if (review.rating) { %>
+          <div class="rating-stars">
+            <% const full = Math.floor(review.rating); %>
+            <% for(let i=0; i<full; i++) { %>★<% } %>
+            <% if (review.rating % 1 !== 0) { %>½<% } %>
+          </div>
+        <% } %>
+
+        <div class="review-text-content"><%= review.review_text || 'No written review provided.' %></div>
+
+        <div class="review-actions-bar">
+          <button class="btn-review-like <%= isLiked ? 'active' : '' %>" id="btn-like-review" onclick="toggleMainReviewLike(<%= review.id %>)">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span id="like-text"><%= likesCount > 0 ? `${likesCount} Likes` : 'Like' %></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Comments Thread -->
+      <section class="comments-section">
+        <h3 class="comments-title">Discussion & Replies</h3>
+        
+        <div id="comments-thread-container">
+          <% const currentUserId = locals.user ? user.id : 1; %>
+          <% if (comments && comments.length > 0) { %>
+            <% comments.forEach(c => { %>
+              <div class="comment-item" id="comment-item-<%= c.id %>">
+                <% if (c.avatar_url) { %>
+                  <img src="<%= c.avatar_url %>" class="comment-avatar">
+                <% } else { %>
+                  <div class="comment-avatar"><%= c.username.charAt(0).toUpperCase() %></div>
+                <% } %>
+                <div class="comment-body">
+                  <div class="comment-header">
+                    <a href="/u/<%= c.username %>" class="comment-user"><%= c.username %></a>
+                    <span class="comment-time"><%= new Date(c.created_at).toLocaleDateString() %></span>
+                    <% if (c.user_id === currentUserId) { %>
+                      <div style="margin-left: auto; display: flex; gap: 4px;">
+                        <button type="button" class="btn-comment-action" onclick="startEditMainComment(<%= c.id %>)">Editar</button>
+                        <button type="button" class="btn-comment-action btn-comment-del" onclick="deleteMainComment(<%= c.id %>)">Borrar</button>
+                      </div>
+                    <% } %>
+                  </div>
+                  <div class="comment-text" id="comment-content-<%= c.id %>"><%= c.content %></div>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div id="no-comments-msg" style="color:var(--muted); font-size:14px; padding: 12px 0;">No replies yet. Be the first to join the conversation!</div>
+          <% } %>
+        </div>
+
+        <div class="comment-form-wrap">
+          <form class="comment-form" onsubmit="postMainReviewComment(event, <%= review.id %>)">
+            <textarea id="main-comment-input" class="comment-textarea" placeholder="Leave a reply..." required></textarea>
+            <button type="submit" class="btn-post-comment">Post Reply</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+const currentUserId = <%= locals.user ? user.id : 1 %>;
+
+async function toggleMainReviewLike(logId) {
+    const btn = document.getElementById('btn-like-review');
+    const label = document.getElementById('like-text');
+    try {
+        const res = await fetch(`/api/review/${logId}/like`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            btn.classList.toggle('active', data.isLiked);
+            label.innerText = data.likesCount > 0 ? `${data.likesCount} Likes` : 'Like';
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function postMainReviewComment(e, logId) {
+    e.preventDefault();
+    const input = document.getElementById('main-comment-input');
+    const content = input.value.trim();
+    if (!content) return;
+
+    try {
+        const res = await fetch(`/api/review/${logId}/comment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
+        });
+        const data = await res.json();
+        if (data.success) {
+            input.value = '';
+            const noMsg = document.getElementById('no-comments-msg');
+            if (noMsg) noMsg.remove();
+
+            const c = data.comment;
+            const container = document.getElementById('comments-thread-container');
+            const av = c.avatar_url ? `<img src="${c.avatar_url}" class="comment-avatar">` : `<div class="comment-avatar">${c.username.charAt(0).toUpperCase()}</div>`;
+            const div = document.createElement('div');
+            div.className = 'comment-item';
+            div.id = `comment-item-${c.id}`;
+            div.innerHTML = `
+                ${av}
+                <div class="comment-body">
+                  <div class="comment-header">
+                    <a href="/u/${c.username}" class="comment-user">${c.username}</a>
+                    <span class="comment-time">${new Date(c.created_at).toLocaleDateString()}</span>
+                    <div style="margin-left: auto; display: flex; gap: 4px;">
+                      <button type="button" class="btn-comment-action" onclick="startEditMainComment(${c.id})">Editar</button>
+                      <button type="button" class="btn-comment-action btn-comment-del" onclick="deleteMainComment(${c.id})">Borrar</button>
+                    </div>
+                  </div>
+                  <div class="comment-text" id="comment-content-${c.id}">${c.content}</div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+    } catch (err) {
+        alert('Failed to post reply');
+    }
+}
+
+function startEditMainComment(commentId) {
+    const textDiv = document.getElementById(`comment-content-${commentId}`);
+    if (!textDiv) return;
+    const original = textDiv.innerText;
+
+    textDiv.innerHTML = `
+        <div style="margin-top:6px;">
+            <textarea id="edit-main-input-${commentId}" class="comment-textarea" style="min-height:55px; padding:8px;">${original}</textarea>
+            <div style="display:flex; justify-content:flex-end; gap:6px; margin-top:6px;">
+                <button type="button" onclick="cancelEditMainComment(${commentId}, '${encodeURIComponent(original)}')" style="padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.12); background:#14181C; color:#CAD2D9; cursor:pointer; font-weight:600; font-size:12px;">Cancelar</button>
+                <button type="button" onclick="saveEditMainComment(${commentId})" style="padding:4px 12px; border-radius:4px; border:none; background:var(--orange); color:#fff; cursor:pointer; font-weight:700; font-size:12px;">Guardar</button>
+            </div>
+        </div>
+    `;
+}
+
+function cancelEditMainComment(commentId, encoded) {
+    const textDiv = document.getElementById(`comment-content-${commentId}`);
+    if (!textDiv) return;
+    textDiv.innerText = decodeURIComponent(encoded);
+}
+
+async function saveEditMainComment(commentId) {
+    const input = document.getElementById(`edit-main-input-${commentId}`);
+    if (!input) return;
+    const content = input.value.trim();
+    if (!content) return alert('El comentario no puede estar vacío');
+
+    try {
+        const res = await fetch(`/api/comment/${commentId}/edit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
+        });
+        const data = await res.json();
+        if (data.success) {
+            const textDiv = document.getElementById(`comment-content-${commentId}`);
+            if (textDiv) textDiv.innerText = data.content;
+        } else {
+            alert(data.error || 'Error al editar comentario');
+        }
+    } catch (err) {
+        alert('Error al guardar comentario');
+    }
+}
+
+async function deleteMainComment(commentId) {
+    if (!confirm('¿Estás seguro de que deseas borrar este comentario?')) return;
+    try {
+        const res = await fetch(`/api/comment/${commentId}/delete`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            const item = document.getElementById(`comment-item-${commentId}`);
+            if (item) item.remove();
+        } else {
+            alert(data.error || 'Error al borrar comentario');
+        }
+    } catch (err) {
+        alert('Error de red al borrar');
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title><%= locals.pageTitle || 'Official Top 100 Anime' %> — Möno</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.page-wrap {
+    padding-top: 40px; padding-bottom: 80px; max-width: 1040px; margin: 0 auto; padding-left: 20px; padding-right: 20px;
+}
+
+.top-header {
+    text-align: center; margin-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: 24px;
+}
+.top-title { font-size: 34px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px; }
+.top-sub { font-size: 15px; color: var(--muted); margin-top: 8px; max-width: 640px; margin-left: auto; margin-right: auto; }
+
+/* Subpage Tabs */
+.top-subnav-pills {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #181D22; border: 1px solid rgba(255,255,255,0.08);
+    padding: 4px; border-radius: 9999px; margin-top: 20px;
+}
+.top-subnav-btn {
+    padding: 7px 18px; font-size: 13px; font-weight: 700; color: var(--muted);
+    text-decoration: none; border-radius: 9999px; transition: all 0.15s ease;
+}
+.top-subnav-btn:hover {
+    color: #FFFFFF;
+}
+.top-subnav-btn.active {
+    background: #FF5500; color: #FFFFFF;
+}
+
+/* Filter Controls Bar */
+.filter-bar {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    margin-bottom: 32px; padding: 16px 20px; background: #181D22; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.5); flex-wrap: wrap;
+}
+
+.filter-search-box {
+    position: relative; flex: 1; min-width: 220px; display: flex; align-items: center;
+}
+.filter-search-input {
+    width: 100%; padding: 9px 14px 9px 38px !important; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12);
+    background: #14181C; font-family: 'Satoshi', sans-serif; font-size: 14px; color: #FFFFFF;
+    box-sizing: border-box; transition: border-color 0.15s, box-shadow 0.15s; line-height: normal;
+}
+.filter-search-input:focus {
+    outline: none; border-color: var(--orange); box-shadow: 0 0 0 2px rgba(255,85,0,0.25);
+}
+.filter-search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; width: 16px; height: 16px; z-index: 2; display: flex; align-items: center; justify-content: center;
+}
+
+.filter-select {
+    appearance: none; background: #14181C; border: 1px solid rgba(255,255,255,0.12);
+    padding: 9px 32px 9px 14px; border-radius: 6px; font-family: 'Satoshi', sans-serif;
+    font-size: 13px; font-weight: 600; color: #CAD2D9; cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%239B9593%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;
+    transition: border-color 0.15s; min-width: 140px;
+}
+.filter-select:hover, .filter-select:focus { border-color: var(--orange); outline: none; color: #FFFFFF; }
+
+.filter-count {
+    font-size: 13px; font-weight: 700; color: var(--muted); margin-left: auto; padding-left: 10px;
+}
+
+/* Rank List */
+.rank-list {
+    display: flex; flex-direction: column; gap: 14px;
+}
+
+.rank-card {
+    display: flex; align-items: center; gap: 20px; background: #181D22;
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    text-decoration: none; color: inherit; position: relative;
+}
+.rank-card:hover {
+    transform: translateY(-2px); border-color: var(--orange);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+
+.rank-number {
+    font-size: 28px; font-weight: 900; width: 56px; text-align: center;
+    color: var(--muted); flex-shrink: 0; font-feature-settings: "tnum";
+}
+.rank-card.top-1 .rank-number { color: #f59e0b; font-size: 32px; }
+.rank-card.top-2 .rank-number { color: #8B7CFF; font-size: 30px; }
+.rank-card.top-3 .rank-number { color: #00E054; font-size: 30px; }
+
+.rank-poster {
+    width: 72px; aspect-ratio: 2/3; object-fit: cover; border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4); flex-shrink: 0; background: #14181C; border: 1px solid rgba(255,255,255,0.08);
+    transition: transform 0.2s;
+}
+.rank-card:hover .rank-poster {
+    transform: scale(1.03);
+}
+
+.rank-body { flex: 1; min-width: 0; }
+.rank-title-row {
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;
+}
+.rank-title { font-size: 17px; font-weight: 800; color: #FFFFFF; }
+.rank-year { font-weight: 600; color: var(--muted); font-size: 14px; }
+.rank-badge-type {
+    font-size: 10px; font-weight: 800; background: rgba(255,255,255,0.08); color: #CAD2D9;
+    padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.rank-meta {
+    font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 600; display: flex; gap: 8px; align-items: center;
+}
+.rank-desc {
+    font-size: 13px; color: #CAD2D9; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.rank-score-box {
+    display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+    flex-shrink: 0; padding-left: 20px; border-left: 1px solid rgba(255,255,255,0.08); min-width: 100px;
+}
+.rank-score { font-size: 22px; font-weight: 900; color: #FFFFFF; line-height: 1; }
+.rank-stars { color: var(--orange); font-size: 13px; margin-top: 4px; letter-spacing: 1px; }
+
+/* Locked Gated Overlay */
+.locked-gate-box {
+    background: linear-gradient(180deg, rgba(24,29,34,0.7) 0%, rgba(20,24,28,0.98) 100%);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 48px 32px;
+    text-align: center;
+    margin-top: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+.locked-gate-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,85,0,0.15); border: 1px solid rgba(255,85,0,0.3);
+    color: var(--orange); display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+}
+.locked-gate-title {
+    font-size: 22px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px;
+}
+.locked-gate-desc {
+    font-size: 14px; color: #CAD2D9; max-width: 480px; margin: 0 auto 24px; line-height: 1.5;
+}
+.locked-gate-actions {
+    display: flex; gap: 14px; justify-content: center; align-items: center; flex-wrap: wrap;
+}
+.btn-gate-register {
+    background: var(--orange); color: #fff; font-weight: 700; font-size: 14px;
+    padding: 10px 24px; border-radius: 9999px; text-decoration: none;
+    box-shadow: 0 4px 14px rgba(255,85,0,0.35); transition: transform 0.15s, background 0.15s;
+}
+.btn-gate-register:hover {
+    background: #E54B00; transform: translateY(-1px);
+}
+.btn-gate-login {
+    background: #14181C; border: 1px solid rgba(255,255,255,0.15); color: #FFFFFF; font-weight: 700; font-size: 14px;
+    padding: 10px 24px; border-radius: 9999px; text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+}
+.btn-gate-login:hover {
+    border-color: #FFFFFF; background: #1C2228;
+}
+
+.empty-state {
+    text-align: center; padding: 60px 20px; background: #181D22; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08); color: var(--muted);
+}
+.empty-state h3 { font-size: 18px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="wrap page-wrap">
+        <div class="top-header">
+            <h1 class="top-title"><%= locals.pageTitle || 'Official Top 100 Anime' %></h1>
+            <div class="top-sub"><%= locals.pageSub || 'The 100 highest-rated anime series and masterworks of all time, ranked by verified community scores.' %></div>
+            
+            <!-- Subpage Tabs for Top 100 / Official Top 100 Movies / Series -->
+            <div class="top-subnav-pills">
+                <a href="/top100" class="top-subnav-btn <%= (!locals.activeType || activeType === 'all') ? 'active' : '' %>">All Top 100</a>
+                <a href="/top100/movies" class="top-subnav-btn <%= activeType === 'movie' ? 'active' : '' %>">Official Top 100 Movies</a>
+                <a href="/top100/series" class="top-subnav-btn <%= activeType === 'tv' ? 'active' : '' %>">Official Top 100 Series</a>
+            </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="filter-bar">
+            <div class="filter-search-box">
+                <svg class="filter-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="top-search-input" class="filter-search-input" placeholder="Search Top 100 by title..." value="<%= locals.searchQuery || '' %>" oninput="applyTopFilters()">
+            </div>
+
+            <!-- Genre / Tag Filter -->
+            <select class="filter-select" id="top-genre-select" onchange="applyTopFilters()">
+                <option value="">All Genres / Tags</option>
+                <% if (locals.genres) { %>
+                    <% genres.forEach(g => { %>
+                        <option value="<%= g.slug %>" <%= (locals.activeGenre === g.slug) ? 'selected' : '' %>><%= g.name %></option>
+                    <% }); %>
+                <% } %>
+            </select>
+
+            <!-- Year Filter (from 2026 down to 1940) -->
+            <select class="filter-select" id="top-year-select" onchange="applyTopFilters()">
+                <option value="">All Years (1940 – 2026)</option>
+                <% for(let y = 2026; y >= 1940; y--) { %>
+                    <option value="<%= y %>" <%= (locals.activeYear == y) ? 'selected' : '' %>><%= y %></option>
+                <% } %>
+            </select>
+
+            <!-- Season Filter -->
+            <select class="filter-select" id="top-season-select" onchange="applyTopFilters()">
+                <option value="">All Seasons</option>
+                <option value="winter" <%= (locals.activeSeason === 'winter' || locals.activeSeason === 'WINTER') ? 'selected' : '' %>>Winter</option>
+                <option value="spring" <%= (locals.activeSeason === 'spring' || locals.activeSeason === 'SPRING') ? 'selected' : '' %>>Spring</option>
+                <option value="summer" <%= (locals.activeSeason === 'summer' || locals.activeSeason === 'SUMMER') ? 'selected' : '' %>>Summer</option>
+                <option value="fall" <%= (locals.activeSeason === 'fall' || locals.activeSeason === 'FALL') ? 'selected' : '' %>>Fall</option>
+            </select>
+
+            <!-- Format Filter -->
+            <select class="filter-select" id="top-type-select" onchange="applyTopFilters()">
+                <option value="">All Formats</option>
+                <option value="tv" <%= (locals.activeType === 'tv') ? 'selected' : '' %>>TV Series</option>
+                <option value="movie" <%= (locals.activeType === 'movie') ? 'selected' : '' %>>Feature Films</option>
+            </select>
+
+            <span class="filter-count" id="visible-count"><%= (locals.items || []).length %> titles</span>
+        </div>
+
+        <!-- Rank List (Top 100) -->
+        <div class="rank-list" id="rank-list-container">
+            <% if (locals.items && items.length > 0) { %>
+                <% const displayLimit = (!locals.user) ? 10 : items.length; %>
+                <% items.slice(0, displayLimit).forEach((item, index) => { %>
+                    <a href="/anime/<%= item.slug %>" class="rank-card <%= index === 0 ? 'top-1' : (index === 1 ? 'top-2' : (index === 2 ? 'top-3' : '')) %>" data-title="<%= (item.title || '').toLowerCase() %>" data-year="<%= item.release_year %>" data-type="<%= item.type %>" data-season="<%= (item.season || '').toLowerCase() %>" data-genres="<%= (item.genre_slugs || '').toLowerCase() %>">
+                        <div class="rank-number">#<%= index + 1 %></div>
+                        <img src="<%= item.cover_image %>" class="rank-poster" alt="<%= item.title %>" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400';">
+                        <div class="rank-body">
+                            <div class="rank-title-row">
+                                <span class="rank-title"><%= item.title %></span>
+                                <span class="rank-year">(<%= item.release_year %>)</span>
+                                <span class="rank-badge-type"><%= item.type === 'movie' ? 'FILM' : 'TV' %></span>
+                            </div>
+                            <div class="rank-meta">
+                                <span><%= item.episodes_count || 1 %> <%= (item.episodes_count > 1) ? 'Episodes' : 'Ep' %></span>
+                                <span>&bull;</span>
+                                <span><%= item.studio || 'Studio Unknown' %></span>
+                                <% if (item.genre_names) { %>
+                                    <span>&bull;</span>
+                                    <span style="color:#CAD2D9;"><%= item.genre_names.split(',').slice(0, 3).join(', ') %></span>
+                                <% } %>
+                            </div>
+                            <div class="rank-desc"><%= item.synopsis || 'No synopsis available.' %></div>
+                        </div>
+                        <div class="rank-score-box">
+                            <div class="rank-score">★ <%= item.score ? item.score.toFixed(2) : '4.50' %></div>
+                            <div class="rank-stars">
+                                <% const fullStars = Math.min(5, Math.max(1, Math.round(item.score || 4.5))); %>
+                                <%= '★'.repeat(fullStars) %><%= '☆'.repeat(5 - fullStars) %>
+                            </div>
+                        </div>
+                    </a>
+                <% }); %>
+
+                <% if (!locals.user && items.length > 10) { %>
+                    <!-- Locked Gate for Guests -->
+                    <div class="locked-gate-box">
+                        <div class="locked-gate-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="locked-gate-title">Unlock the Full Top 100</h3>
+                        <p class="locked-gate-desc">
+                            Create a free möno account to view all 100 ranked masterworks, log episode progress, track watched series, and build custom lists.
+                        </p>
+                        <div class="locked-gate-actions">
+                            <a href="/register" class="btn-gate-register">Create Free Account</a>
+                            <a href="/login" class="btn-gate-login">Log In</a>
+                        </div>
+                    </div>
+                <% } %>
+
+            <% } else { %>
+                <div class="empty-state">
+                    <h3>No anime match your criteria</h3>
+                    <p>Try broadening your filters or clearing the search query.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+    function applyTopFilters() {
+        const query = document.getElementById('top-search-input').value.trim().toLowerCase();
+        const genre = document.getElementById('top-genre-select').value.toLowerCase();
+        const year = document.getElementById('top-year-select').value;
+        const season = document.getElementById('top-season-select').value.toLowerCase();
+        const type = document.getElementById('top-type-select').value;
+
+        const cards = document.querySelectorAll('#rank-list-container .rank-card');
+        let visible = 0;
+
+        cards.forEach((card, idx) => {
+            const cardTitle = card.getAttribute('data-title') || '';
+            const cardYear = card.getAttribute('data-year') || '';
+            const cardType = card.getAttribute('data-type') || '';
+            const cardSeason = card.getAttribute('data-season') || '';
+            const cardGenres = card.getAttribute('data-genres') || '';
+
+            const matchQuery = !query || cardTitle.includes(query);
+            const matchGenre = !genre || cardGenres.includes(genre);
+            const matchYear = !year || cardYear === year;
+            const matchSeason = !season || cardSeason === season;
+            const matchType = !type || cardType === type;
+
+            if (matchQuery && matchGenre && matchYear && matchSeason && matchType) {
+                card.style.display = 'flex';
+                visible++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        const countEl = document.getElementById('visible-count');
+        if (countEl) {
+            countEl.textContent = `${visible} titles`;
+        }
+    }
+    </script>
+</body>
+</html>

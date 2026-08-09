@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= season %> <%= year %> Anime — Möno</title>
+<meta name="description" content="Explore and track anime for <%= season %> <%= year %>. Browse TV series, films, and specials.">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --green: #00E054;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', sans-serif;
+  background-color: #14181C;
+  color: #FFFFFF;
+  min-height: 100vh;
+}
+
+.page-wrap {
+  max-width: 1180px;
+  margin: 32px auto 80px;
+  padding: 0 20px;
+}
+
+/* TOP HEADER & TITLE */
+.season-header {
+  margin-bottom: 28px;
+}
+
+.season-top-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.season-heading {
+  font-size: 26px;
+  font-weight: 900;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.season-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* YEAR ARROW NAVIGATION (CLEAN TEXT, NO BOXES) */
+.year-arrow-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.year-arrow-btn {
+  color: var(--muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s ease, transform 0.15s ease;
+  font-size: 14px;
+}
+.year-arrow-btn:hover {
+  color: #FFFFFF;
+}
+
+.year-current {
+  color: #FFFFFF;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+/* SEASON SWITCHER (CLEAN TEXT TABS, NO BOXES / NO EMOJIS) */
+.season-text-tabs {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+.season-tab-link {
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  text-decoration: none;
+  position: relative;
+  padding: 4px 0;
+  transition: color 0.15s ease;
+}
+
+.season-tab-link:hover {
+  color: #FFFFFF;
+}
+
+.season-tab-link.active {
+  color: #FF5500;
+}
+
+.season-tab-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #FF5500;
+  border-radius: 2px;
+}
+
+/* FILTER BAR (EXPLORE / TRENDING STYLE) */
+.season-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.filter-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  appearance: none;
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 8px 32px 8px 14px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #CAD2D9;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%239B9593%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.filter-select:hover { border-color: var(--orange); color: #FFFFFF; }
+.filter-select:focus { outline: none; border-color: var(--orange); }
+
+.format-text-pills {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.format-text-btn {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color 0.15s ease;
+}
+.format-text-btn:hover { color: #FFFFFF; }
+.format-text-btn.active { color: #FFFFFF; font-weight: 800; }
+
+.season-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.season-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  width: 15px;
+  height: 15px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-input-box {
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 8px 14px 8px 36px !important;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  min-width: 220px;
+  box-sizing: border-box;
+  line-height: normal;
+  transition: border-color 0.15s;
+}
+.search-input-box:focus { border-color: var(--orange); }
+.search-input-box::placeholder { color: var(--muted); }
+
+/* SECTION HEADERS */
+.section-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.section-title span.count-hint {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* POSTER CARD GRID (EXACTLY MATCHING EXPLORE & TRENDING) */
+.anime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+  margin-bottom: 44px;
+}
+
+.anime-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+.card-poster-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2/3;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.anime-card:hover .card-poster-wrap {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+  border-color: rgba(255,85,0,0.45);
+}
+
+.card-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(20,24,28,0.85);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  transition: color 0.15s ease;
+}
+
+.anime-card:hover .card-title {
+  color: #FF5500;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-score {
+  color: var(--orange);
+  font-weight: 700;
+}
+
+/* EMPTY STATE */
+.empty-box {
+  text-align: center;
+  padding: 56px 20px;
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+.empty-box h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+
+    <%- include('partials/nav') %>
+
+    <main class="page-wrap">
+
+        <!-- Top Header Row -->
+        <header class="season-header">
+            <div class="season-top-line">
+                <div class="season-heading">
+                    <span><%= season %> <%= year %> Anime</span>
+                    <span class="season-count">(<%= items.length %> titles)</span>
+                </div>
+
+                <!-- Year Arrow Controls (Clean Text, No Boxes) -->
+                <div class="year-arrow-nav">
+                    <a href="/season/<%= year - 1 %>/<%= season.toLowerCase() %><%= activeFormat !== 'all' ? '?format='+activeFormat : '' %><%= activeGenre ? '&genre='+activeGenre : '' %>" class="year-arrow-btn" title="Previous Year">
+                        ‹ <%= year - 1 %>
+                    </a>
+                    <span class="year-current"><%= year %></span>
+                    <a href="/season/<%= year + 1 %>/<%= season.toLowerCase() %><%= activeFormat !== 'all' ? '?format='+activeFormat : '' %><%= activeGenre ? '&genre='+activeGenre : '' %>" class="year-arrow-btn" title="Next Year">
+                        <%= year + 1 %> ›
+                    </a>
+                </div>
+            </div>
+
+            <!-- Season Switcher Tabs (Clean Text, No Emojis, No Boxes) -->
+            <div class="season-text-tabs">
+                <a href="/season/<%= year %>/winter<%= activeFormat !== 'all' ? '?format='+activeFormat : '' %><%= activeGenre ? '&genre='+activeGenre : '' %>" class="season-tab-link <%= season === 'WINTER' ? 'active' : '' %>">Winter</a>
+                <a href="/season/<%= year %>/spring<%= activeFormat !== 'all' ? '?format='+activeFormat : '' %><%= activeGenre ? '&genre='+activeGenre : '' %>" class="season-tab-link <%= season === 'SPRING' ? 'active' : '' %>">Spring</a>
+                <a href="/season/<%= year %>/summer<%= activeFormat !== 'all' ? '?format='+activeFormat : '' %><%= activeGenre ? '&genre='+activeGenre : '' %>" class="season-tab-link <%= season === 'SUMMER' ? 'active' : '' %>">Summer</a>
+                <a href="/season/<%= year %>/fall<%= activeFormat !== 'all' ? '?format='+activeFormat : '' %><%= activeGenre ? '&genre='+activeGenre : '' %>" class="season-tab-link <%= season === 'FALL' ? 'active' : '' %>">Fall</a>
+            </div>
+
+            <!-- Filter Controls Bar -->
+            <div class="season-filter-bar">
+                <div class="filter-controls-group">
+                    <!-- Format Text Switcher -->
+                    <div class="format-text-pills">
+                        <a href="/season/<%= year %>/<%= season.toLowerCase() %>?format=all<%= activeGenre ? '&genre='+activeGenre : '' %><%= activeSort ? '&sort='+activeSort : '' %>" class="format-text-btn <%= (!activeFormat || activeFormat === 'all') ? 'active' : '' %>">All</a>
+                        <a href="/season/<%= year %>/<%= season.toLowerCase() %>?format=tv<%= activeGenre ? '&genre='+activeGenre : '' %><%= activeSort ? '&sort='+activeSort : '' %>" class="format-text-btn <%= activeFormat === 'tv' ? 'active' : '' %>">Series</a>
+                        <a href="/season/<%= year %>/<%= season.toLowerCase() %>?format=movie<%= activeGenre ? '&genre='+activeGenre : '' %><%= activeSort ? '&sort='+activeSort : '' %>" class="format-text-btn <%= activeFormat === 'movie' ? 'active' : '' %>">Films</a>
+                        <a href="/season/<%= year %>/<%= season.toLowerCase() %>?format=special<%= activeGenre ? '&genre='+activeGenre : '' %><%= activeSort ? '&sort='+activeSort : '' %>" class="format-text-btn <%= activeFormat === 'special' ? 'active' : '' %>">Specials</a>
+                    </div>
+
+                    <!-- Genre Dropdown -->
+                    <select class="filter-select" id="genre-select" onchange="applySeasonFilters()">
+                        <option value="">All Genres</option>
+                        <% genres.forEach(g => { %>
+                            <option value="<%= g.slug %>" <%= activeGenre === g.slug ? 'selected' : '' %>><%= g.name %></option>
+                        <% }); %>
+                    </select>
+
+                    <!-- Sort Dropdown -->
+                    <select class="filter-select" id="sort-select" onchange="applySeasonFilters()">
+                        <option value="popular" <%= activeSort === 'popular' ? 'selected' : '' %>>Most Popular</option>
+                        <option value="score" <%= activeSort === 'score' ? 'selected' : '' %>>Highest Score</option>
+                        <option value="title" <%= activeSort === 'title' ? 'selected' : '' %>>Alphabetical (A–Z)</option>
+                    </select>
+                </div>
+
+                <!-- Instant Filter Input -->
+                <div class="season-search-box">
+                    <svg class="season-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" id="season-search-input" class="search-input-box" placeholder="Filter <%= season.toLowerCase() %> anime..." value="<%= searchQuery %>" oninput="applySeasonFilters()">
+                </div>
+            </div>
+        </header>
+
+        <!-- CATALOG CONTENT -->
+        <% if (!items || items.length === 0) { %>
+            <div class="empty-box">
+                <h3>No Anime Found</h3>
+                <p>There are no titles listed for <%= season %> <%= year %> matching the selected filters.</p>
+                <a href="/season/<%= year %>/<%= season.toLowerCase() %>" style="display:inline-block; margin-top:12px; color:#FF5500; font-weight:700; text-decoration:none;">Reset filters</a>
+            </div>
+        <% } else { %>
+
+            <!-- TV SERIES SECTION -->
+            <% if (tvItems && tvItems.length > 0) { %>
+                <div>
+                    <div class="section-title">
+                        <span>TV Series</span>
+                        <span class="count-hint"><%= tvItems.length %> titles</span>
+                    </div>
+
+                    <div class="anime-grid">
+                        <% tvItems.forEach(a => { %>
+                            <a href="/anime/<%= a.slug %>" class="anime-card" title="<%= a.title %>">
+                                <div class="card-poster-wrap">
+                                    <img src="<%= a.cover_image %>" alt="<%= a.title %>" class="card-poster" loading="lazy">
+                                    <% if (a.airing_status === 'RELEASING') { %>
+                                        <div class="card-badge" style="color:#00E054;">EP <%= a.aired_episodes || 1 %></div>
+                                    <% } else if (a.airing_status === 'NOT_YET_RELEASED') { %>
+                                        <div class="card-badge" style="color:#FFB800;">UPCOMING</div>
+                                    <% } else if (a.episodes_count) { %>
+                                        <div class="card-badge"><%= a.episodes_count %> EPS</div>
+                                    <% } %>
+                                </div>
+                                <div class="card-title"><%= a.title %></div>
+                                <div class="card-meta">
+                                    <span><%= a.studio || a.release_year %></span>
+                                    <span class="card-score">★ <%= a.score ? Number(a.score).toFixed(1) : '—' %></span>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- THEATRICAL FILMS SECTION -->
+            <% if (movieItems && movieItems.length > 0) { %>
+                <div>
+                    <div class="section-title">
+                        <span>Theatrical Films</span>
+                        <span class="count-hint"><%= movieItems.length %> titles</span>
+                    </div>
+
+                    <div class="anime-grid">
+                        <% movieItems.forEach(a => { %>
+                            <a href="/anime/<%= a.slug %>" class="anime-card" title="<%= a.title %>">
+                                <div class="card-poster-wrap">
+                                    <img src="<%= a.cover_image %>" alt="<%= a.title %>" class="card-poster" loading="lazy">
+                                    <div class="card-badge">MOVIE</div>
+                                </div>
+                                <div class="card-title"><%= a.title %></div>
+                                <div class="card-meta">
+                                    <span><%= a.studio || a.release_year %></span>
+                                    <span class="card-score">★ <%= a.score ? Number(a.score).toFixed(1) : '—' %></span>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- SPECIALS & OVAS SECTION -->
+            <% if (otherItems && otherItems.length > 0) { %>
+                <div>
+                    <div class="section-title">
+                        <span>OVAs & Specials</span>
+                        <span class="count-hint"><%= otherItems.length %> titles</span>
+                    </div>
+
+                    <div class="anime-grid">
+                        <% otherItems.forEach(a => { %>
+                            <a href="/anime/<%= a.slug %>" class="anime-card" title="<%= a.title %>">
+                                <div class="card-poster-wrap">
+                                    <img src="<%= a.cover_image %>" alt="<%= a.title %>" class="card-poster" loading="lazy">
+                                    <div class="card-badge"><%= (a.type || 'SPECIAL').toUpperCase() %></div>
+                                </div>
+                                <div class="card-title"><%= a.title %></div>
+                                <div class="card-meta">
+                                    <span><%= a.studio || a.release_year %></span>
+                                    <span class="card-score">★ <%= a.score ? Number(a.score).toFixed(1) : '—' %></span>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+
+        <% } %>
+
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <script>
+    let searchDebounce = null;
+
+    function applySeasonFilters() {
+        clearTimeout(searchDebounce);
+        searchDebounce = setTimeout(() => {
+            const genre = document.getElementById('genre-select').value;
+            const sort = document.getElementById('sort-select').value;
+            const q = document.getElementById('season-search-input').value.trim();
+            const format = '<%= activeFormat || "all" %>';
+
+            const params = new URLSearchParams();
+            if (format && format !== 'all') params.set('format', format);
+            if (genre) params.set('genre', genre);
+            if (sort && sort !== 'popular') params.set('sort', sort);
+            if (q) params.set('q', q);
+
+            const queryString = params.toString();
+            const newUrl = '/season/<%= year %>/<%= season.toLowerCase() %>' + (queryString ? '?' + queryString : '');
+            window.location.href = newUrl;
+        }, 300);
+    }
+    </script>
+</body>
+</html>

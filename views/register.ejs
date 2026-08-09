@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Crear Cuenta &mdash; Möno</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root{
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+    font-family:"Satoshi",sans-serif;
+    color:#FFFFFF;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background-color: #14181C;
+    position: relative;
+    padding: 30px 16px;
+}
+
+.auth-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 28px;
+}
+.logo {
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-size:28px;
+    font-weight:900;
+    color:#FFFFFF;
+    letter-spacing:-.8px;
+    text-decoration:none;
+}
+.logo img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: contain;
+    box-shadow: 0 4px 14px rgba(255, 85, 0, 0.35);
+}
+
+.auth-box{
+    background: #181D22;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 36px;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    color: #FFFFFF;
+}
+.auth-title{font-size:24px;font-weight:800;text-align:center;margin-bottom:6px;letter-spacing:-0.5px;color:#FFFFFF;}
+.auth-subtitle{font-size:14px;color:var(--muted);text-align:center;margin-bottom:28px;}
+
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#CAD2D9;}
+.form-input{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:8px;
+    font-family:inherit;
+    font-size:14px;
+    background:#14181C;
+    color:#FFFFFF;
+    transition: all 0.2s ease;
+}
+.form-input:focus{
+    outline:none;
+    border-color:var(--orange);
+    box-shadow: 0 0 0 3px rgba(255,85,0,0.2);
+}
+.form-input::placeholder{color:var(--muted);}
+
+.auth-btn{
+    width:100%;
+    padding:14px;
+    background:var(--orange);
+    color:#fff;
+    border:none;
+    border-radius:var(--r-full, 9999px);
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
+    transition:all 0.15s ease;
+    box-shadow: 0 4px 14px rgba(255,85,0,0.35);
+}
+.auth-btn:hover{
+    background:#E54B00;
+    transform:translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255,85,0,0.5);
+}
+.auth-btn:active{
+    transform:translateY(1px);
+}
+
+.auth-error{background:rgba(255,77,79,0.15);color:#FF4D4F;border:1px solid rgba(255,77,79,0.3);padding:12px;border-radius:8px;font-size:13px;margin-bottom:20px;font-weight:600;text-align:center;}
+
+.auth-links{text-align:center;margin-top:20px;font-size:14px;color:var(--muted);}
+.auth-links a{color:var(--orange);text-decoration:none;font-weight:700;transition:color 0.15s;}
+.auth-links a:hover{color:#FFFFFF;}
+</style>
+</head>
+<body>
+<div class="auth-wrapper">
+    <div class="logo-container">
+        <a href="/" class="logo">
+            <img src="/images/mono_icon_circle.png" alt="Möno Demon">
+            <span>m<span style="color:#00F0FF;">ö</span>no</span>
+        </a>
+    </div>
+    <div class="auth-box">
+        <h1 class="auth-title">Crear Cuenta</h1>
+        <p class="auth-subtitle">Unite a Möno para catalogar y reseñar anime</p>
+        
+        <% if (error) { %>
+            <div class="auth-error"><%= error %></div>
+        <% } %>
+        
+        <form action="/register" method="POST">
+            <div class="form-group">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" name="email" class="form-input" placeholder="tu-email@ejemplo.com" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nombre de usuario</label>
+                <input type="text" name="username" class="form-input" placeholder="e.g. animelover" required pattern="[a-zA-Z0-9_]{3,20}" title="De 3 a 20 caracteres">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Contraseña</label>
+                <input type="password" name="password" class="form-input" placeholder="••••••••" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Confirmar Contraseña</label>
+                <input type="password" name="confirm_password" class="form-input" placeholder="••••••••" required minlength="6">
+            </div>
+            <button type="submit" class="auth-btn">Registrarme</button>
+        </form>
+        
+        <div class="auth-links">
+            ¿Ya tenés una cuenta? <a href="/login">Iniciá sesión aquí</a>
+        </div>
+    </div>
+
+    <div style="margin-top:24px; text-align:center; font-size:12px; color:var(--muted); display:flex; justify-content:center; gap:16px;">
+        <a href="/help" style="color:var(--muted); text-decoration:none;">Centro de Ayuda</a>
+        <span>•</span>
+        <a href="/terms" style="color:var(--muted); text-decoration:none;">Términos & Privacidad</a>
+        <span>•</span>
+        <a href="/contact" style="color:var(--muted); text-decoration:none;">Contacto</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title><%= profileUser.username %>'s Reviews — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', sans-serif;
+  background-color: #14181C;
+  color: #FFFFFF;
+  min-height: 100vh;
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.subnav {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 12px;
+  margin-bottom: 32px;
+}
+
+.subnav a {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.subnav a.active, .subnav a:hover {
+  color: #FFFFFF;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.review-item {
+  display: flex;
+  gap: 24px;
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.review-poster {
+  width: 90px;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.review-anime-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-decoration: none;
+  margin-bottom: 8px;
+  display: inline-block;
+  transition: color 0.15s;
+}
+
+.review-anime-title:hover {
+  color: var(--orange);
+}
+
+.review-stars {
+  color: var(--orange);
+  font-size: 15px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.review-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #CAD2D9;
+  white-space: pre-wrap;
+}
+
+.review-date {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-top: 14px;
+}
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="wrap">
+        <div class="subnav">
+            <a href="/u/<%= profileUser.username %>">Profile</a>
+            <a href="/u/<%= profileUser.username %>/anime">Anime</a>
+            <a href="/u/<%= profileUser.username %>/diary">Diary</a>
+            <a href="/u/<%= profileUser.username %>/watchlist">Watchlist</a>
+            <a href="/u/<%= profileUser.username %>/lists">Lists</a>
+            <a href="/u/<%= profileUser.username %>/reviews" class="active">Reviews (<%= reviews ? reviews.length : 0 %>)</a>
+            <a href="/u/<%= profileUser.username %>/stats">Stats</a>
+        </div>
+
+        <h1 style="font-size:26px; font-weight:900; margin-bottom:24px; color:#FFFFFF;"><%= profileUser.username %>'s Reviews</h1>
+
+        <div class="reviews-list">
+            <% if (reviews && reviews.length > 0) { %>
+                <% reviews.forEach(r => { %>
+                    <div class="review-item">
+                        <a href="/anime/<%= r.anime_slug %>">
+                            <img src="<%= r.cover_image %>" class="review-poster" alt="<%= r.anime_title %>">
+                        </a>
+                        <div style="flex:1;">
+                            <a href="/anime/<%= r.anime_slug %>" class="review-anime-title"><%= r.anime_title %></a>
+                            
+                            <div class="review-stars">
+                                <% const stars = '★'.repeat(Math.floor(r.rating || 0)) + (r.rating % 1 !== 0 ? '½' : ''); %>
+                                <%= stars %> <span style="font-size:13px; color:var(--muted); font-weight:600;">(<%= r.rating %>/5)</span>
+                            </div>
+
+                            <% if (r.review_text) { %>
+                                <p class="review-text"><%= r.review_text %></p>
+                            <% } else { %>
+                                <p class="review-text" style="color:var(--muted); font-style:italic;">No written review provided.</p>
+                            <% } %>
+
+                            <div class="review-date">
+                                Logged on <%= r.watched_date || new Date(r.created_at).toLocaleDateString() %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div style="padding:48px; text-align:center; color:var(--muted); background:#181D22; border:1px solid rgba(255,255,255,0.08); border-radius:8px;">
+                    No reviews written yet. Go to any anime page and click <strong>Log</strong> to write a review!
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

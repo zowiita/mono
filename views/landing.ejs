@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>MÖNO — The Social Diary & Archive for Anime</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* =============================================================
+       LETTERBOXD CINEMATIC DARK PALETTE & TOKENS (#222224 / #14181C)
+       ============================================================= */
+    :root {
+      --lb-bg: #222224;
+      --lb-surface: #181D22;
+      --lb-card-bg: #1B2026;
+      --lb-border: rgba(255, 255, 255, 0.08);
+      --lb-border-hover: rgba(255, 255, 255, 0.25);
+      
+      --mono-orange: #FF5500;
+      --mono-orange-glow: rgba(255, 85, 0, 0.35);
+      --mono-cobalt: #280DC2;
+      --mono-cobalt-light: #4A35EE;
+      
+      --lb-text: #FFFFFF;
+      --lb-muted: #8C98A4;
+      --lb-subtle: #717B85;
+      
+      --r-sm: 6px;
+      --r-md: 10px;
+      --r-lg: 16px;
+      --r-full: 9999px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--lb-bg);
+      color: var(--lb-text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--lb-bg);
+      color: var(--lb-text);
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    /* Film Grain Texture */
+    .mono-grain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    .mono-container {
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* =============================================================
+       TRANSPARENT FLOATING NAVBAR OVER HERO
+       ============================================================= */
+    .mono-nav-letterboxd {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: linear-gradient(to bottom, rgba(20, 24, 28, 0.92) 0%, rgba(20, 24, 28, 0.5) 70%, transparent 100%);
+      padding: 16px 0;
+    }
+
+    .mono-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mono-brand-logo-lb {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .mono-brand-logo-lb:hover {
+      transform: scale(1.04);
+    }
+    .mono-brand-logo-lb img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .mono-nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .mono-nav-item {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #CAD2D9;
+      text-decoration: none;
+      letter-spacing: 0.2px;
+      transition: color 0.15s ease;
+    }
+    .mono-nav-item:hover {
+      color: #FFFFFF;
+    }
+
+    .mono-nav-item.highlight-link {
+      background: rgba(255, 85, 0, 0.15);
+      color: #FF7728;
+      padding: 6px 14px;
+      border-radius: var(--r-full);
+      border: 1px solid rgba(255, 85, 0, 0.35);
+      transition: all 0.2s ease;
+    }
+    .mono-nav-item.highlight-link:hover {
+      background: var(--mono-orange);
+      color: #FFFFFF;
+      border-color: var(--mono-orange);
+      box-shadow: 0 0 14px rgba(255, 85, 0, 0.4);
+    }
+
+    .mono-nav-search {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .mono-nav-search input {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--r-full);
+      padding: 7px 14px 7px 32px;
+      font-size: 12.5px;
+      color: #FFFFFF;
+      font-family: inherit;
+      width: 140px;
+      transition: all 0.2s;
+    }
+    .mono-nav-search input:focus {
+      background: rgba(255, 255, 255, 0.16);
+      width: 180px;
+      outline: none;
+      border-color: var(--mono-orange);
+    }
+    .mono-nav-search svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8C98A4;
+      pointer-events: none;
+    }
+
+    /* =============================================================
+       HERO BANNER (LETTERBOXD FADE WITH TYPOGRAPHY DIRECTLY ON TOP)
+       ============================================================= */
+    .hero-cinematic-stage {
+      position: relative;
+      width: 100%;
+      min-height: 640px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 76px;
+      overflow: hidden;
+      background-color: var(--lb-bg);
+    }
+
+    /* Backdrop Image Layer with Letterboxd radial & linear vignette */
+    .hero-backdrop-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-backdrop-img {
+      width: 100%;
+      max-width: 1350px;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+      mask-image: radial-gradient(
+        ellipse 90% 70% at 50% 42%,
+        black 40%,
+        rgba(0, 0, 0, 0.85) 60%,
+        rgba(0, 0, 0, 0.3) 80%,
+        transparent 98%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.6) 0%,
+        black 20%,
+        black 65%,
+        transparent 100%
+      );
+      -webkit-mask-image: radial-gradient(
+        ellipse 90% 70% at 50% 42%,
+        black 40%,
+        rgba(0, 0, 0, 0.85) 60%,
+        rgba(0, 0, 0, 0.3) 80%,
+        transparent 98%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.6) 0%,
+        black 20%,
+        black 65%,
+        transparent 100%
+      );
+      mask-composite: intersect;
+      -webkit-mask-composite: source-in;
+    }
+
+    /* Floating Animated Circles in Hero Stage */
+    .hero-ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      filter: blur(45px);
+      opacity: 0.28;
+      animation: floatOrb 12s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, #FF5500, transparent 70%);
+      top: 15%;
+      left: 10%;
+    }
+    .orb-2 {
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, #280DC2, transparent 70%);
+      top: 25%;
+      right: 8%;
+      animation-duration: 16s;
+    }
+    @keyframes floatOrb {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-25px) scale(1.08); }
+      100% { transform: translateY(15px) scale(0.95); }
+    }
+
+    /* Center Letterboxd Headline & Button */
+    .hero-center-direct {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .letterboxd-h1 {
+      font-size: clamp(36px, 4.4vw, 54px);
+      font-weight: 900;
+      line-height: 1.16;
+      letter-spacing: -1.4px;
+      color: #FFFFFF;
+      margin: 0 0 28px 0;
+      text-shadow: 0 3px 20px rgba(0, 0, 0, 0.85), 0 1px 4px rgba(0, 0, 0, 0.95);
+    }
+
+    .letterboxd-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--mono-orange);
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 15px 42px;
+      border-radius: var(--r-full);
+      text-decoration: none;
+      box-shadow: 0 8px 28px rgba(255, 85, 0, 0.42), 0 2px 6px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .letterboxd-btn:hover {
+      background: #E54B00;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 34px rgba(255, 85, 0, 0.6);
+    }
+
+    /* =============================================================
+       TRENDING 6 ANIME SECTION (WITH CIRCULAR MÖNO BADGES)
+       ============================================================= */
+    .trending-showcase-section {
+      padding: 24px 0 76px;
+      background: var(--lb-bg);
+      position: relative;
+      z-index: 10;
+    }
+
+    .trending-eyebrow-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .mono-circle-badge-img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      box-shadow: 0 2px 8px rgba(255, 85, 0, 0.4);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .trending-eyebrow-container:hover .mono-circle-badge-img {
+      transform: rotate(25deg) scale(1.15);
+    }
+
+    .trending-eyebrow-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: #9AB;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .trending-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .trending-item-card {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .trending-item-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .trending-poster-box {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #1C2228;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      aspect-ratio: 2 / 3;
+      margin-bottom: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .trending-item-card:hover .trending-poster-box {
+      border-color: var(--mono-orange);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 18px rgba(255, 85, 0, 0.35);
+    }
+
+    .trending-poster-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .trending-item-card:hover .trending-poster-box img {
+      transform: scale(1.06);
+    }
+
+    .trending-title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .airing-dot-blue {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #00A3FF;
+      flex-shrink: 0;
+      margin-top: 5px;
+      box-shadow: 0 0 6px #00A3FF;
+    }
+
+    .trending-anime-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #D8E0E8;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: color 0.15s;
+    }
+    .trending-item-card:hover .trending-anime-title {
+      color: #FFFFFF;
+    }
+
+    /* =============================================================
+       "MÖNO LETS YOU..." 6-PILLAR GRID (LETTERBOXD DARK)
+       ============================================================= */
+    .mono-lets-you-section {
+      padding: 88px 0 96px;
+      background: #18181A;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: #8C98A4;
+      margin-bottom: 24px;
+    }
+
+    .mono-six-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-box {
+      background: #202024;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .feature-box:hover {
+      background: #26262B;
+      border-color: var(--mono-orange);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px -6px rgba(0, 0, 0, 0.6), 0 0 18px rgba(255, 85, 0, 0.2);
+    }
+
+    .feature-icon-wrap {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: rgba(255, 85, 0, 0.12);
+      border: 1px solid rgba(255, 85, 0, 0.25);
+      color: var(--mono-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .feature-box:hover .feature-icon-wrap {
+      background: var(--mono-orange);
+      color: #FFFFFF;
+      transform: scale(1.08) rotate(4deg);
+    }
+
+    .feature-box-content h4 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+
+    .feature-box-content p {
+      font-size: 13px;
+      color: #8C98A4;
+      line-height: 1.55;
+    }
+
+    /* =============================================================
+       CREATIVE SWEET SPOT & COMPARISON
+       ============================================================= */
+    .creative-comparison-wrap {
+      padding: 96px 0;
+      background: #222224;
+    }
+
+    .comp-stage {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr 1fr;
+      gap: 22px;
+      align-items: center;
+      margin-top: 48px;
+    }
+
+    .stage-card {
+      background: #1B1B1E;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 28px;
+    }
+
+    .stage-card-mono {
+      background: linear-gradient(135deg, #1C1838 0%, #141420 100%);
+      color: #FFFFFF;
+      border: 1.5px solid var(--mono-cobalt);
+      box-shadow: 0 16px 40px rgba(40, 13, 194, 0.25);
+      transform: scale(1.04);
+      z-index: 2;
+    }
+
+    .live-rating-pulse-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 85, 0, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* =============================================================
+       ALL-TIME TOP 50 ARCHIVE (5 COLS x 3 ROWS WITH FADE PAYWALL)
+       ============================================================= */
+    .top-archive-section {
+      padding: 88px 0 100px;
+      background: #18181A;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+
+    .top-anime-grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      position: relative;
+    }
+
+    .top-item-card {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #202024;
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.25s ease;
+    }
+    .top-item-card:hover {
+      border-color: var(--mono-orange);
+      transform: translateY(-4px);
+    }
+    .top-item-card img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      display: block;
+    }
+    .top-rank-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(20, 24, 28, 0.85);
+      backdrop-filter: blur(8px);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .top-meta-info {
+      padding: 10px 12px;
+      background: #202024;
+    }
+    .top-title-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: #FFFFFF;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+    .top-score-text {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--mono-orange);
+    }
+
+    /* Third row progressive blur */
+    .row-blur-11 { opacity: 0.7; }
+    .row-blur-12 { opacity: 0.5; filter: blur(1px); }
+    .row-blur-13 { opacity: 0.35; filter: blur(2px); }
+    .row-blur-14 { opacity: 0.25; filter: blur(3px); }
+    .row-blur-15 { opacity: 0.15; filter: blur(4px); }
+
+    .top-fade-paywall-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(to top, #18181A 40%, rgba(24, 24, 26, 0.88) 75%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 32px;
+      z-index: 10;
+    }
+
+    /* Ambient Scroll Physics */
+    .ambient-physics-flow {
+      position: relative;
+      height: 360px;
+      background: #222224;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .trending-grid-6 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .mono-six-grid {
+        grid-template-columns: 1fr;
+      }
+      .comp-stage {
+        grid-template-columns: 1fr;
+      }
+      .top-anime-grid-5 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .mono-nav-menu {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Film Grain Texture -->
+  <div class="mono-grain"></div>
+
+  <!-- HERO SECTION WITH TRANSPARENT NAVBAR (LETTERBOXD SETUP) -->
+  <section class="hero-cinematic-stage">
+    
+    <!-- Floating Ambient Light Orbs -->
+    <div class="hero-ambient-orb orb-1"></div>
+    <div class="hero-ambient-orb orb-2"></div>
+
+    <!-- Transparent Navbar on top of the hero -->
+    <header class="mono-nav-letterboxd">
+      <div class="mono-container mono-nav-inner">
+        
+        <!-- Official Möno Wordmark Logo (White with Orange Dots) -->
+        <a href="/" class="mono-brand-logo-lb" style="text-decoration:none;">
+          <span class="mono-brand-logo">m<span class="umlaut-wrap">o<span class="umlaut-dots"><span></span><span></span></span></span>no</span>
+        </a>
+
+        <!-- Navigation Menu Links -->
+        <nav class="mono-nav-menu">
+          <a href="/login" class="mono-nav-item">Sign In</a>
+          <a href="/register" class="mono-nav-item highlight-link">Create Account</a>
+          <a href="/anime" class="mono-nav-item">Films</a>
+          <a href="/series" class="mono-nav-item">Series</a>
+          <a href="/top100" class="mono-nav-item">Top 100</a>
+          <a href="/lists" class="mono-nav-item">Lists</a>
+          
+          <div class="mono-nav-search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Search...">
+          </div>
+        </nav>
+
+      </div>
+    </header>
+
+    <!-- Backdrop Image with Letterboxd Radial & Edge Vignette -->
+    <div class="hero-backdrop-container">
+      <img src="/images/eva_zine_header.png" alt="Hero Backdrop" class="hero-backdrop-img">
+    </div>
+
+    <!-- Center Direct Typography & CTA (Directly on Image) -->
+    <div class="hero-center-direct">
+      <h1 class="letterboxd-h1">
+        Log every anime.<br>
+        Review every season.<br>
+        Share your taste.
+      </h1>
+
+      <a href="/register" class="letterboxd-btn">
+        Create your account
+      </a>
+    </div>
+
+  </section>
+
+  <!-- 6 MOST POPULAR ANIME OF THE SEASON (WITH MÖNO CIRCLE BADGES) -->
+  <section class="trending-showcase-section">
+    <div class="mono-container">
+      
+      <!-- Eyebrow with the 2 MÖNO circle badges -->
+      <div class="trending-eyebrow-container">
+        <img src="/images/mono_icon_circle.png" class="mono-circle-badge-img" alt="MÖNO">
+        <span class="trending-eyebrow-text">The 6 most watched anime across the platform right now</span>
+        <img src="/images/mono_icon_circle.png" class="mono-circle-badge-img" alt="MÖNO">
+      </div>
+
+      <!-- 6 Trending Season Posters -->
+      <div class="trending-grid-6">
+        
+        <!-- 1. ONE PIECE -->
+        <a href="/anime/one-piece" class="trending-item-card">
+          <div class="trending-poster-box">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg" alt="ONE PIECE" loading="lazy">
+          </div>
+          <div class="trending-title-row">
+            <div class="airing-dot-blue"></div>
+            <div class="trending-anime-title">ONE PIECE</div>
+          </div>
+        </a>
+
+        <!-- 2. Mushoku Tensei Season 3 -->
+        <a href="/anime/mushoku-tensei-jobless-reincarnation" class="trending-item-card">
+          <div class="trending-poster-box">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx178789-hNXjKFzUq7mk.jpg" alt="Mushoku Tensei" loading="lazy">
+          </div>
+          <div class="trending-title-row">
+            <div class="trending-anime-title">Mushoku Tensei: Jobless Reincarnation Season 3</div>
+          </div>
+        </a>
+
+        <!-- 3. THE GHOST IN THE SHELL -->
+        <a href="/anime/ghost-in-the-shell" class="trending-item-card">
+          <div class="trending-poster-box">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx177699-hnzc1CS5ZSM2.png" alt="THE GHOST IN THE SHELL" loading="lazy">
+          </div>
+          <div class="trending-title-row">
+            <div class="trending-anime-title">THE GHOST IN THE SHELL</div>
+          </div>
+        </a>
+
+        <!-- 4. I Want to Love You Till Your Dying Day -->
+        <a href="/anime/kimi-ga-shinu-made" class="trending-item-card">
+          <div class="trending-poster-box">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187260-WW5RBa5NINRP.jpg" alt="I Want to Love You Till Your Dying Day" loading="lazy">
+          </div>
+          <div class="trending-title-row">
+            <div class="trending-anime-title">I Want to Love You Till Your Dying Day</div>
+          </div>
+        </a>
+
+        <!-- 5. Young Ladies Don't Play Fighting Games -->
+        <a href="/anime/taiari-deshita" class="trending-item-card">
+          <div class="trending-poster-box">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx128757-Iqc6hTjEYIz4.png" alt="Young Ladies Don't Play Fighting Games" loading="lazy">
+          </div>
+          <div class="trending-title-row">
+            <div class="trending-anime-title">Young Ladies Don't Play Fighting Games</div>
+          </div>
+        </a>
+
+        <!-- 6. The Oblivious Saint Can't Contain Her Power -->
+        <a href="/anime/oblivious-saint" class="trending-item-card">
+          <div class="trending-poster-box">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx196219-imvC0rbk4VzH.jpg" alt="The Oblivious Saint" loading="lazy">
+          </div>
+          <div class="trending-title-row">
+            <div class="trending-anime-title">The Oblivious Saint Can't Contain Her Power</div>
+          </div>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- "MÖNO LETS YOU..." 6-PILLAR CORE FEATURE GRID -->
+  <section class="mono-lets-you-section">
+    <div class="mono-container">
+      
+      <div class="section-eyebrow">MÖNO LETS YOU...</div>
+
+      <div class="mono-six-grid">
+        
+        <!-- 1. Eye Track -->
+        <div class="feature-box">
+          <div class="feature-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="feature-box-content">
+            <h4>Track every series, film & OVA</h4>
+            <p>Keep track of every anime you’ve ever completed, log current seasons without clutter, or just start logging fresh from the day you join.</p>
+          </div>
+        </div>
+
+        <!-- 2. Heart Like -->
+        <div class="feature-box">
+          <div class="feature-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="feature-box-content">
+            <h4>Show some love for great taste</h4>
+            <p>Show some love for your favorite masterworks, custom aesthetic lists, and insightful community reviews with a simple like.</p>
+          </div>
+        </div>
+
+        <!-- 3. Review / Lines -->
+        <div class="feature-box">
+          <div class="feature-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="feature-box-content">
+            <h4>Write & share thoughtful reviews</h4>
+            <p>Share your perspectives with spoiler-protection, read authentic thoughts from other viewers, and discuss pivotal director arcs.</p>
+          </div>
+        </div>
+
+        <!-- 4. Star Half-Ratings -->
+        <div class="feature-box">
+          <div class="feature-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="feature-box-content">
+            <h4>Rate on a five-star scale (with halves)</h4>
+            <p>Rate each show on a precision five-star scale (0.5 to 5.0) to capture nuance and accurately record your personal impression.</p>
+          </div>
+        </div>
+
+        <!-- 5. Diary & Stats -->
+        <div class="feature-box">
+          <div class="feature-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="feature-box-content">
+            <h4>Keep a personal anime diary</h4>
+            <p>Keep a chronological diary of your watching journey, log rewatches, and explore stats on studios, release decades, and total hours.</p>
+          </div>
+        </div>
+
+        <!-- 6. Lists & Top 4 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <div class="feature-box-content">
+            <h4>Compile lists & pin your Top 4</h4>
+            <p>Compile and share visual lists on any niche aesthetic, keep a watchlist for upcoming seasons, and pin your 4 all-time favorites.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CREATIVE SWEET SPOT & COMPARISON -->
+  <section class="creative-comparison-wrap">
+    <div class="mono-container">
+      
+      <div style="text-align: center; max-width: 680px; margin: 0 auto;">
+        <div class="section-eyebrow">THE SWEET SPOT</div>
+        <h2 style="font-size: clamp(28px, 3.4vw, 42px); font-weight: 900; letter-spacing: -1.2px; color: #FFFFFF; margin-bottom: 12px;">
+          The depth of an archive. The soul of a film diary.
+        </h2>
+        <p style="font-size: 15px; color: #8C98A4;">
+          Experience how MÖNO eliminates the friction of legacy trackers and generic movie apps.
+        </p>
+      </div>
+
+      <div class="comp-stage">
+        
+        <!-- Side 1: Legacy Trackers -->
+        <div class="stage-card">
+          <span style="display:inline-block; font-size:11px; font-weight:800; color:#717B85; text-transform:uppercase; margin-bottom:12px;">Legacy Databases</span>
+          <h4 style="font-size: 17px; font-weight: 800; color: #FFFFFF; margin-bottom: 14px;">Cluttered & Outdated</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: #717B85;">
+            <li>✕ Heavy ads & 2008 forum layouts</li>
+            <li>✕ Rigid 1–10 scores causing rating fatigue</li>
+            <li>✕ No aesthetic curation or visual zines</li>
+          </ul>
+        </div>
+
+        <!-- Center: MÖNO Highlight -->
+        <div class="stage-card stage-card-mono">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size:11px; font-weight:900; background:var(--mono-orange); color:#FFFFFF; padding:4px 10px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">The MÖNO Flow</span>
+            <span style="color:#FEF08A; font-size:18px;">✦</span>
+          </div>
+          <h3 style="font-size: 22px; font-weight: 900; color: #FFFFFF; margin-bottom: 10px;">Tactile, Modern & Ad-Free</h3>
+          <p style="font-size: 13px; color: rgba(255,255,255,0.88); line-height: 1.5; margin-bottom: 16px;">
+            Everything designed for the aesthetic and rhythm of anime. Half-star precision, spoiler-safe notes, and zero algorithmic clutter.
+          </p>
+
+          <!-- Interactive Rating Demo -->
+          <div class="live-rating-pulse-box">
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8); text-transform: uppercase;">Precision Rating</div>
+              <div style="font-size: 16px; font-weight: 900; color: #FFFFFF;">4.5 / 5.0 ★</div>
+            </div>
+            <div style="display: flex; gap: 4px; font-size: 20px; color: #FEF08A;">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span style="opacity: 0.4;">★</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side 3: Generalist Film Apps -->
+        <div class="stage-card">
+          <span style="display:inline-block; font-size:11px; font-weight:800; color:#717B85; text-transform:uppercase; margin-bottom:12px;">Generalist Film Apps</span>
+          <h4 style="font-size: 17px; font-weight: 800; color: #FFFFFF; margin-bottom: 14px;">Missing Anime Nuance</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: #717B85;">
+            <li>✕ Broken multi-seasons and split cours</li>
+            <li>✕ No episode tracking or airing schedule</li>
+            <li>✕ Missing OVAs, classic shorts & directors</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ALL-TIME TOP 50 ARCHIVE (5 COLS x 3 ROWS WITH FADE PAYWALL) -->
+  <section class="top-archive-section">
+    <div class="mono-container">
+      
+      <div style="text-align: center; max-width: 600px; margin: 0 auto 48px;">
+        <div class="section-eyebrow">THE CANON</div>
+        <h2 style="font-size: clamp(28px, 3.4vw, 42px); font-weight: 900; letter-spacing: -1.2px; color: #FFFFFF; margin-bottom: 10px;">
+          Top 50 All-Time Masterpieces
+        </h2>
+        <p style="font-size: 14px; color: #8C98A4;">
+          The highest-rated animated achievements as ranked by the global community.
+        </p>
+      </div>
+
+      <div class="top-anime-grid-5">
+        
+        <!-- Row 1 (1 - 5) -->
+        <div class="top-item-card">
+          <span class="top-rank-badge">#1</span>
+          <img src="/images/frieren_cover_1785281175713.png" alt="Frieren" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Frieren: Beyond Journey's End</div>
+            <div class="top-score-text">4.9 ★ · 2023</div>
+          </div>
+        </div>
+
+        <div class="top-item-card">
+          <span class="top-rank-badge">#2</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5114-1m0XvggCyv1b.jpg" alt="Fullmetal Alchemist" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Fullmetal Alchemist: Brotherhood</div>
+            <div class="top-score-text">4.9 ★ · 2009</div>
+          </div>
+        </div>
+
+        <div class="top-item-card">
+          <span class="top-rank-badge">#3</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx9253-159Nf4d96ZqX.jpg" alt="Steins;Gate" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Steins;Gate</div>
+            <div class="top-score-text">4.9 ★ · 2011</div>
+          </div>
+        </div>
+
+        <div class="top-item-card">
+          <span class="top-rank-badge">#4</span>
+          <img src="/images/aot_cover_1785281191397.png" alt="Attack on Titan" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Attack on Titan</div>
+            <div class="top-score-text">4.9 ★ · 2013</div>
+          </div>
+        </div>
+
+        <div class="top-item-card">
+          <span class="top-rank-badge">#5</span>
+          <img src="/images/nge_cover_1785281259269.png" alt="Evangelion" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Neon Genesis Evangelion</div>
+            <div class="top-score-text">4.9 ★ · 1995</div>
+          </div>
+        </div>
+
+        <!-- Row 2 (6 - 10) -->
+        <div class="top-item-card">
+          <span class="top-rank-badge">#6</span>
+          <img src="/images/vinland_cover_1785281226165.png" alt="Vinland Saga" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Vinland Saga</div>
+            <div class="top-score-text">4.8 ★ · 2019</div>
+          </div>
+        </div>
+
+        <div class="top-item-card">
+          <span class="top-rank-badge">#7</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx19-gK5q098Nx5N1.png" alt="Monster" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Monster</div>
+            <div class="top-score-text">4.8 ★ · 2004</div>
+          </div>
+        </div>
+
+        <div class="top-item-card">
+          <span class="top-rank-badge">#8</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1535-kUgkcrfOrkUM.jpg" alt="Death Note" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Death Note</div>
+            <div class="top-score-text">4.8 ★ · 2006</div>
+          </div>
+        </div>
+
+        <div class="top-item-card">
+          <span class="top-rank-badge">#9</span>
+          <img src="/images/violet_cover_1785281209933.png" alt="Violet Evergarden" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Violet Evergarden</div>
+            <div class="top-score-text">4.7 ★ · 2018</div>
+          </div>
+        </div>
+
+        <div class="top-item-card">
+          <span class="top-rank-badge">#10</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-nkWLhAepd8yv.jpg" alt="Hunter x Hunter" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Hunter x Hunter (2011)</div>
+            <div class="top-score-text">4.8 ★ · 2011</div>
+          </div>
+        </div>
+
+        <!-- Row 3 (11 - 15) with progressive blur -->
+        <div class="top-item-card row-blur-11">
+          <span class="top-rank-badge">#11</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx199-5f257Kspk68P.jpg" alt="Spirited Away" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Spirited Away</div>
+            <div class="top-score-text">4.8 ★ · 2001</div>
+          </div>
+        </div>
+
+        <div class="top-item-card row-blur-12">
+          <span class="top-rank-badge">#12</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx164-qA467e9t2G19.jpg" alt="Princess Mononoke" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Princess Mononoke</div>
+            <div class="top-score-text">4.8 ★ · 1997</div>
+          </div>
+        </div>
+
+        <div class="top-item-card row-blur-13">
+          <span class="top-rank-badge">#13</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-zD2TcwQ1Fafq.png" alt="Cowboy Bebop" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Cowboy Bebop</div>
+            <div class="top-score-text">4.8 ★ · 1998</div>
+          </div>
+        </div>
+
+        <div class="top-item-card row-blur-14">
+          <span class="top-rank-badge">#14</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97986-TQ7dCgbS3y5s.jpg" alt="Made in Abyss" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Made in Abyss</div>
+            <div class="top-score-text">4.7 ★ · 2017</div>
+          </div>
+        </div>
+
+        <div class="top-item-card row-blur-15">
+          <span class="top-rank-badge">#15</span>
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2001-XwRnjzGeFWRQ.png" alt="Gurren Lagann" loading="lazy">
+          <div class="top-meta-info">
+            <div class="top-title-text">Gurren Lagann</div>
+            <div class="top-score-text">4.7 ★ · 2007</div>
+          </div>
+        </div>
+
+        <!-- FADE OVERLAY PAYWALL -->
+        <div class="top-fade-paywall-overlay">
+          <div style="font-size: 13px; font-weight: 800; color: #FF7728; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
+            ✦ UNLOCK THE COMPLETE TOP 100 & ARCHIVES ✦
+          </div>
+          <h3 style="font-size: 24px; font-weight: 900; color: #FFFFFF; margin-bottom: 16px; text-align: center;">
+            Showing 15 of 10,000+ anime in the archive.
+          </h3>
+          <a href="/register" class="letterboxd-btn" style="font-size: 15px; padding: 14px 36px;">
+            <span>Create Free Account to See All →</span>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- AMBIENT SCROLL PHYSICS CANVAS -->
+  <section class="ambient-physics-flow" id="physicsContainer">
+    <canvas id="physicsCanvas" class="mono-physics-canvas"></canvas>
+    <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 5; pointer-events: none;">
+      <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255, 255, 255, 0.4);">✦ INTERACTIVE AMBIENT TOKENS — DRAG & FLING ANY BALL ✦</span>
+    </div>
+  </section>
+
+  <!-- UNIFIED FOOTER -->
+  <%- include('partials/footer') %>
+
+  <!-- Scripts -->
+  <script src="/js/mono-physics.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ambient Physics initialization
+      if (typeof MonoPhysicsPlayground !== 'undefined') {
+        const physics = new MonoPhysicsPlayground('physicsContainer', 'physicsCanvas');
+      }
+    });
+  </script>
+
+</body>
+</html>

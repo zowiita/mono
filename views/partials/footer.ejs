@@ -1,0 +1,215 @@
+<footer class="ft-site">
+    <div class="wrap">
+        <div class="ft-site-grid">
+            <!-- Brand Column with Official Möno Logo -->
+            <div class="ft-site-brand">
+                <a href="/" class="ft-brand-link" style="display:inline-block; margin-bottom:12px; text-decoration:none;">
+                    <span class="mono-brand-logo" style="font-size:30px;">m<span class="umlaut-wrap">o<span class="umlaut-dots"><span></span><span></span></span></span>no</span>
+                </a>
+                <p class="ft-site-desc">The social archive and catalog for anime fans worldwide. Log every episode, review every season, and curate your personal anime universe.</p>
+            </div>
+
+            <!-- Column 1: Explore -->
+            <div class="ft-col">
+                <h4 class="ft-col-title">Browse</h4>
+                <div class="ft-col-links">
+                    <a href="/anime">Explore Catalog</a>
+                    <a href="/season">Seasonal Anime</a>
+                    <a href="/trending">Trending Now</a>
+                    <a href="/top100">Top 100 Anime</a>
+                    <a href="/series">TV Series</a>
+                    <a href="/movies">Anime Films</a>
+                </div>
+            </div>
+
+            <!-- Column 2: Community -->
+            <div class="ft-col">
+                <h4 class="ft-col-title">Community</h4>
+                <div class="ft-col-links">
+                    <a href="/lists">Member Lists</a>
+                    <a href="/list/new">Create a List</a>
+                    <a href="/anime">Latest Reviews</a>
+                    <a href="/studio/kyoto-animation">Studios</a>
+                    <a href="/person/1">Staff & Cast</a>
+                </div>
+            </div>
+
+            <!-- Column 3: Legal & Docs (Help, Terms, Contact, API) -->
+            <div class="ft-col">
+                <h4 class="ft-col-title">Help & Legal</h4>
+                <div class="ft-col-links">
+                    <a href="/help">Help & FAQ</a>
+                    <a href="/terms">Terms & Privacy</a>
+                    <a href="/contact">Contact Support</a>
+                    <a href="/api-docs">Developer API</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom Bar -->
+        <div class="ft-site-bottom">
+            <div class="ft-bottom-copy">
+                &copy; 2026 <strong>Möno</strong>. Handcrafted for anime fans worldwide.
+                <span class="ft-disclaimer">All anime art and titles are property of their respective creators and production studios.</span>
+            </div>
+            <div class="ft-bottom-socials">
+                <a href="/help" title="FAQ" class="ft-social-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </a>
+                <a href="/api-docs" title="API Docs" class="ft-social-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </a>
+                <a href="/contact" title="Contact Us" class="ft-social-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+.ft-site {
+    background: #18181A;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 60px 0 32px;
+    margin-top: 64px;
+    font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #FFFFFF;
+}
+
+.ft-site-grid {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 44px;
+}
+
+.ft-site-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ft-brand-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.ft-brand-link:hover {
+    transform: scale(1.03);
+}
+
+.ft-mono-logo {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.ft-site-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #9E9E9E;
+    max-width: 320px;
+    margin: 0;
+}
+
+.ft-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.ft-col-title {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #FFFFFF;
+    margin: 0 0 16px 0;
+}
+
+.ft-col-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ft-col-links a {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #9E9E9E;
+    text-decoration: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+    display: inline-block;
+}
+.ft-col-links a:hover {
+    color: #FFFFFF;
+    transform: translateX(2px);
+}
+
+.ft-site-bottom {
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.ft-bottom-copy {
+    font-size: 12px;
+    color: #71717A;
+    line-height: 1.5;
+}
+
+.ft-disclaimer {
+    display: block;
+    font-size: 11px;
+    color: #52525B;
+    margin-top: 4px;
+}
+
+.ft-bottom-socials {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ft-social-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9E9E9E;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+.ft-social-icon:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 860px) {
+    .ft-site-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+    .ft-site-brand {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .ft-site-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+}
+</style>

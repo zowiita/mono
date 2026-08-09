@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Möno Pro & Patron Memberships — Supercharge Your Anime Life</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --orange-hover: #E54B00;
+  --gold: #FFB800;
+  --purple: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', sans-serif;
+  background-color: var(--bg-main);
+  color: #FFFFFF;
+  min-height: 100vh;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 60px 24px 80px;
+}
+
+.hero-section {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 56px;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 85, 0, 0.12);
+  color: var(--orange);
+  border: 1px solid rgba(255, 85, 0, 0.3);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.hero-title {
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.hero-desc {
+  font-size: 17px;
+  color: #CAD2D9;
+  line-height: 1.6;
+}
+
+/* Pricing Grid */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.pricing-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.pricing-card.featured {
+  background: linear-gradient(180deg, #1C2228 0%, #181D22 100%);
+  border: 2px solid var(--orange);
+  box-shadow: 0 12px 36px rgba(255, 85, 0, 0.2);
+}
+
+.card-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--orange);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tier-name {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.tier-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.tier-price {
+  font-size: 40px;
+  font-weight: 900;
+  color: #FFFFFF;
+}
+
+.tier-period {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.tier-desc {
+  font-size: 13px;
+  color: #CAD2D9;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  min-height: 40px;
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+  flex: 1;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #CAD2D9;
+  line-height: 1.4;
+}
+
+.feature-icon {
+  color: var(--orange);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.btn-tier {
+  width: 100%;
+  padding: 13px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+}
+
+.btn-tier:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-tier-primary {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(255, 85, 0, 0.35);
+}
+
+.btn-tier-primary:hover {
+  background: var(--orange-hover);
+  border-color: var(--orange-hover);
+  transform: translateY(-1px);
+}
+
+.btn-tier-patron {
+  background: linear-gradient(135deg, #8B7CFF, #6A56E8);
+  border-color: #8B7CFF;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(139, 124, 255, 0.35);
+}
+
+.btn-tier-patron:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* Comparison Table */
+.comparison-section {
+  margin-top: 48px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+
+.comparison-table th, .comparison-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: left;
+  font-size: 14px;
+}
+
+.comparison-table th {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comparison-table td:not(:first-child), .comparison-table th:not(:first-child) {
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<%- include('partials/nav') %>
+
+<main class="wrap">
+  <div class="hero-section">
+    <div class="hero-tag">Möno Memberships</div>
+    <h1 class="hero-title">Elevate Your Anime Experience</h1>
+    <p class="hero-desc">
+      Support the continuous development of the platform, unlock deep historical viewing analytics, and express yourself with exclusive creator perks.
+    </p>
+  </div>
+
+  <div class="pricing-grid">
+    <!-- FREE TIER -->
+    <div class="pricing-card">
+      <div class="tier-name">Möno Free</div>
+      <div class="tier-price-row">
+        <span class="tier-price">$0</span>
+        <span class="tier-period">forever</span>
+      </div>
+      <p class="tier-desc">Everything you need to track, review, and share anime with the community.</p>
+
+      <ul class="feature-list">
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Unlimited Anime Logging & Reviews
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Community Lists & Public Diary
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          All-Time Stats & Rating Distribution
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Year in Review / Wrapped Basic Mode
+        </li>
+      </ul>
+
+      <button class="btn-tier" disabled style="opacity:0.6; cursor:default;">Current Plan</button>
+    </div>
+
+    <!-- PRO TIER -->
+    <div class="pricing-card featured">
+      <div class="card-badge">Most Popular</div>
+      <div class="tier-name" style="color:var(--orange);">Möno Pro</div>
+      <div class="tier-price-row">
+        <span class="tier-price">$3</span>
+        <span class="tier-period">/ month or $28/yr</span>
+      </div>
+      <p class="tier-desc">Advanced historical analytics, deep monthly breakdowns, and profile customization.</p>
+
+      <ul class="feature-list">
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Monthly Deep-Dive Stats</strong> (Historic month-by-month charts)
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Golden `PRO` Badge</strong> across profile and discussions
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Custom Poster Art</strong> uploads for personal lists
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Private Diary Logs</strong> (Hide sensitive entries from feed)
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Export All Data</strong> to CSV / JSON / Backup
+        </li>
+      </ul>
+
+      <button class="btn-tier btn-tier-primary" onclick="activateTier('pro')">
+        <%= currentUser.is_pro ? 'Active Tier (Click to Toggle)' : 'Upgrade to Möno Pro' %>
+      </button>
+    </div>
+
+    <!-- PATRON TIER -->
+    <div class="pricing-card">
+      <div class="tier-name" style="color:var(--purple);">Möno Patron</div>
+      <div class="tier-price-row">
+        <span class="tier-price">$7</span>
+        <span class="tier-period">/ month</span>
+      </div>
+      <p class="tier-desc">For passionate cinephiles who want to actively shape the future of Möno.</p>
+
+      <ul class="feature-list">
+        <li class="feature-item">
+          <svg class="feature-icon" style="color:var(--purple);" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>All Möno Pro Perks</strong> included
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" style="color:var(--purple);" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Glowing Purple `PATRON` Badge</strong>
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" style="color:var(--purple);" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Animated Avatars & Banners (GIF / WebM)</strong>
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" style="color:var(--purple);" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Name in Supporter Credits / Hall of Fame</strong>
+        </li>
+        <li class="feature-item">
+          <svg class="feature-icon" style="color:var(--purple);" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong>Voting Power</strong> on future platform roadmap
+        </li>
+      </ul>
+
+      <button class="btn-tier btn-tier-patron" onclick="activateTier('patron')">
+        Become a Patron
+      </button>
+    </div>
+  </div>
+
+  <!-- Comparison Section -->
+  <div class="comparison-section">
+    <h2 style="font-size:24px; font-weight:900; margin-bottom:12px;">Full Feature Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Features</th>
+          <th>Free</th>
+          <th>Pro</th>
+          <th>Patron</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Anime Tracking & Episode Logs</td>
+          <td>Unlimited</td>
+          <td>Unlimited</td>
+          <td>Unlimited</td>
+        </tr>
+        <tr>
+          <td>All-Time Statistics & Rating Distribution</td>
+          <td>✓</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Year in Review / Möno Wrapped</td>
+          <td>✓ Basic</td>
+          <td>✓ Story Deck</td>
+          <td>✓ Story Deck + Badge</td>
+        </tr>
+        <tr>
+          <td>Monthly Deep-Dive Breakdown</td>
+          <td>—</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Custom List Covers</td>
+          <td>—</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Private Diary Entries</td>
+          <td>—</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Export Data to CSV / JSON</td>
+          <td>—</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Animated Avatars & Banners</td>
+          <td>—</td>
+          <td>—</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Supporter Hall of Fame Credits</td>
+          <td>—</td>
+          <td>—</td>
+          <td>✓</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+async function activateTier(tier) {
+  try {
+    const res = await fetch('/api/user/toggle-pro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert(data.message);
+      window.location.href = '/u/zowi/stats';
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+</script>
+
+</body>
+</html>

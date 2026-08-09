@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Miwazoe's Profile — Untitled</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+/* PROFILE HEADER DARK */
+.ph{margin-bottom:48px;}
+.ph-banner{width:100%;height:260px;background:#181D22;border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-lg);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;}
+.ph-banner-empty{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:color .15s;}
+.ph-banner-empty:hover{color:#FFFFFF;}
+.ph-main{position:relative;margin-top:-60px;display:flex;align-items:flex-end;gap:24px;padding:0 24px;margin-bottom:24px;}
+.ph-av{width:140px;height:140px;border-radius:50%;border:4px solid #14181C;background:#181D22;overflow:hidden;position:relative;z-index:10;box-shadow:0 8px 24px rgba(0,0,0,0.6);flex-shrink:0;cursor:pointer;}
+.ph-av img{width:100%;height:100%;object-fit:cover;}
+.ph-av-hover{position:absolute;inset:0;background:rgba(0,0,0,0.65);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;opacity:0;transition:opacity .15s;}
+.ph-av:hover .ph-av-hover{opacity:1;}
+.ph-banner-hover{position:absolute;top:20px;right:20px;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.15);padding:8px 16px;border-radius:8px;color:#fff;font-size:13px;font-weight:600;opacity:0;transition:opacity .15s;cursor:pointer;}
+.ph-banner:hover .ph-banner-hover{opacity:1;}
+.ph-info{flex:1;padding-bottom:12px;}
+.ph-name{font-size:32px;font-weight:800;color:#FFFFFF;line-height:1.1;letter-spacing:-1px;}
+.ph-btn{background:var(--orange);color:#fff;font-size:13px;font-weight:700;padding:8px 20px;border-radius:9999px;transition:background .15s;border:none;cursor:pointer;}
+.ph-btn:hover{background:#E54B00;}
+.pn{display:flex;gap:24px;border-bottom:1px solid rgba(255,255,255,0.08);padding:0 24px;}
+.pn a{font-size:14px;font-weight:600;color:var(--muted);padding-bottom:12px;position:relative;transition:color .15s;}
+.pn a:hover{color:#FFFFFF;}
+.pn a.active{color:#FFFFFF;font-weight:700;}
+.pn a.active::after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:3px;background:var(--orange);border-radius:3px 3px 0 0;}
+.st-row{display:flex;gap:40px;padding:24px 24px 0;}
+.st-item{display:flex;flex-direction:column;opacity:1;}
+.st-num{font-size:26px;font-weight:800;color:var(--orange);line-height:1;}
+.st-lbl{font-size:12px;font-weight:700;color:#CAD2D9;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;}
+/* LAYOUT GRID */
+.pg{display:grid;grid-template-columns:260px 1fr;gap:48px;padding:24px 24px 64px;}
+.col-l{display:flex;flex-direction:column;gap:40px;}
+.col-r{display:flex;flex-direction:column;gap:56px;}
+.sb-title{font-size:13px;font-weight:800;color:#FFFFFF;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:flex-end;}
+.sb-title .sb-cnt{color:var(--orange);font-weight:800;opacity:1 !important;}
+.empty-msg{font-size:13px;color:#CAD2D9;line-height:1.5;background:#181D22;padding:16px;border-radius:var(--r-md);border:1px dashed rgba(255,255,255,0.12);text-align:center;}
+.empty-msg-btn{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--orange);cursor:pointer;}
+.main-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.main-title{font-size:20px;font-weight:800;color:#FFFFFF;letter-spacing:-.5px;}
+.fav-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+@media (max-width: 640px) {
+  .fav-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+}
+.fav-empty{aspect-ratio:2/3;border-radius:var(--r-md);background:#181D22;border:2px dashed rgba(255,255,255,0.12);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .15s, background .15s;}
+.fav-empty:hover{border-color:var(--orange);background:#1C2228;}
+.fav-empty svg{width:24px;height:24px;fill:none;stroke:var(--muted);stroke-width:2;margin-bottom:8px;}
+.fav-empty span{font-size:12px;font-weight:600;color:var(--muted);}
+</style></head><body>
+<%- include('partials/nav') %>
+<div class="wrap" style="max-width:1100px;padding-top:32px;">
+<div class="ph">
+  <div class="ph-banner" id="banner-container">
+    <% if (profileUser.banner_url) { %>
+        <img src="<%= profileUser.banner_url %>" style="width:100%;height:100%;object-fit:cover;">
+    <% } else { %>
+        <span class="ph-banner-empty" id="banner-empty-btn"><% if(user && user.id === profileUser.id){ %>+ Add header image<% } %></span>
+    <% } %>
+    <% if (user && user.id === profileUser.id) { %>
+        <% if (profileUser.banner_url) { %>
+            <div class="ph-banner-hover" id="banner-hover-btn">Change Header</div>
+        <% } %>
+        <input type="file" id="banner-input" style="display:none" accept="image/*">
+    <% } %>
+  </div>
+  <div class="ph-main">
+    <div class="ph-av" id="avatar-container">
+      <% if (profileUser.avatar_url) { %>
+          <img src="<%= profileUser.avatar_url %>" style="width:100%;height:100%;object-fit:cover;">
+      <% } else { %>
+          <div class="av1" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:64px;color:#fff;font-weight:700;"><%= profileUser.username.charAt(0).toUpperCase() %></div>
+      <% } %>
+      <% if (user && user.id === profileUser.id) { %>
+          <div class="ph-av-hover" id="avatar-btn">Change Avatar</div>
+          <input type="file" id="avatar-input" style="display:none" accept="image/*">
+      <% } %>
+    </div>
+    <div class="ph-info">
+      <div style="display:flex; align-items:baseline; gap:10px;">
+        <h1 class="ph-name"><%= profileUser.username %></h1>
+        <% if (profileUser.is_pro) { %>
+          <span class="pro-text-badge" style="font-size:13px;"><%= profileUser.pro_tier === 'patron' ? 'PATRON' : 'PRO' %></span>
+        <% } %>
+      </div>
+    </div>
+    <div class="ph-actions">
+      <% if (user && user.id === profileUser.id) { %>
+          <a href="/settings" class="ph-btn" style="text-decoration:none;display:inline-block;">Edit profile</a>
+      <% } else { %>
+          <button class="ph-btn">Follow</button>
+      <% } %>
+    </div>
+  </div>
+  <div class="pn">
+    <a href="/u/<%= profileUser.username %>" class="active">Profile</a>
+    <a href="/u/<%= profileUser.username %>/anime">Anime</a>
+    <a href="/u/<%= profileUser.username %>/diary">Diary</a>
+    <a href="/u/<%= profileUser.username %>/watchlist">Watchlist</a>
+    <a href="/u/<%= profileUser.username %>/lists">Lists</a>
+    <a href="/u/<%= profileUser.username %>/reviews">Reviews</a>
+    <a href="/u/<%= profileUser.username %>/stats">Stats</a>
+  </div>
+  <div class="st-row">
+    <div class="st-item"><span class="st-num"><%= locals.stats ? stats.watchedCount : 0 %></span><span class="st-lbl">Anime</span></div>
+    <div class="st-item"><span class="st-num"><%= locals.stats ? stats.totalEpisodes : 0 %></span><span class="st-lbl">Episodes</span></div>
+    <div class="st-item"><span class="st-num"><%= locals.stats ? stats.hoursWatched : 0 %>h</span><span class="st-lbl">Hours</span></div>
+    <div class="st-item"><span class="st-num" id="followers-cnt"><%= locals.stats ? stats.followersCount : 0 %></span><span class="st-lbl">Followers</span></div>
+    <div class="st-item"><span class="st-num"><%= locals.stats ? stats.followingCount : 0 %></span><span class="st-lbl">Following</span></div>
+  </div>
+  <% if (locals.user && user.id !== profileUser.id) { %>
+    <div style="margin-top:12px;">
+      <button id="btn-follow" onclick="toggleFollow('<%= profileUser.username %>')" style="padding:6px 18px; border-radius:6px; font-family:'Satoshi', sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.15s; border:1px solid var(--orange); background:<%= stats.isFollowing ? '#fff' : 'var(--orange)' %>; color:<%= stats.isFollowing ? 'var(--orange)' : '#fff' %>;">
+        <%= stats.isFollowing ? '✓ Following' : '+ Follow' %>
+      </button>
+    </div>
+  <% } %>
+</div>
+<div class="pg">
+<div class="col-l">
+  <div class="sb-sec">
+    <div class="sb-title">Bio</div>
+    <% if (profileUser.bio || profileUser.location) { %>
+        <% if (profileUser.bio) { %>
+            <p id="bio-text" style="font-size:14px;color:#CAD2D9;line-height:1.6;white-space:pre-wrap;"><%= profileUser.bio %></p>
+        <% } %>
+        <% if (profileUser.location) { %>
+            <p style="font-size:13px;color:var(--muted);margin-top:8px;"><%= profileUser.location %></p>
+        <% } %>
+    <% } else { %>
+        <div class="empty-msg" id="bio-empty">You haven't added a bio yet. <br>
+        <% if (user && user.id === profileUser.id) { %>
+            <span class="empty-msg-btn" id="bio-edit-btn">Write something about yourself</span>
+        <% } %>
+        </div>
+    <% } %>
+    <% if (user && user.id === profileUser.id) { %>
+        <div id="bio-edit-container" style="display:none; margin-top:8px;">
+            <textarea id="bio-textarea" maxlength="300" style="width:100%;min-height:80px;background:#14181C;border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:8px;font-family:inherit;font-size:13px;color:#FFFFFF;resize:vertical;outline:none;"><%= profileUser.bio || '' %></textarea>
+            <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+                <button id="bio-cancel" style="font-size:12px;font-weight:600;color:var(--muted);padding:4px 8px;background:none;border:none;cursor:pointer;">Cancel</button>
+                <button id="bio-save" style="font-size:12px;font-weight:700;color:#fff;background:var(--orange);padding:4px 14px;border-radius:4px;border:none;cursor:pointer;">Save</button>
+            </div>
+        </div>
+    <% } %>
+  </div>
+
+  <!-- Profile Statistics Box -->
+  <div class="sb-sec">
+    <div class="sb-title">Statistics</div>
+    <div style="background:#181D22; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px; margin-top:8px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;">
+            <span style="color:var(--muted);">Average Rating:</span>
+            <span style="font-weight:700; color:var(--orange);">★ <%= stats.avgScore %></span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;">
+            <span style="color:var(--muted);">Total Watched:</span>
+            <span style="font-weight:700; color:#FFFFFF;"><%= stats.watchedCount %> anime</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:13px;">
+            <span style="color:var(--muted);">Time Invested:</span>
+            <span style="font-weight:700; color:#FFFFFF;"><%= stats.hoursWatched %> hours</span>
+        </div>
+
+        <% if (stats.topGenres && stats.topGenres.length > 0) { %>
+            <div style="margin-top:12px; border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
+                <div style="font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; margin-bottom:8px; letter-spacing:0.5px;">Top Genres</div>
+                <% stats.topGenres.forEach(g => { %>
+                    <div style="margin-bottom:6px;">
+                        <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:#CAD2D9; margin-bottom:2px;">
+                            <span><%= g.name %></span>
+                            <span style="color:var(--muted); font-size:11px;"><%= g.count %> titles</span>
+                        </div>
+                        <div style="width:100%; height:4px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden;">
+                            <div style="width:<%= Math.min(100, g.count * 25) %>%; height:100%; background:var(--orange); border-radius:2px;"></div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+  </div>
+
+  <div class="sb-sec">
+    <div class="sb-title">Watchlist <span class="sb-cnt" style="opacity:.6"><%= locals.stats ? stats.watchlistCount : 0 %></span></div>
+    <div class="empty-msg">Your watchlist is active.<br><a href="/anime" class="empty-msg-btn">Browse catalog</a></div>
+  </div>
+</div>
+<div class="col-r">
+  <div class="main-sec">
+    <div class="main-head">
+      <h2 class="main-title">Favorite Anime</h2>
+      <% if (user && user.id === profileUser.id) { %>
+        <a href="/settings#favorites-section" style="font-size:12px; font-weight:700; color:var(--orange); transition:opacity .15s;">Edit Top 5 →</a>
+      <% } else { %>
+        <span style="font-size:12px; font-weight:600; color:var(--muted);">Top 5 Favorites</span>
+      <% } %>
+    </div>
+    <div class="fav-grid">
+      <% for (let i = 1; i <= 5; i++) { %>
+        <% const fav = (locals.favorites || []).find(f => f.position === i); %>
+        <% if (fav) { %>
+          <a href="/anime/<%= fav.slug %>" class="fav-card" style="position:relative; aspect-ratio:2/3; border-radius:6px; overflow:hidden; display:block; box-shadow:0 4px 12px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); transition:transform 0.15s, box-shadow 0.15s;" title="<%= fav.title %>">
+            <img src="<%= fav.cover_image %>" style="width:100%; height:100%; object-fit:cover;" alt="<%= fav.title %>">
+            <div style="position:absolute; bottom:0; inset-inline:0; background:linear-gradient(transparent, rgba(0,0,0,0.85)); padding:10px 6px 6px; text-align:center;">
+              <span style="font-size:11px; font-weight:700; color:#fff; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= fav.title %></span>
+            </div>
+          </a>
+        <% } else { %>
+          <div class="fav-empty" style="aspect-ratio:2/3; background:#181D22; border:1px dashed rgba(255,255,255,0.12); border-radius:6px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; cursor:<%= (user && user.id === profileUser.id) ? 'pointer' : 'default' %>;" <% if (user && user.id === profileUser.id) { %>onclick="window.location.href='/settings#favorites-section'" title="Click to pick anime for slot #<%= i %>"<% } %>>
+            <span style="font-size:12px; font-weight:700; color:var(--muted);">#<%= i %></span>
+            <span style="font-size:11px; color:var(--orange); font-weight:700;"><%= (user && user.id === profileUser.id) ? '+ Add Fav' : 'Empty' %></span>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+  <!-- CURRENTLY WATCHING / EPISODE TRACKING -->
+  <div class="main-sec">
+    <div class="main-head">
+        <h2 class="main-title">Currently Watching</h2>
+        <span style="font-size:12px; font-weight:700; color:var(--orange); text-transform:uppercase; letter-spacing:0.5px;">
+            <%= locals.watchingList ? watchingList.length : 0 %> In Progress
+        </span>
+    </div>
+    
+    <div style="display:flex; flex-direction:column; gap:16px;">
+        <% if (locals.watchingList && watchingList.length > 0) { %>
+            <% watchingList.forEach(item => { %>
+                <div style="display:flex; gap:16px; background:#181D22; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:16px; align-items:center;">
+                    <a href="/anime/<%= item.slug %>"><img src="<%= item.cover_image %>" style="width:60px; aspect-ratio:2/3; object-fit:cover; border-radius:4px; box-shadow:0 4px 10px rgba(0,0,0,0.4);" alt="<%= item.title %>"></a>
+                    <div style="flex:1; min-width:0;">
+                        <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                            <a href="/anime/<%= item.slug %>" style="font-size:15px; font-weight:700; color:#FFFFFF;"><%= item.title %></a>
+                            <span style="font-size:12px; font-weight:700; color:var(--muted);">Episode <strong style="color:#FFFFFF;" id="ep-num-<%= item.slug %>"><%= item.current_episode %></strong> / <%= item.episodes_count %></span>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div style="width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; margin:8px 0; overflow:hidden;">
+                            <div id="ep-bar-<%= item.slug %>" style="width:<%= ((item.current_episode / item.episodes_count) * 100).toFixed(2) %>%; height:100%; background:var(--orange); border-radius:3px; transition:width 0.2s;"></div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+                            <div style="display:flex; gap:6px; align-items:center;">
+                                <button onclick="changeEpisode('<%= item.slug %>', -1, <%= item.episodes_count %>)" style="width:24px; height:24px; border-radius:4px; background:#14181C; border:1px solid rgba(255,255,255,0.1); font-weight:700; color:#CAD2D9; display:flex; align-items:center; justify-content:center; font-size:14px;">-</button>
+                                <button onclick="changeEpisode('<%= item.slug %>', 1, <%= item.episodes_count %>)" style="width:24px; height:24px; border-radius:4px; background:#14181C; border:1px solid rgba(255,255,255,0.1); font-weight:700; color:#CAD2D9; display:flex; align-items:center; justify-content:center; font-size:14px;">+</button>
+                                <span style="font-size:11px; color:var(--muted); margin-left:4px;">Quick progress</span>
+                            </div>
+                            <button onclick="openEpReviewModal('<%= item.title %>', '<%= item.slug %>', <%= item.current_episode %>)" style="font-size:12px; font-weight:700; color:#fff; background:var(--orange); padding:4px 10px; border-radius:4px; transition:background 0.15s;">
+                                Review Ep <span id="ep-btn-num-<%= item.slug %>"><%= item.current_episode %></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="empty-msg">Not currently watching any series.<br><a href="/anime" class="empty-msg-btn">Browse Anime</a></div>
+        <% } %>
+    </div>
+  </div>
+
+  <!-- RECENT ACTIVITY & REVIEWS -->
+  <div class="main-sec">
+    <div class="main-head">
+      <h2 class="main-title">Recent Activity & Reviews</h2>
+      <a href="/u/<%= profileUser.username %>/reviews" style="font-size:12px; font-weight:700; color:var(--orange);">View all →</a>
+    </div>
+    
+    <% if (locals.recentLogs && recentLogs.length > 0) { %>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <% recentLogs.forEach(log => { %>
+          <div style="display:flex; gap:16px; background:#181D22; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:16px;">
+            <a href="/anime/<%= log.slug %>">
+              <img src="<%= log.cover_image %>" style="width:64px; aspect-ratio:2/3; object-fit:cover; border-radius:4px; box-shadow:0 4px 10px rgba(0,0,0,0.4);" alt="<%= log.title %>">
+            </a>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+                <a href="/anime/<%= log.slug %>" style="font-size:16px; font-weight:800; color:#FFFFFF;"><%= log.title %></a>
+                <span style="font-size:12px; color:var(--muted); font-weight:600;"><%= log.watched_date || new Date(log.created_at).toLocaleDateString() %></span>
+              </div>
+              
+              <% if (log.rating > 0) { %>
+                <div style="color:var(--orange); font-size:14px; font-weight:700; margin-bottom:8px;">
+                  <% const stars = '★'.repeat(Math.floor(log.rating)) + (log.rating % 1 !== 0 ? '½' : ''); %>
+                  <%= stars %> <span style="font-size:12px; color:var(--muted); font-weight:600;">(<%= log.rating %>/5)</span>
+                  <% if (log.is_liked) { %>
+                    <span style="color:#FF5500; margin-left:6px;" title="Liked">♥</span>
+                  <% } %>
+                </div>
+              <% } %>
+
+              <% if (log.review_text) { %>
+                <p style="font-size:13px; line-height:1.55; color:#E1E7ED; white-space:pre-wrap;"><%= log.review_text %></p>
+              <% } %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div class="empty-msg" style="padding:40px;">
+        <div style="font-size:15px; font-weight:700; color:#FFFFFF; margin-bottom:4px;">No activity yet</div>
+        <div style="font-size:13px; color:var(--muted);">When you log anime, write reviews or assign ratings, they will show up here.</div>
+      </div>
+    <% } %>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Modal Background -->
+<div id="modal-bg" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:999; backdrop-filter:blur(2px);"></div>
+
+<script>
+    // Inline Bio Editing
+    const bioEditBtn = document.getElementById('bio-edit-btn');
+    const bioEmpty = document.getElementById('bio-empty');
+    const bioContainer = document.getElementById('bio-edit-container');
+    const bioTextarea = document.getElementById('bio-textarea');
+    const bioSave = document.getElementById('bio-save');
+    const bioCancel = document.getElementById('bio-cancel');
+    const bioText = document.getElementById('bio-text');
+    
+    if (bioEditBtn) {
+        bioEditBtn.addEventListener('click', () => {
+            bioEmpty.style.display = 'none';
+            bioContainer.style.display = 'block';
+            bioTextarea.focus();
+        });
+    }
+    
+    if (bioCancel) {
+        bioCancel.addEventListener('click', () => {
+            bioContainer.style.display = 'none';
+            if (bioEmpty) bioEmpty.style.display = 'block';
+        });
+    }
+    
+    if (bioSave) {
+        bioSave.addEventListener('click', async () => {
+            const bio = bioTextarea.value;
+            const res = await fetch('/api/profile/bio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bio })
+            });
+            if (res.ok) {
+                location.reload();
+            }
+        });
+    }
+
+    // Inline Avatar & Banner Upload
+    const avatarBtn = document.getElementById('avatar-btn');
+    const avatarInput = document.getElementById('avatar-input');
+    if (avatarBtn && avatarInput) {
+        avatarBtn.addEventListener('click', () => avatarInput.click());
+        avatarInput.addEventListener('change', async (e) => {
+            if (!e.target.files.length) return;
+            const fd = new FormData();
+            fd.append('avatar', e.target.files[0]);
+            const res = await fetch('/api/profile/avatar', { method: 'POST', body: fd });
+            if (res.ok) location.reload();
+        });
+    }
+    
+    const bannerEmptyBtn = document.getElementById('banner-empty-btn');
+    const bannerHoverBtn = document.getElementById('banner-hover-btn');
+    const bannerInput = document.getElementById('banner-input');
+    if (bannerInput) {
+        if (bannerEmptyBtn) bannerEmptyBtn.addEventListener('click', (e) => { e.stopPropagation(); bannerInput.click(); });
+        if (bannerHoverBtn) bannerHoverBtn.addEventListener('click', (e) => { e.stopPropagation(); bannerInput.click(); });
+        
+        bannerInput.addEventListener('change', async (e) => {
+            if (!e.target.files.length) return;
+            const fd = new FormData();
+            fd.append('banner', e.target.files[0]);
+            const res = await fetch('/api/profile/banner', { method: 'POST', body: fd });
+            if (res.ok) location.reload();
+        });
+    }
+
+    // Follow / Unfollow logic
+    async function toggleFollow(username) {
+        try {
+            const res = await fetch(`/api/user/${username}/follow`, { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                const btn = document.getElementById('btn-follow');
+                if (btn) {
+                    btn.innerText = data.isFollowing ? '✓ Following' : '+ Follow';
+                    btn.style.background = data.isFollowing ? 'transparent' : 'var(--orange)';
+                    btn.style.borderColor = 'var(--orange)';
+                    btn.style.color = data.isFollowing ? 'var(--orange)' : '#fff';
+                }
+                const cnt = document.getElementById('followers-cnt');
+                if (cnt) cnt.innerText = data.followersCount;
+            }
+        } catch (err) {
+            console.error('Follow error:', err);
+        }
+    }
+</script>
+
+<!-- Episode Review Modal with Full Half-Star Support -->
+<div id="ep-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:100%; max-width:480px; background:#1C2228; border:1px solid rgba(255,255,255,0.12); border-radius:12px; z-index:1000; box-shadow:0 12px 48px rgba(0,0,0,0.7); overflow:hidden;">
+    <div style="background:#14181C; padding:16px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div>
+            <div style="font-size:11px; font-weight:800; color:var(--orange); text-transform:uppercase; letter-spacing:1px;">Episode Review</div>
+            <div id="ep-modal-title" style="font-size:15px; font-weight:800; color:#FFFFFF;">Log Episode</div>
+        </div>
+        <button onclick="closeEpModal()" style="color:var(--muted); cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="5" y1="12" x2="18" y2="18"/></svg></button>
+    </div>
+    <div style="padding:20px;">
+        <div style="margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="font-size:13px; font-weight:700; color:#FFFFFF;">Episode Rating (0.5 – 5.0)</label>
+                <span id="ep-rating-badge" style="font-size:12px; font-weight:700; color:var(--orange); background:rgba(255,85,0,0.15); border:1px solid rgba(255,85,0,0.3); padding:2px 8px; border-radius:4px;">Sin calificar</span>
+            </div>
+            <div style="display:inline-flex; align-items:center; gap:8px; background:#14181C; padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+                <div id="ep-star-container" style="display:inline-flex; align-items:center; gap:3px;" onmouseleave="resetEpStars()">
+                    <!-- Star Units inserted dynamically -->
+                </div>
+                <button type="button" onclick="clearEpRating()" title="Quitar calificación" style="background:none; border:none; color:var(--muted); font-size:14px; font-weight:700; cursor:pointer; padding:0 4px; line-height:1; transition:color 0.15s;" onmouseenter="this.style.color='#FFFFFF'" onmouseleave="this.style.color='var(--muted)'">✕</button>
+            </div>
+        </div>
+
+        <label style="font-size:13px; font-weight:700; color:#FFFFFF; margin-bottom:6px; display:block;">Thoughts on this chapter</label>
+        <textarea id="ep-review-textarea" placeholder="Write a short review for this specific episode..." style="width:100%; height:100px; padding:10px 12px; background:#14181C; border:1px solid rgba(255,255,255,0.12); border-radius:6px; font-family:inherit; font-size:13px; color:#FFFFFF; resize:vertical; outline:none; box-sizing:border-box;"></textarea>
+
+        <div style="margin-top:12px; display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="ep-spoiler" style="accent-color:var(--orange); cursor:pointer;">
+            <label for="ep-spoiler" style="font-size:12px; color:var(--muted); font-weight:600; cursor:pointer;">Contains episode spoilers</label>
+        </div>
+
+        <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:8px;">
+            <button type="button" onclick="closeEpModal()" style="font-size:13px; font-weight:600; color:var(--muted); padding:8px 16px; border-radius:6px; cursor:pointer;">Cancel</button>
+            <button type="button" id="ep-save-btn" onclick="saveEpReview()" style="font-size:13px; font-weight:700; color:#fff; background:var(--orange); padding:8px 18px; border-radius:6px; box-shadow:0 4px 14px rgba(255,85,0,0.3); cursor:pointer; transition:opacity .15s;">Save Episode Review</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Episode Star Rating Widget State
+    let currentEpRating = 0;
+    let hoveredEpRating = null;
+    let activeReviewSlug = '';
+    let activeReviewEp = 1;
+
+    function renderEpStars(ratingToDraw) {
+        const container = document.getElementById('ep-star-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const effectiveRating = ratingToDraw !== undefined ? ratingToDraw : currentEpRating;
+
+        for (let i = 1; i <= 5; i++) {
+            const starUnit = document.createElement('div');
+            starUnit.className = 'star-unit';
+            starUnit.style.cssText = 'position:relative; width:22px; height:22px; cursor:pointer; display:inline-block;';
+
+            // Background Star (Grey Empty)
+            const bgStar = document.createElement('div');
+            bgStar.style.cssText = 'position:absolute; inset:0; color:rgba(255,255,255,0.15); font-size:22px; line-height:22px; pointer-events:none;';
+            bgStar.innerHTML = '★';
+            starUnit.appendChild(bgStar);
+
+            // Filled Star Layer (Orange)
+            let clipPercent = 0;
+            if (effectiveRating >= i) {
+                clipPercent = 100;
+            } else if (effectiveRating === i - 0.5) {
+                clipPercent = 50;
+            }
+
+            if (clipPercent > 0) {
+                const fillStar = document.createElement('div');
+                fillStar.style.cssText = `position:absolute; inset:0; color:var(--orange); font-size:22px; line-height:22px; pointer-events:none; overflow:hidden; clip-path:inset(0 ${100 - clipPercent}% 0 0);`;
+                fillStar.innerHTML = '★';
+                starUnit.appendChild(fillStar);
+            }
+
+            // Left half hit zone (for X.5)
+            const leftHit = document.createElement('div');
+            leftHit.style.cssText = 'position:absolute; left:0; top:0; width:50%; height:100%; z-index:2; cursor:pointer;';
+            const valLeft = i - 0.5;
+            leftHit.addEventListener('mouseenter', () => hoverEpRating(valLeft));
+            leftHit.addEventListener('click', () => setEpRating(valLeft));
+            starUnit.appendChild(leftHit);
+
+            // Right half hit zone (for X.0)
+            const rightHit = document.createElement('div');
+            rightHit.style.cssText = 'position:absolute; right:0; top:0; width:50%; height:100%; z-index:2; cursor:pointer;';
+            const valRight = i;
+            rightHit.addEventListener('mouseenter', () => hoverEpRating(valRight));
+            rightHit.addEventListener('click', () => setEpRating(valRight));
+            starUnit.appendChild(rightHit);
+
+            container.appendChild(starUnit);
+        }
+
+        const badge = document.getElementById('ep-rating-badge');
+        if (badge) {
+            if (effectiveRating > 0) {
+                badge.innerText = `★ ${effectiveRating.toFixed(1)} / 5.0`;
+                badge.style.background = 'rgba(255,85,0,0.15)';
+                badge.style.color = 'var(--orange)';
+            } else {
+                badge.innerText = 'Sin calificar';
+                badge.style.background = 'rgba(255,255,255,0.05)';
+                badge.style.color = 'var(--muted)';
+            }
+        }
+    }
+
+    function hoverEpRating(val) {
+        hoveredEpRating = val;
+        renderEpStars(val);
+    }
+
+    function resetEpStars() {
+        hoveredEpRating = null;
+        renderEpStars(currentEpRating);
+    }
+
+    function setEpRating(val) {
+        currentEpRating = val;
+        hoveredEpRating = null;
+        renderEpStars(currentEpRating);
+    }
+
+    function clearEpRating() {
+        currentEpRating = 0;
+        hoveredEpRating = null;
+        renderEpStars(0);
+    }
+
+    // Currently Watching Progress Tracker
+    async function changeEpisode(slug, delta, total) {
+        const epEl = document.getElementById(`ep-num-${slug}`);
+        const btnEpNum = document.getElementById(`ep-btn-num-${slug}`);
+        let current = (epEl ? parseInt(epEl.innerText, 10) : 1) + delta;
+        if (current < 0) current = 0;
+        if (current > total) current = total;
+
+        if (epEl) epEl.innerText = current;
+        if (btnEpNum) btnEpNum.innerText = current;
+        const pct = total > 0 ? ((current / total) * 100).toFixed(2) : 0;
+        const bar = document.getElementById(`ep-bar-${slug}`);
+        if (bar) bar.style.width = `${pct}%`;
+
+        try {
+            await fetch('/api/progress/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug, episode: current })
+            });
+        } catch (err) {
+            console.error('Failed to sync progress:', err);
+        }
+    }
+
+    function openEpReviewModal(animeTitle, slug, currentEp) {
+        activeReviewSlug = slug;
+        const epEl = document.getElementById(`ep-num-${slug}`);
+        activeReviewEp = epEl ? parseInt(epEl.innerText, 10) : currentEp;
+
+        document.getElementById('ep-modal-title').innerText = `${animeTitle} — Episode ${activeReviewEp}`;
+        document.getElementById('ep-review-textarea').value = '';
+        document.getElementById('ep-spoiler').checked = false;
+        clearEpRating();
+
+        document.getElementById('modal-bg').style.display = 'block';
+        document.getElementById('ep-modal').style.display = 'block';
+    }
+
+    function closeEpModal() {
+        document.getElementById('modal-bg').style.display = 'none';
+        document.getElementById('ep-modal').style.display = 'none';
+    }
+
+    async function saveEpReview() {
+        const textarea = document.getElementById('ep-review-textarea');
+        const spoilerCheck = document.getElementById('ep-spoiler');
+        const saveBtn = document.getElementById('ep-save-btn');
+        
+        const reviewText = textarea.value.trim();
+        const containsSpoilers = spoilerCheck.checked;
+
+        if (saveBtn) {
+            saveBtn.innerText = 'Guardando...';
+            saveBtn.style.opacity = '0.7';
+            saveBtn.disabled = true;
+        }
+
+        try {
+            const res = await fetch('/api/episode/review', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    slug: activeReviewSlug,
+                    episodeNumber: activeReviewEp,
+                    rating: currentEpRating,
+                    reviewText,
+                    containsSpoilers
+                })
+            });
+
+            if (res.ok) {
+                closeEpModal();
+                window.location.reload();
+            } else {
+                alert('Error al guardar la reseña del episodio.');
+            }
+        } catch (err) {
+            alert('Error de red al guardar.');
+        } finally {
+            if (saveBtn) {
+                saveBtn.innerText = 'Save Episode Review';
+                saveBtn.style.opacity = '1';
+                saveBtn.disabled = false;
+            }
+        }
+    }
+</script>
+<%- include('partials/footer') %>
+</body>
+</html>

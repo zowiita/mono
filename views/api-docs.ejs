@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de la API para Desarrolladores — Möno</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background-color: #14181C;
+            color: #FFFFFF;
+            font-family: 'Satoshi', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .api-hero {
+            padding: 60px 0 36px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .api-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,85,0,0.15);
+            border: 1px solid rgba(255,85,0,0.3);
+            padding: 5px 14px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 16px;
+        }
+        .api-title {
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            margin: 0 0 10px 0;
+            color: #FFFFFF;
+        }
+        .api-container {
+            max-width: 860px;
+            margin: 48px auto;
+        }
+        .endpoint-card {
+            background: #181D22;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .http-method {
+            font-size: 12px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+        .http-get {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        .http-post {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ADE80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .endpoint-path {
+            font-family: monospace;
+            font-size: 15px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .code-block {
+            background: #14181C;
+            color: #CAD2D9;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="api-hero">
+        <div class="wrap">
+            <div class="api-badge">
+                <span>⚡</span> API REST v1
+            </div>
+            <h1 class="api-title">Möno Developer API</h1>
+            <p style="color:var(--muted); font-size:15px; max-width:540px; margin:0 auto; line-height:1.6;">
+                Accede programáticamente al catálogo de anime, búsqueda instantánea, reseñas de la comunidad y estados de episodios.
+            </p>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="api-container">
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="http-method http-get">GET</span>
+                    <span class="endpoint-path">/api/search/anime?q={query}</span>
+                </div>
+                <p style="font-size:14px; color:var(--muted); margin:0;">Búsqueda instantánea de anime por título en inglés o japonés con límite de resultados.</p>
+                <div class="code-block">
+// Ejemplo de respuesta:
+[
+  {
+    "id": 1,
+    "slug": "nge",
+    "title": "Neon Genesis Evangelion",
+    "year": 1995,
+    "studio": "Gainax",
+    "cover_image": "/images/nge_cover_1785281259269.png"
+  }
+]
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="http-method http-post">POST</span>
+                    <span class="endpoint-path">/api/progress/update</span>
+                </div>
+                <p style="font-size:14px; color:var(--muted); margin:0;">Actualiza el número de episodio actual visto con validación de límite de emisión en tiempo real.</p>
+                <div class="code-block">
+// Request Body JSON:
+{
+  "slug": "frieren-beyond-journeys-end",
+  "episode": 5,
+  "status": "watching"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="http-method http-post">POST</span>
+                    <span class="endpoint-path">/api/anime/{slug}/log</span>
+                </div>
+                <p style="font-size:14px; color:var(--muted); margin:0;">Registra o actualiza en la misma solapa la calificación (0-5 estrellas), reseña, spoiler tag y estado del anime.</p>
+                <div class="code-block">
+// Request Body JSON:
+{
+  "rating": 4.5,
+  "reviewText": "Una obra maestra de la animación.",
+  "containsSpoilers": false,
+  "isLiked": true,
+  "status": "completed"
+}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

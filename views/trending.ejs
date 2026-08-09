@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Trending Anime — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.page-wrap {
+    padding-top: 40px; padding-bottom: 80px; max-width: 1140px; margin: 0 auto; padding-left: 20px; padding-right: 20px;
+}
+
+.trending-header {
+    margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+}
+.trending-title-area {
+    display: flex; flex-direction: column; gap: 6px;
+}
+.trending-title-row {
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+}
+.trending-title { font-size: 32px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px; margin: 0; }
+.trending-sub { font-size: 14.5px; color: var(--muted); margin-top: 2px; }
+
+/* Films or Series Switcher */
+.type-toggle-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #181D22; border: 1px solid rgba(255,255,255,0.1);
+    padding: 3px; border-radius: 8px;
+}
+.type-toggle-btn {
+    padding: 6px 14px; font-size: 13px; font-weight: 700; color: var(--muted);
+    text-decoration: none; border-radius: 6px; transition: all 0.15s ease;
+}
+.type-toggle-btn:hover {
+    color: #FFFFFF;
+}
+.type-toggle-btn.active {
+    background: #FF5500; color: #FFFFFF;
+}
+
+/* Filter Controls Bar */
+.filter-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    margin-bottom: 32px; padding: 16px 20px; background: #181D22; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); flex-wrap: wrap;
+}
+
+.filter-search-box {
+    position: relative; flex: 1; min-width: 220px; display: flex; align-items: center;
+}
+.filter-search-input {
+    width: 100%; padding: 9px 14px 9px 38px !important; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12);
+    background: #14181C; font-family: 'Satoshi', sans-serif; font-size: 14px; color: #FFFFFF;
+    box-sizing: border-box; transition: border-color 0.15s, box-shadow 0.15s; line-height: normal;
+}
+.filter-search-input:focus {
+    outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,85,0,0.2);
+}
+.filter-search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; width: 16px; height: 16px; z-index: 2; display: flex; align-items: center; justify-content: center;
+}
+
+.filter-select {
+    appearance: none; background: #14181C; border: 1px solid rgba(255,255,255,0.12);
+    padding: 9px 32px 9px 14px; border-radius: 8px; font-family: 'Satoshi', sans-serif;
+    font-size: 13px; font-weight: 600; color: #FFFFFF; cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23CAD2D9%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;
+    transition: border-color 0.15s; min-width: 140px;
+}
+.filter-select:hover, .filter-select:focus { border-color: var(--orange); outline: none; }
+
+.filter-count {
+    font-size: 13px; font-weight: 700; color: var(--muted);
+}
+
+/* Grid Layout */
+.trending-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 22px;
+}
+
+.trend-card {
+    display: flex; flex-direction: column; text-decoration: none; color: inherit;
+    background: #181D22; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    position: relative;
+}
+.trend-card:hover {
+    transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.7); border-color: rgba(255,85,0,0.4);
+}
+
+.trend-poster-wrap {
+    position: relative; width: 100%; aspect-ratio: 2/3; background: #14181C; overflow: hidden;
+}
+.trend-poster {
+    width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease;
+}
+.trend-card:hover .trend-poster {
+    transform: scale(1.05);
+}
+
+.trend-rank-badge {
+    position: absolute; top: 10px; left: 10px; background: rgba(20,24,28,0.85); backdrop-filter: blur(4px);
+    color: #fff; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; z-index: 2;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+.trend-card:nth-child(1) .trend-rank-badge { background: #f59e0b; color: #000; border: none; }
+.trend-card:nth-child(2) .trend-rank-badge { background: #3b82f6; border: none; }
+.trend-card:nth-child(3) .trend-rank-badge { background: #10b981; border: none; }
+
+.trend-score-badge {
+    position: absolute; bottom: 10px; right: 10px; background: var(--orange);
+    color: #fff; font-size: 12px; font-weight: 800; padding: 3px 7px; border-radius: 4px; z-index: 2;
+}
+
+.trend-body {
+    padding: 12px 14px; display: flex; flex-direction: column; flex: 1; justify-content: space-between;
+}
+.trend-card-title {
+    font-size: 14px; font-weight: 800; color: #FFFFFF; line-height: 1.35;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 6px;
+}
+.trend-card-meta {
+    font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; font-weight: 600;
+}
+.trend-type-tag {
+    font-size: 10px; font-weight: 800; background: rgba(255,255,255,0.08); color: #CAD2D9; padding: 2px 5px; border-radius: 3px;
+}
+
+.empty-state {
+    grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #181D22; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08); color: var(--muted);
+}
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="wrap page-wrap">
+        <div class="trending-header">
+            <div class="trending-title-area">
+                <div class="trending-title-row">
+                    <h1 class="trending-title">Trending Anime</h1>
+                    <div class="type-toggle-pill">
+                        <a href="/trending<%= activeGenre ? '?genre='+activeGenre : '' %>" class="type-toggle-btn <%= (!locals.activeType || activeType === 'all') ? 'active' : '' %>">All</a>
+                        <a href="/trending?type=tv<%= activeGenre ? '&genre='+activeGenre : '' %><%= activeYear ? '&year='+activeYear : '' %>" class="type-toggle-btn <%= activeType === 'tv' ? 'active' : '' %>">Series</a>
+                        <a href="/trending?type=movie<%= activeGenre ? '&genre='+activeGenre : '' %><%= activeYear ? '&year='+activeYear : '' %>" class="type-toggle-btn <%= activeType === 'movie' ? 'active' : '' %>">Films</a>
+                    </div>
+                </div>
+                <div class="trending-sub">All <%= activeType === 'movie' ? 'anime films' : (activeType === 'tv' ? 'anime series' : 'anime series and films') %> currently trending across the community.</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#FF5500; box-shadow:0 0 8px rgba(255,85,0,0.6);"></span>
+                <span style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;">Live Community Trends</span>
+            </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="filter-bar">
+            <div class="filter-search-box">
+                <svg class="filter-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="trend-search-input" class="filter-search-input" placeholder="Search trending anime..." value="<%= locals.searchQuery || '' %>" oninput="applyTrendingFilters()">
+            </div>
+
+            <!-- Genre / Tag Filter -->
+            <select class="filter-select" id="trend-genre-select" onchange="applyTrendingFilters()">
+                <option value="">All Genres / Tags</option>
+                <% if (locals.genres) { %>
+                    <% genres.forEach(g => { %>
+                        <option value="<%= g.slug %>" <%= (locals.activeGenre === g.slug) ? 'selected' : '' %>><%= g.name %></option>
+                    <% }); %>
+                <% } %>
+            </select>
+
+            <!-- Year Filter (from 2026 down to 1940) -->
+            <select class="filter-select" id="trend-year-select" onchange="applyTrendingFilters()">
+                <option value="">All Years (1940 – 2026)</option>
+                <% for(let y = 2026; y >= 1940; y--) { %>
+                    <option value="<%= y %>" <%= (locals.activeYear == y) ? 'selected' : '' %>><%= y %></option>
+                <% } %>
+            </select>
+
+            <!-- Season Filter -->
+            <select class="filter-select" id="trend-season-select" onchange="applyTrendingFilters()">
+                <option value="">All Seasons</option>
+                <option value="winter" <%= (locals.activeSeason === 'winter' || locals.activeSeason === 'WINTER') ? 'selected' : '' %>>Winter</option>
+                <option value="spring" <%= (locals.activeSeason === 'spring' || locals.activeSeason === 'SPRING') ? 'selected' : '' %>>Spring</option>
+                <option value="summer" <%= (locals.activeSeason === 'summer' || locals.activeSeason === 'SUMMER') ? 'selected' : '' %>>Summer</option>
+                <option value="fall" <%= (locals.activeSeason === 'fall' || locals.activeSeason === 'FALL') ? 'selected' : '' %>>Fall</option>
+            </select>
+
+            <!-- Format Filter -->
+            <select class="filter-select" id="trend-type-select" onchange="applyTrendingFilters()">
+                <option value="">All Formats</option>
+                <option value="tv" <%= (locals.activeType === 'tv') ? 'selected' : '' %>>TV Series</option>
+                <option value="movie" <%= (locals.activeType === 'movie') ? 'selected' : '' %>>Feature Films</option>
+            </select>
+
+            <span class="filter-count" id="trend-visible-count"><%= (locals.trending || []).length %> titles</span>
+        </div>
+
+        <!-- Trending Grid (Full List) -->
+        <div class="trending-grid" id="trending-grid-container">
+            <% if (locals.trending && trending.length > 0) { %>
+                <% trending.forEach((item, index) => { %>
+                    <a href="/anime/<%= item.slug %>" class="trend-card" data-title="<%= (item.title || '').toLowerCase() %>" data-year="<%= item.release_year %>" data-type="<%= item.type %>" data-season="<%= (item.season || '').toLowerCase() %>" data-genres="<%= (item.genre_slugs || '').toLowerCase() %>">
+                        <div class="trend-poster-wrap">
+                            <img src="<%= item.cover_image %>" class="trend-poster" alt="<%= item.title %>" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400';">
+                            <span class="trend-rank-badge">#<%= index + 1 %></span>
+                            <span class="trend-score-badge">★ <%= item.score ? item.score.toFixed(1) : '4.5' %></span>
+                        </div>
+                        <div class="trend-body">
+                            <div class="trend-card-title"><%= item.title %></div>
+                            <div class="trend-card-meta">
+                                <span><%= item.release_year %></span>
+                                <span class="trend-type-tag"><%= item.type === 'movie' ? 'FILM' : 'TV' %></span>
+                                <span style="color:#CAD2D9; font-weight:700;"><%= item.studio ? item.studio.split('/')[0].trim() : '' %></span>
+                            </div>
+                        </div>
+                    </a>
+                <% }); %>
+            <% } else { %>
+                <div class="empty-state">
+                    <h3>No trending anime found</h3>
+                    <p>Try clearing your search query or selecting a different genre or year.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+    function applyTrendingFilters() {
+        const query = document.getElementById('trend-search-input').value.trim().toLowerCase();
+        const genre = document.getElementById('trend-genre-select').value.toLowerCase();
+        const year = document.getElementById('trend-year-select').value;
+        const season = document.getElementById('trend-season-select').value.toLowerCase();
+        const type = document.getElementById('trend-type-select').value;
+
+        const cards = document.querySelectorAll('#trending-grid-container .trend-card');
+        let visible = 0;
+
+        cards.forEach((card, idx) => {
+            const cardTitle = card.getAttribute('data-title') || '';
+            const cardYear = card.getAttribute('data-year') || '';
+            const cardType = card.getAttribute('data-type') || '';
+            const cardSeason = card.getAttribute('data-season') || '';
+            const cardGenres = card.getAttribute('data-genres') || '';
+
+            const matchQuery = !query || cardTitle.includes(query);
+            const matchGenre = !genre || cardGenres.includes(genre);
+            const matchYear = !year || cardYear === year;
+            const matchSeason = !season || cardSeason === season;
+            const matchType = !type || cardType === type;
+
+            if (matchQuery && matchGenre && matchYear && matchSeason && matchType) {
+                card.style.display = 'flex';
+                visible++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        const countEl = document.getElementById('trend-visible-count');
+        if (countEl) {
+            countEl.textContent = `${visible} titles`;
+        }
+    }
+    </script>
+</body>
+</html>

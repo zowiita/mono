@@ -1,0 +1,1196 @@
+<nav class="nav">
+    <div class="wrap nav-in">
+        <a href="/" class="logo" title="Möno Home">
+            <span class="mono-brand-logo">m<span class="umlaut-wrap">o<span class="umlaut-dots"><span></span><span></span></span></span>no</span>
+        </a>
+        <div class="nav-mid">
+            <ul class="nav-links">
+                <li class="nav-dropdown-container">
+                    <a href="/anime">Browse ▾</a>
+                    <div class="nav-dropdown" style="left:0; right:auto; top:100%; width:160px; padding:6px 0;">
+                        <a href="/anime">Explore</a>
+                        <a href="/season">Seasonal Anime</a>
+                        <a href="/trending">Trending</a>
+                        <a href="/top100">Top 100</a>
+                    </div>
+                </li>
+                <li><a href="/series">Series</a></li>
+                <li><a href="/movies">Movies</a></li>
+                <li><a href="/lists">Lists</a></li>
+                <li><a href="/activity">Activity</a></li>
+            </ul>
+        </div>
+        <div class="nav-end">
+            <!-- Global Search Trigger -->
+            <button class="nav-search-trigger" onclick="openGlobalSearch()" title="Search (Press /)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <span class="search-kbd-hint">/</span>
+            </button>
+
+            <% if (user) { %>
+                <!-- Notifications Bell -->
+                <div class="nav-notif-container" id="notif-container">
+                    <button class="nav-btn-icon notif-bell" id="notif-bell-btn" onclick="toggleNotifications(event)" title="Notifications">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span class="notif-badge" id="nav-notif-badge" style="display:none;">0</span>
+                    </button>
+
+                    <!-- Notifications Dropdown -->
+                    <div class="notif-dropdown" id="notif-dropdown" onclick="event.stopPropagation()">
+                        <div class="notif-header">
+                            <span style="font-weight:700;font-size:14px;">Notifications</span>
+                            <button class="notif-mark-btn" onclick="markAllNotificationsRead()">Mark all as read</button>
+                        </div>
+                        <div class="notif-list" id="notif-list-body">
+                            <div class="notif-loading">Loading notifications...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-log" id="nav-btn-log" onclick="handleNavLog()"><span class="plus"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>Log</button>
+                
+                <div class="nav-dropdown-container">
+                    <div class="nav-av" style="margin-left:6px;">
+                        <% if (user.avatar_url) { %>
+                            <img src="<%= user.avatar_url %>" style="width:100%;height:100%;object-fit:cover;">
+                        <% } else { %>
+                            <span style="font-size:11px;font-weight:700;"><%= user.username.charAt(0).toUpperCase() %></span>
+                        <% } %>
+                    </div>
+                    <div class="nav-dropdown">
+                        <div class="nav-dropdown-header" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                            <strong><%= user.username %></strong>
+                            <% if (user.is_pro) { %>
+                                <span class="pro-text-badge"><%= user.pro_tier === 'patron' ? 'PATRON' : 'PRO' %></span>
+                            <% } %>
+                        </div>
+                        <a href="/u/<%= user.username %>">Profile</a>
+                        <a href="/u/<%= user.username %>/anime">My Anime</a>
+                        <a href="/u/<%= user.username %>/diary">Diary</a>
+                        <a href="/u/<%= user.username %>/lists">My Lists</a>
+                        <a href="/u/<%= user.username %>/reviews">My Reviews</a>
+                        <a href="/u/<%= user.username %>/stats">My Stats & Analytics</a>
+                        <a href="/pro" style="color:var(--blue-pro, #00B4D8);font-weight:700;">Möno Pro</a>
+                        <a href="/settings">Settings</a>
+                        <form action="/logout" method="POST" style="margin:0;padding:0;border-top:1px solid rgba(255,255,255,0.08);margin-top:4px;padding-top:4px;">
+                            <button type="submit" class="nav-dropdown-item-btn">Log out</button>
+                        </form>
+                    </div>
+                </div>
+
+            <% } else { %>
+                <a href="/login" style="font-size:13px;font-weight:600;color:#CAD2D9;margin-right:12px;text-decoration:none;transition:color 0.15s;">Log in</a>
+                <a href="/register" class="btn-log" style="text-decoration:none;">Sign up</a>
+            <% } %>
+        </div>
+    </div>
+</nav>
+
+<!-- GLOBAL SEARCH MODAL (ANIME ONLY, MAX 10, PRESS ENTER FOR FULL SEARCH) -->
+<div class="global-search-backdrop" id="global-search-modal" onclick="closeGlobalSearchOnBackdrop(event)">
+    <div class="global-search-box">
+        <form action="/search" method="GET" class="global-search-input-wrap" onsubmit="return handleGlobalSearchSubmit(event)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" name="q" id="global-search-input" placeholder="Search anime... (Press Enter for full results, Esc to close)" autocomplete="off">
+            <span class="esc-badge" onclick="closeGlobalSearch()">ESC</span>
+        </form>
+        <div class="global-search-results" id="global-search-results">
+            <div class="search-empty-state">Start typing to search anime...</div>
+        </div>
+    </div>
+</div>
+
+<!-- UNIVERSAL LOG MODAL (GLOBAL LOGGING FLOW) -->
+<div class="global-search-backdrop" id="universal-log-modal" onclick="closeUniversalLogOnBackdrop(event)">
+    <div class="global-search-box" style="max-width: 760px; width: 92%; background:#1C2228; border:1px solid rgba(255,255,255,0.12); border-radius:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid rgba(255,255,255,0.08); background:#181D22;">
+            <h3 style="font-size:16px; font-weight:700; color:#FFFFFF;" id="uni-log-heading">Log Anime</h3>
+            <button onclick="closeUniversalLog()" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; line-height:1;">✕</button>
+        </div>
+
+        <!-- Step 1: Search Anime to Log -->
+        <div id="uni-log-step-search" style="padding:20px;">
+            <div class="global-search-input-wrap" style="border:1px solid rgba(255,255,255,0.12); background:#14181C; border-radius:8px; padding:10px 14px; margin-bottom:12px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" id="uni-log-search-input" placeholder="Find anime to log..." autocomplete="off" oninput="searchAnimeForLog(this.value)" style="background:transparent; color:#FFFFFF; border:none; outline:none; font-size:14px; width:100%;">
+            </div>
+            <div id="uni-log-anime-list" style="max-height:320px; overflow-y:auto;">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+
+        <!-- Step 2: Log Form for Selected Anime -->
+        <div id="uni-log-step-form" style="display:none; padding:24px;">
+            <div style="display:flex; gap:16px; align-items:center; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.08);">
+                <img id="uni-log-poster" src="" style="width:58px; height:82px; object-fit:cover; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+                <div style="flex:1;">
+                    <div id="uni-log-title" style="font-size:17px; font-weight:700; color:#FFFFFF;"></div>
+                    <div id="uni-log-meta" style="font-size:12px; color:var(--muted); margin-top:2px;"></div>
+                </div>
+                <button type="button" onclick="backToLogSearch()" style="font-size:12px; color:var(--orange); font-weight:600; background:none; border:none; cursor:pointer;">Change</button>
+            </div>
+
+            <!-- Status Selector -->
+            <div style="margin-bottom:16px;">
+                <label style="display:block; font-size:12px; font-weight:700; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Status</label>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px;">
+                    <button type="button" class="uni-status-btn active" data-status="completed" onclick="setUniStatus('completed', this)">Completed</button>
+                    <button type="button" class="uni-status-btn" data-status="watching" onclick="setUniStatus('watching', this)">Watching</button>
+                    <button type="button" class="uni-status-btn" data-status="plan_to_watch" onclick="setUniStatus('plan_to_watch', this)">Plan to Watch</button>
+                    <button type="button" class="uni-status-btn" data-status="dropped" onclick="setUniStatus('dropped', this)">Dropped</button>
+                </div>
+            </div>
+
+            <!-- Episode Progress (Visible when Watching) -->
+            <div id="uni-ep-wrap" style="display:none; margin-bottom:16px; background:#181D22; padding:12px 16px; border-radius:8px; border:1px solid rgba(255,255,255,0.08);">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:13px; font-weight:600; color:#FFFFFF;">Episodes Watched</span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button type="button" onclick="adjustUniEp(-1)" style="width:28px; height:28px; border-radius:4px; background:#1C2228; color:#FFFFFF; border:1px solid rgba(255,255,255,0.15); font-weight:700; cursor:pointer;">-</button>
+                        <span style="font-size:14px; font-weight:700; color:var(--orange); min-width:60px; text-align:center;"><span id="uni-ep-current">1</span> / <span id="uni-ep-total">24</span></span>
+                        <button type="button" onclick="adjustUniEp(1)" style="width:28px; height:28px; border-radius:4px; background:#1C2228; color:#FFFFFF; border:1px solid rgba(255,255,255,0.15); font-weight:700; cursor:pointer;">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rating Stars (Half-star support) -->
+            <div style="margin-bottom:16px;">
+                <label style="display:block; font-size:12px; font-weight:700; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Rating</label>
+                <div class="star-rating-widget" id="uni-star-widget" onmouseleave="resetUniRating()">
+                    <div class="stars-track">
+                        <div class="star-unit" data-star="1">
+                            <div class="star-hit left" onmousemove="hoverUniRating(0.5)" onclick="setUniRating(0.5)"></div>
+                            <div class="star-hit right" onmousemove="hoverUniRating(1.0)" onclick="setUniRating(1.0)"></div>
+                            <svg class="star-svg" viewBox="0 0 24 24"><path class="star-bg" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path class="star-fill" id="uni-star-fill-1" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="star-unit" data-star="2">
+                            <div class="star-hit left" onmousemove="hoverUniRating(1.5)" onclick="setUniRating(1.5)"></div>
+                            <div class="star-hit right" onmousemove="hoverUniRating(2.0)" onclick="setUniRating(2.0)"></div>
+                            <svg class="star-svg" viewBox="0 0 24 24"><path class="star-bg" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path class="star-fill" id="uni-star-fill-2" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="star-unit" data-star="3">
+                            <div class="star-hit left" onmousemove="hoverUniRating(2.5)" onclick="setUniRating(2.5)"></div>
+                            <div class="star-hit right" onmousemove="hoverUniRating(3.0)" onclick="setUniRating(3.0)"></div>
+                            <svg class="star-svg" viewBox="0 0 24 24"><path class="star-bg" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path class="star-fill" id="uni-star-fill-3" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="star-unit" data-star="4">
+                            <div class="star-hit left" onmousemove="hoverUniRating(3.5)" onclick="setUniRating(3.5)"></div>
+                            <div class="star-hit right" onmousemove="hoverUniRating(4.0)" onclick="setUniRating(4.0)"></div>
+                            <svg class="star-svg" viewBox="0 0 24 24"><path class="star-bg" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path class="star-fill" id="uni-star-fill-4" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="star-unit" data-star="5">
+                            <div class="star-hit left" onmousemove="hoverUniRating(4.5)" onclick="setUniRating(4.5)"></div>
+                            <div class="star-hit right" onmousemove="hoverUniRating(5.0)" onclick="setUniRating(5.0)"></div>
+                            <svg class="star-svg" viewBox="0 0 24 24"><path class="star-bg" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/><path class="star-fill" id="uni-star-fill-5" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                    </div>
+                    <div class="rating-display-wrap">
+                        <button type="button" class="rating-clear-btn" id="uni-rating-clear-btn" onclick="clearUniRating()" style="display:none;" title="Borrar calificación">✕</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Text -->
+            <div style="margin-bottom:16px;">
+                <label style="display:block; font-size:12px; font-weight:700; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Review / Notes</label>
+                <textarea id="uni-log-review" placeholder="Add your review or notes..." style="width:100%; height:80px; padding:10px; border-radius:6px; border:1px solid var(--cream-dk); font-family:inherit; font-size:13px; resize:none; outline:none; box-sizing:border-box;"></textarea>
+            </div>
+
+            <!-- Spoilers & Favorite -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); cursor:pointer;">
+                    <input type="checkbox" id="uni-log-spoiler">
+                    <span>Contains spoilers</span>
+                </label>
+                <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); cursor:pointer;">
+                    <input type="checkbox" id="uni-log-favorite">
+                    <span>Favorite (add to top 4)</span>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="button" onclick="submitUniversalLog()" class="btn-log" style="width:100%; justify-content:center; padding:12px; font-size:14px;">Save Entry</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.nav {
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    height: 56px;
+    background: rgba(24, 29, 34, 0.95);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: 'Satoshi', -apple-system, sans-serif;
+}
+.nav-in {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+.logo-sq {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.logo-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--orange);
+    display: block;
+}
+.nav-mid {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+.nav-links {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.nav-links li {
+    position: relative;
+}
+.nav-links a {
+    font-size: 14px;
+    font-weight: 600;
+    color: #CAD2D9;
+    padding: 6px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    display: inline-block;
+}
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+}
+.nav-end {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Search Command Trigger */
+.nav-search-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #8C98A4;
+    font-family: inherit;
+    transition: all 0.15s;
+}
+.nav-search-trigger:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+.search-kbd-hint {
+    background: #14181C;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 5px;
+    color: #CAD2D9;
+    line-height: 1;
+}
+
+/* Notifications */
+.nav-notif-container {
+    position: relative;
+}
+.notif-bell {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #CAD2D9;
+    transition: color 0.15s, background 0.15s;
+}
+.notif-bell:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
+}
+.notif-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    min-width: 15px;
+    height: 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    border: 2px solid #181D22;
+}
+.notif-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 320px;
+    background: #1C2228;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+    display: none;
+    flex-direction: column;
+    z-index: 650;
+    overflow: hidden;
+}
+.notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: #181D22;
+    color: #FFFFFF;
+}
+.notif-mark-btn {
+    background: none;
+    border: none;
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+}
+.notif-mark-btn:hover {
+    text-decoration: underline;
+}
+.notif-list {
+    max-height: 360px;
+    overflow-y: auto;
+}
+.notif-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+}
+.notif-item.unread {
+    background: rgba(40, 13, 194, 0.15);
+}
+.notif-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+.notif-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--blue);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.notif-text {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #CAD2D9;
+    flex: 1;
+}
+.notif-time {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+.notif-loading, .notif-empty {
+    padding: 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.btn-log {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(255, 85, 0, 0.35);
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-log:hover {
+    background: #E54B00;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 85, 0, 0.5);
+}
+.nav-av {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #280DC2, #5030D8);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.nav-dropdown-container {
+    position: relative;
+    cursor: pointer;
+}
+.nav-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 175px;
+    background: #1C2228;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: all 0.15s ease;
+    z-index: 600;
+}
+.nav-dropdown-container:hover .nav-dropdown,
+.nav-dropdown-container:focus-within .nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.nav-dropdown-header {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #FFFFFF;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 4px;
+}
+.nav-dropdown a, .nav-dropdown-item-btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #CAD2D9;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s, background 0.15s;
+}
+.nav-dropdown a:hover, .nav-dropdown-item-btn:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* GLOBAL SEARCH COMMAND PALETTE MODAL */
+.global-search-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 12, 16, 0.82);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 90px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.global-search-backdrop.open {
+    display: flex;
+    opacity: 1;
+}
+.global-search-box {
+    width: 100%;
+    max-width: 600px;
+    background: #1C2228;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.global-search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.global-search-input-wrap svg {
+    color: var(--orange);
+    flex-shrink: 0;
+}
+.global-search-input-wrap input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-family: inherit;
+    color: #FFFFFF;
+    background: transparent;
+}
+.esc-badge {
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.1);
+    color: #CAD2D9;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.global-search-results {
+    max-height: 440px;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+.search-category-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    padding: 8px 20px 4px 20px;
+}
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+    cursor: pointer;
+}
+.search-result-item:hover, .search-result-item.active {
+    background: rgba(255, 255, 255, 0.08);
+}
+.search-thumb {
+    width: 38px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: #14181C;
+    flex-shrink: 0;
+}
+.search-item-info {
+    flex: 1;
+    min-width: 0;
+}
+.search-item-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.search-item-sub {
+    font-size: 12px;
+    color: var(--muted);
+}
+.search-score-badge {
+    background: rgba(255, 85, 0, 0.15);
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.search-see-all-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #181D22;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+    text-decoration: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.15s;
+}
+.search-see-all-btn:hover {
+    background: #1C2228;
+}
+.search-empty-state {
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* Status buttons */
+.uni-status-btn {
+    padding: 8px 4px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    background: #14181C;
+    font-size: 11px;
+    font-weight: 700;
+    color: #CAD2D9;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+}
+.uni-status-btn:hover {
+    background: #181D22;
+    color: #FFFFFF;
+}
+.uni-status-btn.active {
+    background: var(--orange);
+    color: #fff;
+    border-color: var(--orange);
+}
+
+/* Universal Star Rating Widget */
+.star-rating-widget {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.stars-track {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+.star-unit {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.star-hit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 5;
+}
+.star-hit.left { left: 0; }
+.star-hit.right { right: 0; }
+.star-svg {
+    width: 26px;
+    height: 26px;
+    pointer-events: none;
+}
+.star-bg {
+    fill: rgba(255, 255, 255, 0.15);
+}
+.star-fill {
+    fill: var(--orange);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.08s ease-out;
+}
+.rating-display-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.rating-num-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange);
+    background: rgba(255, 85, 0, 0.15);
+    padding: 3px 8px;
+    border-radius: 4px;
+    min-width: 64px;
+    text-align: center;
+}
+.rating-num-badge.empty {
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.08);
+}
+.rating-clear-btn {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.15s;
+}
+.rating-clear-btn:hover {
+    color: #ff4d4f;
+    background: rgba(255, 77, 79, 0.15);
+}
+</style>
+
+<script>
+// UNIVERSAL LOGGING MODAL LOGIC
+let uniSelectedAnime = null;
+let uniRating = 0;
+let uniStatus = 'completed';
+let uniCurrentEp = 1;
+let uniTotalEps = 24;
+
+function handleNavLog() {
+    // If we're already on anime-detail page with its own log modal, trigger it
+    const localModal = document.getElementById('log-modal');
+    if (localModal) {
+        localModal.style.display = 'flex';
+        return;
+    }
+
+    // Otherwise open the universal Log Modal
+    openUniversalLog();
+}
+
+function openUniversalLog() {
+    const modal = document.getElementById('universal-log-modal');
+    if (!modal) return;
+    modal.classList.add('open');
+    backToLogSearch();
+    document.getElementById('uni-log-search-input')?.focus();
+    searchAnimeForLog('');
+}
+
+function closeUniversalLog() {
+    const modal = document.getElementById('universal-log-modal');
+    if (modal) modal.classList.remove('open');
+}
+
+function closeUniversalLogOnBackdrop(e) {
+    if (e.target.id === 'universal-log-modal') {
+        closeUniversalLog();
+    }
+}
+
+function backToLogSearch() {
+    document.getElementById('uni-log-step-search').style.display = 'block';
+    document.getElementById('uni-log-step-form').style.display = 'none';
+    document.getElementById('uni-log-heading').innerText = 'Log Anime';
+}
+
+async function searchAnimeForLog(q) {
+    const listEl = document.getElementById('uni-log-anime-list');
+    if (!listEl) return;
+
+    try {
+        const res = await fetch(`/api/search/global?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        
+        if (!data.anime || data.anime.length === 0) {
+            listEl.innerHTML = '<div style="padding:20px; text-align:center; color:var(--muted); font-size:13px;">No anime found.</div>';
+            return;
+        }
+
+        let html = '';
+        data.anime.forEach(a => {
+            html += `
+                <div onclick='selectAnimeForUniLog(${JSON.stringify(a).replace(/'/g, "&#39;")})' style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:6px; cursor:pointer; transition:background 0.15s;" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">
+                    <img src="${a.cover_image}" style="width:34px; height:48px; object-fit:cover; border-radius:4px; flex-shrink:0;">
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-size:13px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${a.title}</div>
+                        <div style="font-size:11px; color:var(--muted);">${a.year || ''} • ${a.type || 'TV'} • ★ ${a.score || '—'}</div>
+                    </div>
+                    <span style="font-size:12px; font-weight:700; color:var(--blue);">Log &rarr;</span>
+                </div>
+            `;
+        });
+        listEl.innerHTML = html;
+    } catch (err) {
+        listEl.innerHTML = '<div style="padding:20px; text-align:center; color:var(--muted); font-size:13px;">Error fetching anime.</div>';
+    }
+}
+
+function selectAnimeForUniLog(anime) {
+    uniSelectedAnime = anime;
+    document.getElementById('uni-log-heading').innerText = `Log: ${anime.title}`;
+    document.getElementById('uni-log-poster').src = anime.cover_image;
+    document.getElementById('uni-log-title').innerText = anime.title;
+    document.getElementById('uni-log-meta').innerText = `${anime.year || ''} • ${anime.type || 'TV'} • ${anime.studio || ''}`;
+    
+    uniTotalEps = anime.episodes_count || 24;
+    uniCurrentEp = 1;
+    document.getElementById('uni-ep-total').innerText = uniTotalEps;
+    document.getElementById('uni-ep-current').innerText = uniCurrentEp;
+
+    // Reset Form
+    uniRating = 0;
+    resetUniRating();
+    setUniStatus('completed', document.querySelector('.uni-status-btn[data-status="completed"]'));
+    document.getElementById('uni-log-review').value = '';
+    document.getElementById('uni-log-spoiler').checked = false;
+    document.getElementById('uni-log-favorite').checked = false;
+
+    document.getElementById('uni-log-step-search').style.display = 'none';
+    document.getElementById('uni-log-step-form').style.display = 'block';
+}
+
+function setUniStatus(status, btn) {
+    uniStatus = status;
+    document.querySelectorAll('.uni-status-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const epWrap = document.getElementById('uni-ep-wrap');
+    if (epWrap) {
+        epWrap.style.display = status === 'watching' ? 'block' : 'none';
+    }
+}
+
+function adjustUniEp(delta) {
+    uniCurrentEp += delta;
+    if (uniCurrentEp < 1) uniCurrentEp = 1;
+    if (uniCurrentEp > uniTotalEps) uniCurrentEp = uniTotalEps;
+    document.getElementById('uni-ep-current').innerText = uniCurrentEp;
+}
+
+function setUniRating(r) {
+    uniRating = (uniRating === r) ? 0 : r;
+    renderUniStars(uniRating);
+}
+
+function hoverUniRating(r) {
+    renderUniStars(r);
+}
+
+function resetUniRating() {
+    renderUniStars(uniRating);
+}
+
+function clearUniRating() {
+    uniRating = 0;
+    renderUniStars(0);
+}
+
+function renderUniStars(val) {
+    const label = document.getElementById('uni-rating-label');
+    const clearBtn = document.getElementById('uni-rating-clear-btn');
+    
+    for (let s = 1; s <= 5; s++) {
+        const fill = document.getElementById('uni-star-fill-' + s);
+        if (!fill) continue;
+        
+        if (val >= s) {
+            fill.style.clipPath = 'inset(0 0 0 0)';
+        } else if (val === s - 0.5) {
+            fill.style.clipPath = 'inset(0 50% 0 0)';
+        } else {
+            fill.style.clipPath = 'inset(0 100% 0 0)';
+        }
+    }
+
+    if (val > 0) {
+        if (label) {
+            label.innerText = '★ ' + val.toFixed(1) + ' / 5.0';
+            label.classList.remove('empty');
+        }
+        if (clearBtn) clearBtn.style.display = 'inline-block';
+    } else {
+        if (label) {
+            label.innerText = 'Sin calificar';
+            label.classList.add('empty');
+        }
+        if (clearBtn) clearBtn.style.display = 'none';
+    }
+}
+
+async function submitUniversalLog() {
+    if (!uniSelectedAnime) return;
+    
+    const reviewText = document.getElementById('uni-log-review').value;
+    const containsSpoilers = document.getElementById('uni-log-spoiler').checked;
+    const isFavorite = document.getElementById('uni-log-favorite').checked;
+
+    try {
+        const res = await fetch(`/api/anime/${uniSelectedAnime.slug}/log`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                rating: uniRating,
+                review: reviewText,
+                status: uniStatus,
+                current_episode: uniStatus === 'watching' ? uniCurrentEp : (uniStatus === 'completed' ? uniTotalEps : 0),
+                contains_spoilers: containsSpoilers ? 1 : 0,
+                is_favorite: isFavorite ? 1 : 0
+            })
+        });
+
+        if (res.ok) {
+            closeUniversalLog();
+            // If on profile or anime page, reload to reflect entry
+            if (window.location.pathname.startsWith('/u/') || window.location.pathname.startsWith('/anime/')) {
+                window.location.reload();
+            } else {
+                alert(`Successfully logged "${uniSelectedAnime.title}"!`);
+            }
+        } else {
+            alert('Failed to save log entry.');
+        }
+    } catch (err) {
+        alert('Network error while saving log.');
+    }
+}
+
+// GLOBAL COMMAND PALETTE SEARCH (ANIME ONLY, MAX 10, ENTER FOR FULL SEARCH)
+let searchDebounceTimeout = null;
+
+function openGlobalSearch() {
+    const modal = document.getElementById('global-search-modal');
+    const input = document.getElementById('global-search-input');
+    if (!modal) return;
+    modal.classList.add('open');
+    input.value = '';
+    input.focus();
+    fetchGlobalSearchResults('');
+}
+
+function closeGlobalSearch() {
+    const modal = document.getElementById('global-search-modal');
+    if (modal) modal.classList.remove('open');
+}
+
+function closeGlobalSearchOnBackdrop(e) {
+    if (e.target.id === 'global-search-modal') {
+        closeGlobalSearch();
+    }
+}
+
+function handleGlobalSearchSubmit(e) {
+    const input = document.getElementById('global-search-input');
+    if (!input || !input.value.trim()) {
+        e.preventDefault();
+        return false;
+    }
+    return true;
+}
+
+// Keyboard Shortcut listener (/) and (ESC)
+window.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        openGlobalSearch();
+    } else if (e.key === 'Escape') {
+        closeGlobalSearch();
+        closeUniversalLog();
+        closeNotifications();
+    }
+});
+
+document.getElementById('global-search-input')?.addEventListener('input', (e) => {
+    clearTimeout(searchDebounceTimeout);
+    const val = e.target.value;
+    searchDebounceTimeout = setTimeout(() => {
+        fetchGlobalSearchResults(val);
+    }, 180);
+});
+
+async function fetchGlobalSearchResults(q) {
+    const container = document.getElementById('global-search-results');
+    if (!container) return;
+    
+    try {
+        const res = await fetch(`/api/search/global?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        
+        let html = '';
+
+        if (data.anime && data.anime.length > 0) {
+            html += `<div class="search-category-title">Anime</div>`;
+            data.anime.forEach(a => {
+                html += `
+                    <a href="/anime/${a.slug}" class="search-result-item">
+                        <img src="${a.cover_image}" class="search-thumb">
+                        <div class="search-item-info">
+                            <div class="search-item-title">${a.title}</div>
+                            <div class="search-item-sub">${a.year || ''} • ${a.type ? a.type.toUpperCase() : 'TV'} • ${a.studio || ''}</div>
+                        </div>
+                        <span class="search-score-badge">★ ${a.score ? a.score.toFixed(1) : '—'}</span>
+                    </a>
+                `;
+            });
+
+            if (q && q.trim()) {
+                html += `
+                    <a href="/search?q=${encodeURIComponent(q.trim())}" class="search-see-all-btn">
+                        <span>Press Enter to see all results for "<strong>${q.trim()}</strong>"</span>
+                        <span>&rarr;</span>
+                    </a>
+                `;
+            }
+        } else {
+            html = `<div class="search-empty-state">No anime found for "${q}"</div>`;
+        }
+
+        container.innerHTML = html;
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="search-empty-state">Error fetching search results.</div>`;
+    }
+}
+
+// NOTIFICATIONS LOGIC
+async function fetchNotificationsBadge() {
+    try {
+        const res = await fetch('/api/notifications');
+        if (!res.ok) return;
+        const data = await res.json();
+        const badge = document.getElementById('nav-notif-badge');
+        if (badge) {
+            if (data.unreadCount > 0) {
+                badge.innerText = data.unreadCount > 99 ? '99+' : data.unreadCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+    } catch (e) {}
+}
+
+function toggleNotifications(e) {
+    e.stopPropagation();
+    const drop = document.getElementById('notif-dropdown');
+    if (!drop) return;
+    const isShowing = drop.style.display === 'flex';
+    if (isShowing) {
+        drop.style.display = 'none';
+    } else {
+        drop.style.display = 'flex';
+        loadNotificationsList();
+    }
+}
+
+function closeNotifications() {
+    const drop = document.getElementById('notif-dropdown');
+    if (drop) drop.style.display = 'none';
+}
+
+document.addEventListener('click', () => {
+    closeNotifications();
+});
+
+async function loadNotificationsList() {
+    const body = document.getElementById('notif-list-body');
+    if (!body) return;
+    body.innerHTML = '<div class="notif-loading">Loading...</div>';
+
+    try {
+        const res = await fetch('/api/notifications');
+        const data = await res.json();
+        
+        if (!data.notifications || data.notifications.length === 0) {
+            body.innerHTML = '<div class="notif-empty">No notifications yet.</div>';
+            return;
+        }
+
+        let html = '';
+        data.notifications.forEach(n => {
+            let msg = '';
+            let link = '#';
+            if (n.type === 'follow') {
+                msg = `<strong>${n.actor_username}</strong> started following you.`;
+                link = `/u/${n.actor_username}`;
+            } else if (n.type === 'like') {
+                msg = `<strong>${n.actor_username}</strong> liked your review.`;
+                link = `/review/${n.target_id}`;
+            } else if (n.type === 'comment') {
+                msg = `<strong>${n.actor_username}</strong> commented on your review.`;
+                link = `/review/${n.target_id}`;
+            }
+
+            const av = n.actor_avatar ? `<img src="${n.actor_avatar}" class="notif-avatar">` : `<div class="notif-avatar">${n.actor_username.charAt(0).toUpperCase()}</div>`;
+            const unreadClass = n.is_read === 0 ? 'unread' : '';
+
+            html += `
+                <a href="${link}" class="notif-item ${unreadClass}">
+                    ${av}
+                    <div class="notif-text">
+                        <div>${msg}</div>
+                        <div class="notif-time">${new Date(n.created_at).toLocaleDateString()}</div>
+                    </div>
+                </a>
+            `;
+        });
+        body.innerHTML = html;
+    } catch (err) {
+        body.innerHTML = '<div class="notif-empty">Failed to load notifications.</div>';
+    }
+}
+
+async function markAllNotificationsRead() {
+    try {
+        await fetch('/api/notifications/mark-read', { method: 'POST' });
+        const badge = document.getElementById('nav-notif-badge');
+        if (badge) badge.style.display = 'none';
+        document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
+    } catch (e) {}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchNotificationsBadge();
+});
+</script>

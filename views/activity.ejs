@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Activity Stream — Möno</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+/* ACTIVITY FEED STYLES */
+.act-wrap { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
+
+.act-header {
+    margin-bottom: 28px;
+}
+.act-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+.act-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+    margin: 0;
+}
+.act-sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+}
+
+/* MAIN VIEW TOGGLE (Following / Community) */
+.act-toggle-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+.act-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+}
+.act-toggle-btn:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.04);
+}
+.act-toggle-btn.active {
+    color: #FFFFFF;
+    background: #1C2228;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+.act-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 8px rgba(255, 85, 0, 0.8);
+    display: inline-block;
+}
+
+/* SUB FILTERS (All, Reviews, Logs, Lists) */
+.act-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 24px;
+}
+.act-pill {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    background: #181D22;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+.act-pill:hover {
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+.act-pill.active {
+    color: var(--orange);
+    border-color: rgba(255, 85, 0, 0.35);
+    background: rgba(255, 85, 0, 0.08);
+}
+
+/* ACTIVITY STREAM CARDS */
+.act-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.act-card {
+    background: #181D22;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--r-md);
+    padding: 20px;
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.act-card:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* CARD HEADER */
+.act-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+.act-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.act-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #252C34;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.act-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.act-meta-line {
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: var(--muted);
+}
+.act-meta-line strong a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 700;
+}
+.act-meta-line strong a:hover {
+    color: var(--orange);
+}
+.act-action-text {
+    color: #8C98A4;
+}
+.act-anime-link {
+    color: #FFFFFF;
+    font-weight: 700;
+    text-decoration: none;
+}
+.act-anime-link:hover {
+    color: var(--orange);
+}
+.act-time {
+    font-size: 11.5px;
+    color: #63707E;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* CARD BODY FOR REVIEWS / LOGS */
+.act-card-body {
+    display: flex;
+    gap: 16px;
+}
+.act-poster-wrap {
+    flex-shrink: 0;
+    width: 68px;
+    height: 98px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #14181C;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    transition: transform 0.15s, border-color 0.15s;
+}
+.act-poster-wrap:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+.act-poster-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.act-content-wrap {
+    flex: 1;
+    min-width: 0;
+}
+
+.act-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.act-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--orange);
+    font-size: 14px;
+    letter-spacing: -1px;
+}
+.act-stars svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--orange);
+}
+.act-heart-liked {
+    color: var(--orange);
+    display: inline-flex;
+    align-items: center;
+}
+.act-heart-liked svg {
+    width: 13px;
+    height: 13px;
+    fill: var(--orange);
+}
+.act-badge-pill {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--muted);
+}
+.act-badge-completed {
+    background: rgba(40, 194, 100, 0.15);
+    color: #4ADE80;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.act-review-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #D1D5DB;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.act-spoiler-box {
+    background: rgba(255, 85, 0, 0.05);
+    border: 1px dashed rgba(255, 85, 0, 0.25);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+.act-spoiler-box:hover {
+    border-color: var(--orange);
+}
+
+/* CARD ACTIONS (LIKE, COMMENT) */
+.act-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+.act-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+.act-action-btn:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.04);
+}
+.act-action-btn.liked {
+    color: var(--orange);
+}
+.act-action-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* LIST CARD BODY */
+.act-list-posters {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0 10px;
+}
+.act-list-poster {
+    width: 54px;
+    height: 78px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #14181C;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.act-list-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* EMPTY STATE */
+.act-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: #181D22;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--r-lg);
+}
+.act-empty svg {
+    width: 48px;
+    height: 48px;
+    color: var(--muted);
+    stroke-width: 1.5;
+    margin-bottom: 16px;
+}
+.act-empty h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 8px;
+}
+.act-empty p {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 420px;
+    margin: 0 auto 20px;
+    line-height: 1.5;
+}
+.act-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--orange);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 20px;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: transform 0.15s, background 0.15s;
+}
+.act-empty-btn:hover {
+    background: #E54B00;
+    transform: translateY(-1px);
+}
+</style>
+</head>
+<body>
+<%- include('partials/nav') %>
+
+<div class="act-wrap">
+    <div class="act-header">
+        <div class="act-title-row">
+            <h1 class="act-title">Activity</h1>
+        </div>
+        <p class="act-sub">Live updates, reviews, ratings, and milestones from members you follow and the community.</p>
+
+        <!-- View Switcher (Following vs Community) -->
+        <div class="act-toggle-bar">
+            <a href="/activity?filter=following&type=<%= activeType %>" class="act-toggle-btn <%= activeFilter === 'following' ? 'active' : '' %>">
+                Following
+                <% if (followsCount > 0) { %>
+                    <span style="font-size:11px;opacity:0.7;">(<%= followsCount %>)</span>
+                <% } %>
+            </a>
+            <a href="/activity?filter=community&type=<%= activeType %>" class="act-toggle-btn <%= activeFilter === 'community' ? 'active' : '' %>">
+                <span class="act-live-dot"></span>
+                Community Feed
+            </a>
+        </div>
+
+        <!-- Type Filter Pills -->
+        <div class="act-filters">
+            <a href="/activity?filter=<%= activeFilter %>&type=all" class="act-pill <%= activeType === 'all' ? 'active' : '' %>">All Activity</a>
+            <a href="/activity?filter=<%= activeFilter %>&type=reviews" class="act-pill <%= activeType === 'reviews' ? 'active' : '' %>">Reviews</a>
+            <a href="/activity?filter=<%= activeFilter %>&type=logs" class="act-pill <%= activeType === 'logs' ? 'active' : '' %>">Ratings & Logs</a>
+            <a href="/activity?filter=<%= activeFilter %>&type=lists" class="act-pill <%= activeType === 'lists' ? 'active' : '' %>">Lists</a>
+        </div>
+    </div>
+
+    <!-- Activity Feed Content -->
+    <div class="act-stream">
+        <% if (activities && activities.length > 0) { %>
+            <% activities.forEach(function(act) { %>
+                
+                <% if (act.activity_type === 'list') { %>
+                    <!-- LIST ACTIVITY CARD -->
+                    <div class="act-card">
+                        <div class="act-card-header">
+                            <div class="act-user-info">
+                                <a href="/u/<%= act.username %>" class="act-avatar">
+                                    <% if (act.avatar_url) { %>
+                                        <img src="<%= act.avatar_url %>" alt="<%= act.username %>">
+                                    <% } else { %>
+                                        <%= act.username.charAt(0).toUpperCase() %>
+                                    <% } %>
+                                </a>
+                                <div class="act-meta-line">
+                                    <strong><a href="/u/<%= act.username %>"><%= act.username %></a></strong>
+                                    <span class="act-action-text">published a new list</span>
+                                </div>
+                            </div>
+                            <span class="act-time"><%= new Date(act.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %></span>
+                        </div>
+
+                        <div style="padding-left:48px;">
+                            <h3 style="margin:0 0 6px;font-size:16px;font-weight:700;">
+                                <a href="/list/<%= act.list_id %>" style="color:#FFFFFF;text-decoration:none;"><%= act.list_title %></a>
+                            </h3>
+                            <% if (act.list_description) { %>
+                                <p style="font-size:13.5px;color:var(--muted);margin:0 0 10px;line-height:1.5;"><%= act.list_description %></p>
+                            <% } %>
+
+                            <% if (act.posters && act.posters.length > 0) { %>
+                                <div class="act-list-posters">
+                                    <% act.posters.forEach(function(p) { %>
+                                        <div class="act-list-poster">
+                                            <img src="<%= p.cover_image %>" alt="<%= p.title %>">
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+                            <span class="act-badge-pill" style="margin-top:6px;display:inline-block;"><%= act.item_count %> titles</span>
+                        </div>
+                    </div>
+
+                <% } else { %>
+                    <!-- LOG / REVIEW ACTIVITY CARD -->
+                    <div class="act-card">
+                        <div class="act-card-header">
+                            <div class="act-user-info">
+                                <a href="/u/<%= act.username %>" class="act-avatar">
+                                    <% if (act.avatar_url) { %>
+                                        <img src="<%= act.avatar_url %>" alt="<%= act.username %>">
+                                    <% } else { %>
+                                        <%= act.username.charAt(0).toUpperCase() %>
+                                    <% } %>
+                                </a>
+                                <div class="act-meta-line">
+                                    <strong><a href="/u/<%= act.username %>"><%= act.username %></a></strong>
+                                    <% if (act.kind === 'review') { %>
+                                        <span class="act-action-text">reviewed</span>
+                                    <% } else if (act.progress_status === 'completed') { %>
+                                        <span class="act-action-text">completed</span>
+                                    <% } else { %>
+                                        <span class="act-action-text">logged & rated</span>
+                                    <% } %>
+                                    <a href="/anime/<%= act.anime_slug %>" class="act-anime-link"><%= act.anime_title %></a>
+                                    <% if (act.anime_year) { %>
+                                        <span style="font-size:12px;color:var(--muted);">(<%= act.anime_year %>)</span>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <span class="act-time"><%= new Date(act.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %></span>
+                        </div>
+
+                        <div class="act-card-body" style="padding-left:48px;">
+                            <a href="/anime/<%= act.anime_slug %>" class="act-poster-wrap">
+                                <img src="<%= act.anime_cover %>" alt="<%= act.anime_title %>">
+                            </a>
+
+                            <div class="act-content-wrap">
+                                <div class="act-rating-row">
+                                    <% if (act.rating > 0) { %>
+                                        <span class="act-stars">
+                                            <% for(let s = 1; s <= 5; s++) { %>
+                                                <% if (act.rating >= s) { %>
+                                                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                                <% } else if (act.rating >= s - 0.5) { %>
+                                                    <svg viewBox="0 0 24 24"><path d="M12 2v15.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <% } %>
+                                            <% } %>
+                                            <span style="font-size:12px;font-weight:700;margin-left:4px;color:var(--orange);"><%= act.rating.toFixed(1) %></span>
+                                        </span>
+                                    <% } %>
+
+                                    <% if (act.is_liked) { %>
+                                        <span class="act-heart-liked" title="Liked">
+                                            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                        </span>
+                                    <% } %>
+
+                                    <% if (act.progress_status === 'completed') { %>
+                                        <span class="act-badge-pill act-badge-completed">Completed</span>
+                                    <% } else if (act.current_episode > 0) { %>
+                                        <span class="act-badge-pill">Ep <%= act.current_episode %><%= act.episodes_count ? '/' + act.episodes_count : '' %></span>
+                                    <% } %>
+                                </div>
+
+                                <% if (act.kind === 'review' && act.review_text) { %>
+                                    <% if (act.contains_spoilers) { %>
+                                        <div class="act-spoiler-box" onclick="this.nextElementSibling.style.display='block';this.style.display='none';">
+                                            ⚠️ <strong>Review contains spoilers</strong> — Click to reveal
+                                        </div>
+                                        <div class="act-review-text" style="display:none;">
+                                            <%= act.review_text %>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="act-review-text">
+                                            <%= act.review_text %>
+                                        </div>
+                                    <% } %>
+                                <% } %>
+
+                                <div class="act-card-actions">
+                                    <button class="act-action-btn <%= act.userHasLiked ? 'liked' : '' %>" onclick="toggleFeedLike(event, <%= act.activity_id %>)">
+                                        <svg viewBox="0 0 24 24" fill="<%= act.userHasLiked ? 'currentColor' : 'none' %>" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                        <span class="like-cnt"><%= act.likes_count > 0 ? act.likes_count : '' %></span> Like
+                                    </button>
+
+                                    <a href="/review/<%= act.activity_id %>" class="act-action-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                        <span><%= act.comments_count > 0 ? act.comments_count : '' %></span> Comment
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+
+            <% }) %>
+        <% } else { %>
+            <div class="act-empty">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <% if (activeFilter === 'following') { %>
+                    <h3>No activity from people you follow</h3>
+                    <p>When users you follow log anime, write reviews, or create lists, their updates will appear here in your personal feed.</p>
+                    <a href="/activity?filter=community" class="act-empty-btn">Switch to Community Feed</a>
+                <% } else { %>
+                    <h3>No recent activity found</h3>
+                    <p>There are no activities matching this filter. Start by exploring the catalog and logging an anime!</p>
+                    <a href="/anime" class="act-empty-btn">Browse Anime</a>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script>
+async function toggleFeedLike(e, logId) {
+    e.preventDefault();
+    const btn = e.currentTarget;
+    try {
+        const res = await fetch('/api/review/' + logId + '/like', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            btn.classList.toggle('liked', data.isLiked);
+            const svg = btn.querySelector('svg');
+            if (svg) svg.setAttribute('fill', data.isLiked ? 'currentColor' : 'none');
+            const cntSpan = btn.querySelector('.like-cnt');
+            if (cntSpan) cntSpan.textContent = data.likesCount > 0 ? data.likesCount : '';
+        }
+    } catch(err) {
+        console.error('Error liking review:', err);
+    }
+}
+</script>
+</body>
+</html>

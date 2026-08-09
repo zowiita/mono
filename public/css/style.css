@@ -1,0 +1,474 @@
+/* ==========================================================================
+   MÖNO DARK DESIGN SYSTEM & GLOBAL TOKENS (#222224 / #14181C)
+   ========================================================================== */
+
+:root {
+  /* Dark Canvas & Surfaces */
+  --bg-main: #222224;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --bg-card-hover: #242B33;
+  --bg-subtle: #14181C;
+  
+  /* Backward Compatibility Tokens for Legacy Templates */
+  --white: #222224;
+  --cream: rgba(255, 255, 255, 0.08);
+  --cream-dk: rgba(255, 255, 255, 0.14);
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  
+  /* Brand Palette */
+  --blue: #280DC2;
+  --blue-hover: #1F089E;
+  --blue-light: #4A35EE;
+  --blue-soft: rgba(40, 13, 194, 0.25);
+  --blue-mid: rgba(74, 53, 238, 0.4);
+  
+  --orange: #FF5500;
+  --orange-hover: #E54B00;
+  --orange-soft: rgba(255, 85, 0, 0.2);
+  
+  /* Typography Scale */
+  --t-xs: 11px;
+  --t-sm: 13px;
+  --t-base: 15px;
+  --t-md: 16px;
+  --t-lg: 20px;
+  --t-xl: 28px;
+  --t-2xl: 38px;
+  
+  /* Radii */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-full: 9999px;
+  
+  /* Dark Shadows (Clean, No Glowing Halos) */
+  --sh-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --sh-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+  --sh-lg: 0 12px 36px rgba(0, 0, 0, 0.65);
+  --sh-blue: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --sh-orange: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --blue-pro: #00B4D8;
+}
+
+/* Global Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-main);
+  color: #FFFFFF;
+}
+
+body {
+  font-family: "Satoshi", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-main);
+  color: #FFFFFF;
+  font-size: var(--t-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ==========================================================================
+   GLOBAL DARK NAVIGATION BAR
+   ========================================================================== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  height: 58px;
+  background: rgba(24, 28, 34, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-in {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.mono-brand-logo {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: "Satoshi", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -1.2px;
+  color: #FFFFFF;
+  line-height: 1;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mono-brand-logo:hover {
+  transform: scale(1.05);
+}
+.mono-brand-logo .umlaut-wrap {
+  position: relative;
+  display: inline-block;
+}
+.mono-brand-logo .umlaut-dots {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  pointer-events: none;
+}
+.mono-brand-logo .umlaut-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #FF5500;
+  box-shadow: 0 0 8px rgba(255, 85, 0, 0.6);
+  display: block;
+}
+
+.nav-mid {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-links a {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #CAD2D9;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.nav-links a:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-links a.active {
+  color: #FFFFFF;
+  background: var(--blue);
+  box-shadow: 0 2px 10px rgba(40, 13, 194, 0.35);
+}
+
+.nav-end {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8C98A4;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.15s ease;
+}
+
+.nav-btn-icon:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.btn-log {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--orange);
+  color: #FFFFFF;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: var(--r-full);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+}
+
+.btn-log:hover {
+  background: var(--orange-hover);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-av {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #280DC2, #5030D8);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+.nav-av:hover {
+  border-color: var(--orange);
+}
+
+/* AVATAR GRADIENTS */
+.g1 { background: linear-gradient(155deg, #0d1b2a, #1b3a5c, #2a6494); }
+.g2 { background: linear-gradient(155deg, #1a0608, #4a1018, #8b2030); }
+.g3 { background: linear-gradient(155deg, #1c1008, #3d2210, #6e3c18); }
+.g4 { background: linear-gradient(155deg, #080a1c, #14183c, #1e2862); }
+.av1 { background: linear-gradient(135deg, #280DC2, #5030D8); }
+
+/* ==========================================================================
+   DROPDOWN MENUS (DARK THEME)
+   ========================================================================== */
+.nav-dropdown-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 175px;
+  background: #1C2228;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 600;
+  padding: 6px 0;
+}
+
+.nav-dropdown-container:hover .nav-dropdown,
+.nav-dropdown-container:focus-within .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown-header {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 4px;
+}
+
+.nav-dropdown a,
+.nav-dropdown-item-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #CAD2D9;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-dropdown a:hover,
+.nav-dropdown-item-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================================================
+   SECTIONS & COMMONLY USED DARK COMPONENTS
+   ========================================================================== */
+.main {
+  padding: 40px 0 96px;
+}
+
+.sec {
+  margin-bottom: 64px;
+}
+
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.sec-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sec-bar {
+  width: 4px;
+  height: 24px;
+  background: var(--orange);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.sec-title {
+  font-size: var(--t-xl);
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  line-height: 1;
+  color: #FFFFFF;
+}
+
+.see-all {
+  font-size: 13px;
+  font-weight: 700;
+  color: #CAD2D9;
+  transition: color 0.15s;
+}
+.see-all:hover {
+  color: #FFFFFF;
+}
+
+/* Dark Pills & Toggles */
+.tog {
+  display: inline-flex;
+  background: #181D22;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.tog button {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #8C98A4;
+  padding: 5px 12px;
+  border-radius: 4px;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+
+.tog button.on {
+  background: #283038;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Form Controls Dark */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+  background: #181D22;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 85, 0, 0.2);
+}
+
+select option {
+  background: #181D22;
+  color: #FFFFFF;
+}
+
+/* PRO & Patron Text Badges (Clean, Text-Only, Bright Blue) */
+.pro-text-badge {
+  color: #00B4D8;
+  font-size: 11.5px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.patron-text-badge {
+  color: #38BDF8;
+  font-size: 11.5px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}

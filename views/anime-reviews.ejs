@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reviews for <%= locals.anime ? anime.title : 'Anime' %> — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root{
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Satoshi",sans-serif;color:#FFFFFF;background:#14181C;line-height:1.5;min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+
+.wrap { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+.header-row { display: flex; align-items: flex-end; gap: 24px; margin-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 24px; }
+.poster-mini { width: 80px; aspect-ratio:2/3; object-fit:cover; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+.header-text h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+.header-text h1 a { color: #FFFFFF; }
+.header-text h1 a:hover { color: var(--orange); }
+.header-text .subtitle { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+.reviews-grid { display: flex; flex-direction: column; gap: 16px; }
+.review-card { display: grid; grid-template-columns: 48px 1fr; gap: 16px; background: #181D22; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.review-av { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #280DC2, #5030D8); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; overflow:hidden; border: 1px solid rgba(255,255,255,0.15); }
+.review-av img { width: 100%; height: 100%; object-fit: cover; }
+.review-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.review-user { font-size: 15px; font-weight: 700; color: #FFFFFF; }
+.review-user:hover { color: var(--orange); }
+.review-rating { color: var(--orange); font-size: 14px; font-weight: 700; }
+.review-date { font-size: 12px; color: var(--muted); }
+.review-text { font-size: 14px; color: #CAD2D9; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
+.review-actions { display: flex; gap: 16px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.review-actions span { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+.review-actions span:hover { color: var(--orange); }
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+    
+    <div class="wrap">
+        <div class="header-row">
+            <a href="/anime/<%= locals.anime ? anime.slug : 'nge' %>">
+                <img src="<%= locals.anime ? anime.cover_image : '/images/nge_cover_1785281259269.png' %>" alt="<%= locals.anime ? anime.title : 'Anime' %>" class="poster-mini">
+            </a>
+            <div class="header-text">
+                <h1><a href="/anime/<%= locals.anime ? anime.slug : 'nge' %>"><%= locals.anime ? anime.title : 'Neon Genesis Evangelion' %></a> <span style="font-size:20px;color:var(--muted);font-weight:500;"><%= locals.anime ? anime.release_year : '1995' %></span></h1>
+                <div class="subtitle">Community Reviews (<%= locals.reviews ? reviews.length : 0 %>)</div>
+            </div>
+        </div>
+        
+        <div class="reviews-grid">
+            <% if (locals.reviews && reviews.length > 0) { %>
+                <% reviews.forEach(r => { %>
+                    <div class="review-card">
+                        <div class="review-av">
+                            <% if (r.avatar_url) { %>
+                                <img src="<%= r.avatar_url %>" alt="<%= r.username %>">
+                            <% } else { %>
+                                <%= (r.username || 'U').charAt(0).toUpperCase() %>
+                            <% } %>
+                        </div>
+                        <div class="review-body">
+                            <div class="review-meta">
+                                <a href="/u/<%= r.username %>" class="review-user"><%= r.username %></a>
+                                <span class="review-rating">
+                                    <% const stars = '★'.repeat(Math.floor(r.rating || 0)) + (r.rating % 1 !== 0 ? '½' : ''); %>
+                                    <%= stars %> (<%= r.rating %>/5)
+                                </span>
+                                <span class="review-date">Watched on <%= r.watched_date || new Date(r.created_at).toLocaleDateString() %></span>
+                            </div>
+                            <div class="review-text"><%= r.review_text || 'Left a rating without written notes.' %></div>
+                            <div class="review-actions">
+                                <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> <%= r.is_liked ? 'Liked' : 'Like review' %></span>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="review-card">
+                    <div class="review-av">Z</div>
+                    <div class="review-body">
+                        <div class="review-meta">
+                            <a href="/u/demo" class="review-user">Zoe</a>
+                            <span class="review-rating">★★★★★</span>
+                            <span class="review-date">Watched on Jul 15, 2026</span>
+                        </div>
+                        <div class="review-text">An absolute masterpiece that redefined the genre. The psychological depth and character development are unmatched.</div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

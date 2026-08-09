@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Settings &mdash; Edit Profile — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#8B7CFF;--blue-soft:rgba(139,124,255,0.15);--blue-mid:#A59BFF;
+  --white:#14181C;--orange:#FF5500;--orange-soft:rgba(255,85,0,0.15);
+  --ink:#FFFFFF;--cream:#181D22;--cream-dk:rgba(255,255,255,0.12);--muted:#9B9593;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Satoshi",sans-serif;background:#14181C;color:#FFFFFF;padding-bottom:60px;}
+
+.wrap{max-width:1100px;margin:0 auto;padding:0 40px;}
+
+/* SUB NAV */
+.sub-nav-bg{background:#181D22;border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 0;}
+.sub-nav{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+.sub-nav-links{display:flex;gap:24px;}
+.sub-nav-links a{color:inherit;text-decoration:none;transition:color .15s;}
+.sub-nav-links a.active{color:var(--orange);border-bottom:2px solid var(--orange);padding-bottom:12px;margin-bottom:-14px;}
+.sub-nav-links a:hover{color:#FFFFFF;}
+.deactivate{color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500;}
+.deactivate:hover{color:#ff5555;}
+
+/* MAIN LAYOUT */
+.pg{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;margin-top:40px;}
+.col-l{max-width:460px;}
+
+.edit-title{font-size:24px;font-weight:800;margin-bottom:28px;letter-spacing:-.5px;color:#FFFFFF;}
+
+/* FORM ELEMENTS */
+.form-group{margin-bottom:20px;}
+.form-row{display:flex;gap:16px;}
+.form-row .form-group{flex:1;}
+
+.form-label{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px;color:#CAD2D9;}
+.form-input{width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,0.12);border-radius:6px;font-family:inherit;font-size:14px;background:#1C2228;color:#FFFFFF;transition:border-color .15s;}
+.form-input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 2px rgba(255,85,0,0.25);}
+.form-input:disabled{background:#181D22;color:var(--muted);cursor:not-allowed;}
+textarea.form-input{min-height:100px;resize:vertical;}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239B9593' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 12px center;background-size:14px;}
+
+.form-hint{font-size:12px;color:var(--muted);margin-left:12px;display:flex;align-items:center;line-height:1.4;}
+.flex-input-hint{display:flex;align-items:center;}
+.flex-input-hint select{width:160px;}
+
+.checkbox-group{margin-top:24px;}
+.cb-label{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#CAD2D9;cursor:pointer;margin-bottom:12px;}
+.cb-label input{width:16px;height:16px;accent-color:var(--orange);cursor:pointer;}
+
+.edit-btn{padding:12px 24px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;transition:background .15s,transform .15s;box-shadow:0 4px 14px rgba(255,85,0,0.3);}
+.edit-btn:hover{background:#E54B00;transform:translateY(-1px);}
+
+/* RIGHT COLUMN (FAVORITES MANAGEMENT) */
+.fav-panel{background:#181D22;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.fav-sec-title{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.fav-sec-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.4;}
+.fav-slots-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px;}
+.fav-slot-box{position:relative;aspect-ratio:2/3;background:#14181C;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .15s,box-shadow .15s;}
+.fav-slot-box.has-anime{border-style:solid;border-color:rgba(255,255,255,0.12);box-shadow:0 4px 12px rgba(0,0,0,0.4);}
+.fav-slot-box.active-selecting{border-color:var(--orange);box-shadow:0 0 0 2px rgba(255,85,0,0.35);}
+.fav-slot-num{position:absolute;top:6px;left:6px;background:rgba(20,24,28,0.85);color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px;z-index:3;border:1px solid rgba(255,255,255,0.1);}
+.fav-slot-img{width:100%;height:100%;object-fit:cover;}
+.fav-slot-overlay{position:absolute;inset:0;background:linear-gradient(transparent,rgba(20,24,28,0.92));display:flex;flex-direction:column;justify-content:flex-end;padding:8px 6px 6px;text-align:center;z-index:2;}
+.fav-slot-title{font-size:11px;font-weight:700;color:#fff;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fav-slot-actions{display:flex;justify-content:center;gap:4px;margin-top:4px;}
+.fav-slot-btn{font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;cursor:pointer;border:none;}
+.fav-slot-btn-remove{background:rgba(255,255,255,0.15);color:#fff;transition:background .15s;}
+.fav-slot-btn-remove:hover{background:rgba(220,53,69,0.9);}
+.fav-slot-btn-change{background:var(--orange);color:#fff;}
+
+.fav-empty-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;cursor:pointer;color:var(--muted);transition:color .15s,background .15s;}
+.fav-empty-btn:hover{color:var(--orange);background:rgba(255,85,0,0.1);}
+.fav-empty-btn svg{width:22px;height:22px;}
+
+/* SEARCH ANIME BOX */
+.fav-search-container{border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;}
+.fav-search-title{font-size:13px;font-weight:800;color:#FFFFFF;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.fav-active-pos-badge{font-size:11px;font-weight:700;color:var(--orange);background:rgba(255,85,0,0.15);border:1px solid rgba(255,85,0,0.3);padding:3px 8px;border-radius:4px;}
+.search-input-wrap{position:relative;}
+.fav-search-input{width:100%;padding:10px 14px;background:#14181C;border:1px solid rgba(255,255,255,0.12);border-radius:6px;font-family:inherit;font-size:14px;color:#FFFFFF;outline:none;transition:border-color .15s;}
+.fav-search-input:focus{border-color:var(--orange);box-shadow:0 0 0 2px rgba(255,85,0,0.25);}
+.fav-search-results{margin-top:8px;max-height:240px;overflow-y:auto;background:#1C2228;border:1px solid rgba(255,255,255,0.12);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.5);display:none;}
+.fav-result-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .15s;}
+.fav-result-item:last-child{border-bottom:none;}
+.fav-result-item:hover{background:rgba(255,85,0,0.12);}
+.fav-res-meta{display:flex;align-items:center;gap:10px;min-width:0;}
+.fav-res-img{width:32px;height:46px;object-fit:cover;border-radius:3px;flex-shrink:0;}
+.fav-res-title{font-size:13px;font-weight:700;color:#FFFFFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fav-res-sub{font-size:11px;color:var(--muted);}
+.fav-res-btn{font-size:11px;font-weight:700;color:#fff;background:var(--orange);padding:4px 10px;border-radius:4px;flex-shrink:0;border:none;}
+</style>
+</head>
+<body>
+
+<%- include('partials/nav') %>
+
+<div class="sub-nav-bg">
+    <div class="wrap sub-nav">
+        <div class="sub-nav-links">
+            <a href="/settings" class="active">Profile</a>
+            <a href="/u/<%= profileUser.username %>">View Public Profile</a>
+        </div>
+        <a href="/logout" class="deactivate">Log out</a>
+    </div>
+</div>
+
+<div class="wrap">
+    <div class="pg">
+        
+        <!-- LEFT COLUMN: Profile Details Form -->
+        <div class="col-l">
+            <h1 class="edit-title">Profile Settings</h1>
+            
+            <form action="/settings" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-input" value="<%= profileUser.username %>" readonly style="background:#181D22; color:var(--muted); cursor:not-allowed;">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Profile Avatar</label>
+                        <input type="file" name="avatar" class="form-input" accept="image/*" style="padding:7px 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Profile Banner</label>
+                        <input type="file" name="banner" class="form-input" accept="image/*" style="padding:7px 10px;">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Given name</label>
+                        <input type="text" name="given_name" class="form-input" value="<%= profileUser.given_name || '' %>">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Family name</label>
+                        <input type="text" name="family_name" class="form-input" value="<%= profileUser.family_name || '' %>">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email address</label>
+                    <input type="email" name="email" class="form-input" value="<%= profileUser.email || '' %>" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-input" value="<%= profileUser.location || '' %>">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Website</label>
+                        <input type="url" name="website" class="form-input" value="<%= profileUser.website || '' %>">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea name="bio" class="form-input" placeholder="Tell the community about your taste in anime..."><%= profileUser.bio || '' %></textarea>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label class="cb-label">
+                        <input type="checkbox" name="hide_likes" <%= profileUser.hide_likes ? 'checked' : '' %>>
+                        <span>Hide likes on my public profile</span>
+                    </label>
+                    <label class="cb-label">
+                        <input type="checkbox" name="hide_ratings" <%= profileUser.hide_ratings ? 'checked' : '' %>>
+                        <span>Hide star ratings on my reviews</span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="edit-btn">Save Changes</button>
+            </form>
+        </div>
+
+        <!-- RIGHT COLUMN: Favorite Anime Top 5 Selector -->
+        <div class="col-r" id="favorites-section">
+            <div class="fav-panel">
+                <div class="fav-sec-title">Favorite Anime (Top 5)</div>
+                <div class="fav-sec-sub">Select your 5 favorite anime to showcase on your profile. Click any slot to choose or change an anime.</div>
+
+                <div class="fav-slots-grid">
+                    <% for (let i = 1; i <= 5; i++) { %>
+                        <% const fav = (locals.favorites || []).find(f => f.position === i); %>
+                        <% if (fav) { %>
+                            <div class="fav-slot-box has-anime" id="slot-box-<%= i %>">
+                                <span class="fav-slot-num">#<%= i %></span>
+                                <img src="<%= fav.cover_image %>" class="fav-slot-img" alt="<%= fav.title %>" onerror="this.onerror=null; this.src='/images/frieren_cover_1785281175713.png';">
+                                <div class="fav-slot-overlay">
+                                    <span class="fav-slot-title"><%= fav.title %></span>
+                                    <div class="fav-slot-actions">
+                                        <button type="button" class="fav-slot-btn fav-slot-btn-change" onclick="selectSlot(<%= i %>)">Cambiar</button>
+                                        <button type="button" class="fav-slot-btn fav-slot-btn-remove" onclick="removeFavorite(<%= i %>)">Quitar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="fav-slot-box" id="slot-box-<%= i %>">
+                                <span class="fav-slot-num">#<%= i %></span>
+                                <div class="fav-empty-btn" onclick="selectSlot(<%= i %>)">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span style="font-size:11px; font-weight:700;">Add #<%= i %></span>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% } %>
+                </div>
+
+                <!-- Live Search Box to set favorite anime for active slot -->
+                <div class="fav-search-container">
+                    <div class="fav-search-title">
+                        <span>Search & Assign Anime</span>
+                        <span class="fav-active-pos-badge" id="active-slot-badge">Target Slot: #1</span>
+                    </div>
+                    <div class="search-input-wrap">
+                        <input type="text" id="fav-search-input" class="fav-search-input" placeholder="Type anime name (e.g. Frieren, Evangelion, Vinland Saga)..." autocomplete="off">
+                    </div>
+                    <div id="fav-search-results" class="fav-search-results">
+                        <!-- Autocomplete items appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    let activeSlot = 1;
+
+    function selectSlot(pos) {
+        activeSlot = pos;
+        document.getElementById('active-slot-badge').innerText = `Target Slot: #${pos}`;
+        
+        // Highlight active slot
+        for (let i = 1; i <= 5; i++) {
+            const el = document.getElementById(`slot-box-${i}`);
+            if (el) {
+                if (i === pos) el.classList.add('active-selecting');
+                else el.classList.remove('active-selecting');
+            }
+        }
+
+        const input = document.getElementById('fav-search-input');
+        if (input) {
+            input.focus();
+            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    async function removeFavorite(pos) {
+        try {
+            const res = await fetch('/api/profile/favorite/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ position: pos })
+            });
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                alert('Error al quitar de favoritos.');
+            }
+        } catch (err) {
+            alert('Error de red.');
+        }
+    }
+
+    // Live search for favorites
+    const favInput = document.getElementById('fav-search-input');
+    const favResults = document.getElementById('fav-search-results');
+    let favTimeout;
+
+    if (favInput) {
+        favInput.addEventListener('input', (e) => {
+            clearTimeout(favTimeout);
+            const q = e.target.value.trim();
+            if (!q) {
+                favResults.style.display = 'none';
+                return;
+            }
+
+            favTimeout = setTimeout(async () => {
+                try {
+                    const res = await fetch(`/api/search/anime?q=${encodeURIComponent(q)}`);
+                    const data = await res.json();
+
+                    favResults.innerHTML = '';
+                    if (data && data.length > 0) {
+                        data.forEach(anime => {
+                            const item = document.createElement('div');
+                            item.className = 'fav-result-item';
+                            item.innerHTML = `
+                                <div class="fav-res-meta">
+                                    <img src="${anime.cover_image}" class="fav-res-img" alt="${anime.title}" onerror="this.onerror=null; this.src='/images/frieren_cover_1785281175713.png';">
+                                    <div>
+                                        <div class="fav-res-title">${anime.title}</div>
+                                        <div class="fav-res-sub">${anime.year || ''} • ${anime.studio || 'Anime'}</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="fav-res-btn">Set as #${activeSlot}</button>
+                            `;
+
+                            item.addEventListener('click', async () => {
+                                try {
+                                    const postRes = await fetch('/api/profile/favorite', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ position: activeSlot, slug: anime.slug })
+                                    });
+                                    if (postRes.ok) {
+                                        window.location.reload();
+                                    } else {
+                                        alert('Error al guardar anime favorito.');
+                                    }
+                                } catch (err) {
+                                    alert('Error de red.');
+                                }
+                            });
+
+                            favResults.appendChild(item);
+                        });
+                        favResults.style.display = 'block';
+                    } else {
+                        favResults.innerHTML = '<div style="padding:14px; font-size:13px; color:var(--muted); text-align:center;">No se encontraron animes con ese término.</div>';
+                        favResults.style.display = 'block';
+                    }
+                } catch (err) {
+                    console.error('Error fetching search:', err);
+                }
+            }, 200);
+        });
+    }
+
+    // Default select slot 1 on load
+    selectSlot(1);
+</script>
+
+<%- include('partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos de Servicio y Privacidad — Möno</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background-color: #14181C;
+            color: #FFFFFF;
+            font-family: 'Satoshi', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .terms-hero {
+            padding: 60px 0 32px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .terms-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,85,0,0.15);
+            border: 1px solid rgba(255,85,0,0.3);
+            padding: 5px 14px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 16px;
+        }
+        .terms-title {
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin: 0 0 10px 0;
+            color: #FFFFFF;
+        }
+        .terms-body {
+            max-width: 780px;
+            margin: 48px auto;
+            background: #181D22;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 40px;
+            line-height: 1.7;
+            font-size: 15px;
+            color: #CAD2D9;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .terms-body h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin: 32px 0 12px 0;
+            letter-spacing: -0.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 8px;
+        }
+        .terms-body h2:first-of-type {
+            margin-top: 0;
+        }
+        .terms-body p {
+            margin: 0 0 16px 0;
+        }
+        .terms-body ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        .terms-body li {
+            margin-bottom: 8px;
+        }
+        .terms-body a {
+            color: var(--orange);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .terms-body a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="terms-hero">
+        <div class="wrap">
+            <div class="terms-badge">
+                <span>⚖️</span> Aspectos Legales & Normas
+            </div>
+            <h1 class="terms-title">Términos de Servicio y Privacidad</h1>
+            <p style="color:var(--muted); font-size:15px; margin:0;">Última actualización: Agosto 2026</p>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="terms-body">
+            <h2>1. Introducción y Propósito</h2>
+            <p>Bienvenido a <strong>Möno</strong>. Al utilizar nuestra plataforma, aceptas estos términos y directrices. Möno es un espacio social de catalogación, descubrimiento y registro para los amantes de la animación japonesa.</p>
+
+            <h2>2. Propiedad Intelectual y Derechos de Autor</h2>
+            <p>Todo el contenido audiovisual, nombres de franquicias, pósters, capturas e información de producción pertenecen a sus respectivos creadores, autores y estudios de animación (como MAPPA, Kyoto Animation, Toei Animation, Gainax, Studio Ghibli, entre otros). Möno recopila esta información con fines informativos, educativos y de reseña crítica bajo las disposiciones de uso legítimo (<em>Fair Use</em>).</p>
+
+            <h2>3. Normas de la Comunidad</h2>
+            <p>Para mantener una comunidad abierta y respetuosa:</p>
+            <ul>
+                <li><strong>Spoilers:</strong> Cualquier reseña o comentario que revele giros argumentales clave debe marcarse obligatoriamente con la etiqueta de spoiler.</li>
+                <li><strong>Respeto:</strong> No se tolerará acoso, discursos de odio o contenido ilícito.</li>
+                <li><strong>Cuentas:</strong> Cada usuario es responsable de la seguridad y el contenido publicado desde su perfil.</li>
+            </ul>
+
+            <h2>4. Privacidad de Datos</h2>
+            <p>En Möno valoramos tu privacidad. Solo almacenamos la información necesaria para brindarte el servicio (tu nombre de usuario, correo electrónico, listas, calificaciones y progreso). No vendemos tus datos a terceros.</p>
+
+            <h2>5. Uso de la API</h2>
+            <p>El acceso a nuestra API para desarrolladores está sujeto a límites de tasa (rate limiting) para asegurar la estabilidad del servicio. El scraping automatizado masivo no autorizado está prohibido.</p>
+
+            <h2>6. Contacto y Consultas</h2>
+            <p>Si tienes preguntas o inquietudes sobre estos términos, podés comunicarte con nuestro equipo en <a href="/contact">Contacto y Soporte</a>.</p>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

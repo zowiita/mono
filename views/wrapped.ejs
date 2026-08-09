@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title><%= profileUser.username %>'s <%= year %> Möno Wrapped</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #0B0D0F;
+  --orange: #FF5500;
+  --orange-hover: #E54B00;
+  --blue: #8B7CFF;
+  --gold: #FFB800;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', sans-serif;
+  background-color: var(--bg-main);
+  color: #FFFFFF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Background animated gradient glow */
+.glow-orb-1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 85, 0, 0.25) 0%, rgba(0,0,0,0) 70%);
+  top: -100px;
+  left: -100px;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: floatOrb 8s ease-in-out infinite alternate;
+}
+
+.glow-orb-2 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 124, 255, 0.2) 0%, rgba(0,0,0,0) 70%);
+  bottom: -150px;
+  right: -150px;
+  filter: blur(100px);
+  pointer-events: none;
+  animation: floatOrb 10s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.1); }
+}
+
+/* Wrapped Container */
+.wrapped-container {
+  width: 100%;
+  max-width: 440px;
+  height: 780px;
+  max-height: 92vh;
+  background: #14181C;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 85, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Story Progress Bars */
+.story-progress-bar {
+  display: flex;
+  gap: 6px;
+  padding: 16px 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+}
+
+.story-segment {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.story-segment-fill {
+  height: 100%;
+  width: 0%;
+  background: #FFFFFF;
+  border-radius: 999px;
+  transition: width 0.1s linear;
+}
+
+.story-segment.completed .story-segment-fill {
+  width: 100%;
+}
+
+/* Header Inside Container */
+.story-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 20px 12px;
+  z-index: 20;
+}
+
+.user-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.btn-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* Slide Cards */
+.story-slides {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+
+.story-slide {
+  position: absolute;
+  inset: 0;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px) scale(0.98);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.story-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.slide-tag {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+
+.slide-title {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.slide-big-stat {
+  font-size: 64px;
+  font-weight: 900;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FF8C00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  margin: 16px 0 8px;
+}
+
+.slide-sub {
+  font-size: 15px;
+  color: #CAD2D9;
+  line-height: 1.5;
+  max-width: 300px;
+}
+
+/* Poster Highlight Slide */
+.slide-poster {
+  width: 170px;
+  aspect-ratio: 2/3;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255,85,0,0.3);
+  border: 2px solid rgba(255,255,255,0.2);
+  margin: 20px 0;
+}
+
+/* Navigation Tap Zones */
+.tap-zone-left, .tap-zone-right {
+  position: absolute;
+  top: 60px;
+  bottom: 80px;
+  width: 50%;
+  z-index: 25;
+  cursor: pointer;
+}
+.tap-zone-left { left: 0; }
+.tap-zone-right { right: 0; }
+
+/* Bottom Action Bar */
+.story-bottom-bar {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 30;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.btn-story-share {
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.btn-story-share:hover {
+  background: var(--orange-hover);
+  transform: scale(1.03);
+}
+</style>
+</head>
+<body>
+
+<div class="glow-orb-1"></div>
+<div class="glow-orb-2"></div>
+
+<div class="wrapped-container">
+  <!-- Story Bars -->
+  <div class="story-progress-bar">
+    <div class="story-segment" id="seg-0"><div class="story-segment-fill" id="fill-0"></div></div>
+    <div class="story-segment" id="seg-1"><div class="story-segment-fill" id="fill-1"></div></div>
+    <div class="story-segment" id="seg-2"><div class="story-segment-fill" id="fill-2"></div></div>
+    <div class="story-segment" id="seg-3"><div class="story-segment-fill" id="fill-3"></div></div>
+    <div class="story-segment" id="seg-4"><div class="story-segment-fill" id="fill-4"></div></div>
+  </div>
+
+  <!-- Header -->
+  <div class="story-top-header">
+    <div class="user-tag">
+      <span><%= profileUser.username %></span>
+      <span style="color:var(--orange);">· <%= year %> Möno Wrapped</span>
+    </div>
+    <a href="/u/<%= profileUser.username %>/stats?tab=wrapped&year=<%= year %>" class="btn-close" title="Exit Wrapped">✕</a>
+  </div>
+
+  <!-- Tap Zones for Click Navigation -->
+  <div class="tap-zone-left" onclick="prevSlide()"></div>
+  <div class="tap-zone-right" onclick="nextSlide()"></div>
+
+  <!-- Slides -->
+  <div class="story-slides">
+    <!-- Slide 1: Welcome & Total Minutes -->
+    <div class="story-slide active" id="slide-0">
+      <div class="slide-tag">Your Year in Anime</div>
+      <h2 class="slide-title">You went on unforgettable journeys in <%= year %></h2>
+      <div class="slide-big-stat"><%= yearMinutes.toLocaleString() %></div>
+      <div style="font-size:16px; font-weight:800; color:#FFFFFF; margin-bottom:6px;">Minutes of Anime Watched</div>
+      <p class="slide-sub">That's <%= yearHours %> hours (<%= yearDays %> whole days) immersed in story and animation.</p>
+    </div>
+
+    <!-- Slide 2: Anime & Episodes Completed -->
+    <div class="story-slide" id="slide-1">
+      <div class="slide-tag">Marathon Master</div>
+      <h2 class="slide-title">You conquered entire seasons</h2>
+      <div class="slide-big-stat"><%= yearAnimeCount %></div>
+      <div style="font-size:16px; font-weight:800; color:#FFFFFF; margin-bottom:6px;">Anime Completed & Logged</div>
+      <p class="slide-sub">Across <strong><%= yearEpisodesCount %> episodes</strong> watched this year.</p>
+    </div>
+
+    <!-- Slide 3: #1 Anime of the Year -->
+    <div class="story-slide" id="slide-2">
+      <div class="slide-tag">Masterpiece of <%= year %></div>
+      <h2 class="slide-title">Your #1 Highest Rated Anime</h2>
+      <% if (topAnime && topAnime.length > 0) { %>
+        <img src="<%= topAnime[0].cover_image %>" alt="<%= topAnime[0].title %>" class="slide-poster">
+        <div style="font-size:18px; font-weight:900; color:#FFFFFF;"><%= topAnime[0].title %></div>
+        <div style="font-size:14px; color:var(--orange); font-weight:800; margin-top:4px;">★ <%= topAnime[0].rating %> / 5.0 Rating</div>
+      <% } else { %>
+        <p class="slide-sub">No anime logged for <%= year %> yet.</p>
+      <% } %>
+    </div>
+
+    <!-- Slide 4: Favorite Genre & Studio -->
+    <div class="story-slide" id="slide-3">
+      <div class="slide-tag">Tastes & Passions</div>
+      <h2 class="slide-title">Your defining anime DNA</h2>
+      <div style="background:rgba(255,255,255,0.06); padding:20px 24px; border-radius:16px; width:100%; max-width:300px; margin:20px 0; border:1px solid rgba(255,255,255,0.1);">
+        <div style="font-size:12px; color:var(--muted); font-weight:700; text-transform:uppercase;">Top Genre</div>
+        <div style="font-size:22px; font-weight:900; color:#FFFFFF; margin-top:4px;"><%= topGenre %></div>
+        <div style="height:1px; background:rgba(255,255,255,0.1); margin:16px 0;"></div>
+        <div style="font-size:12px; color:var(--muted); font-weight:700; text-transform:uppercase;">Top Studio</div>
+        <div style="font-size:22px; font-weight:900; color:var(--orange); margin-top:4px;"><%= topStudio %></div>
+      </div>
+    </div>
+
+    <!-- Slide 5: The Final Summary Card -->
+    <div class="story-slide" id="slide-4">
+      <div class="slide-tag">Möno Wrapped · <%= year %></div>
+      <h2 class="slide-title" style="font-size:26px;">You are an anime visionary</h2>
+      <div style="background:linear-gradient(135deg, #181D22, #241420); border:1px solid rgba(255,85,0,0.4); border-radius:16px; padding:20px; width:100%; max-width:320px; margin:16px 0; text-align:left;">
+        <div style="font-size:11px; font-weight:800; color:var(--orange); text-transform:uppercase;">Möno Wrapped <%= year %></div>
+        <div style="font-size:18px; font-weight:900; color:#fff; margin:4px 0 12px;"><%= profileUser.username %></div>
+        <div style="font-size:12px; color:#CAD2D9; line-height:1.6;">
+          ⏱ <strong><%= yearHours %>h</strong> watched (<%= yearMinutes.toLocaleString() %> mins)<br>
+          🎬 <strong><%= yearAnimeCount %></strong> anime titles<br>
+          ✨ Favorite: <strong><%= topAnime && topAnime[0] ? topAnime[0].title : '—' %></strong><br>
+          🎨 Top Studio: <strong><%= topStudio %></strong>
+        </div>
+      </div>
+      <button class="btn-story-share" onclick="shareWrapped()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share My Wrapped
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="story-bottom-bar">
+    <button class="btn-story-share" onclick="nextSlide()">Tap or Click to Advance →</button>
+  </div>
+</div>
+
+<script>
+let curSlide = 0;
+const totalSlides = 5;
+
+function updateStory() {
+  for (let i = 0; i < totalSlides; i++) {
+    const slide = document.getElementById('slide-' + i);
+    const seg = document.getElementById('seg-' + i);
+    const fill = document.getElementById('fill-' + i);
+    
+    if (i === curSlide) {
+      slide.classList.add('active');
+      seg.classList.remove('completed');
+      fill.style.width = '100%';
+    } else if (i < curSlide) {
+      slide.classList.remove('active');
+      seg.classList.add('completed');
+      fill.style.width = '100%';
+    } else {
+      slide.classList.remove('active');
+      seg.classList.remove('completed');
+      fill.style.width = '0%';
+    }
+  }
+}
+
+function nextSlide() {
+  if (curSlide < totalSlides - 1) {
+    curSlide++;
+    updateStory();
+  } else {
+    // Replay or exit
+    curSlide = 0;
+    updateStory();
+  }
+}
+
+function prevSlide() {
+  if (curSlide > 0) {
+    curSlide--;
+    updateStory();
+  }
+}
+
+function shareWrapped() {
+  navigator.clipboard.writeText(window.location.href);
+  alert('Wrapped link copied to clipboard! Share it with your friends.');
+}
+
+updateStory();
+</script>
+
+</body>
+</html>

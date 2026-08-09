@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title><%= profileUser.username %>'s Anime Statistics & Analytics — Möno</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --orange-hover: #E54B00;
+  --blue: #8B7CFF;
+  --gold: #FFB800;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', sans-serif;
+  background-color: var(--bg-main);
+  color: #FFFFFF;
+  min-height: 100vh;
+}
+
+.wrap {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+/* Subnav */
+.subnav {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 14px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.subnav a {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.subnav a.active, .subnav a:hover {
+  color: #FFFFFF;
+}
+
+/* Header */
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.stats-user-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stats-title {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.badge-pro {
+  background: linear-gradient(135deg, #FFB800, #FF5500);
+  color: #000;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.btn-demo-pro {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-demo-pro:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* Timeframe Tabs */
+.timeframe-tabs {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 12px;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: #FFFFFF;
+}
+
+.tab-btn.active {
+  color: #FFFFFF;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--orange);
+}
+
+/* Top KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.kpi-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+}
+
+.kpi-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.kpi-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.kpi-subtext {
+  font-size: 12px;
+  color: #CAD2D9;
+  margin-top: 6px;
+}
+
+/* Analytics Row Grid */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+@media (max-width: 860px) {
+  .charts-grid { grid-template-columns: 1fr; }
+}
+
+.chart-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.chart-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Rating Distribution Bars */
+.rating-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 160px;
+  padding-top: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 8px;
+}
+
+.rating-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.bar-fill {
+  width: 100%;
+  background: rgba(255, 85, 0, 0.3);
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  transition: height 0.4s ease, background 0.2s;
+  position: relative;
+}
+
+.rating-col:hover .bar-fill {
+  background: var(--orange);
+}
+
+.bar-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.bar-star {
+  font-size: 11px;
+  font-weight: 700;
+  color: #CAD2D9;
+}
+
+/* Genre Progress Bars */
+.genre-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.genre-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.genre-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.genre-progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.genre-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF5500, #FF8C00);
+  border-radius: 999px;
+}
+
+/* Format & Studios Bars */
+.meta-bars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.studio-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px;
+}
+
+.studio-item:last-child {
+  border-bottom: none;
+}
+
+/* Year in Review / Wrapped Section */
+.year-selector-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.year-pills {
+  display: flex;
+  gap: 8px;
+}
+
+.year-pill {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s;
+}
+
+.year-pill.active, .year-pill:hover {
+  background: var(--orange);
+  color: #fff;
+  border-color: var(--orange);
+}
+
+.wrapped-banner-card {
+  background: linear-gradient(135deg, #181D22 0%, #221528 50%, #2A1208 100%);
+  border: 1px solid rgba(255, 85, 0, 0.3);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.btn-launch-wrapped {
+  background: #FFFFFF;
+  color: #14181C;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(255,255,255,0.25);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn-launch-wrapped:hover {
+  transform: scale(1.03);
+  background: #EFEFEF;
+}
+
+.top-anime-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.year-anime-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.year-anime-poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border-subtle);
+  transition: transform 0.2s;
+}
+
+.year-anime-card:hover .year-anime-poster {
+  transform: translateY(-3px);
+  border-color: var(--orange);
+}
+
+/* Monthly Deep-Dive (Pro) */
+.pro-locked-container {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.pro-locked-blur {
+  filter: blur(8px);
+  opacity: 0.25;
+  pointer-events: none;
+  user-select: none;
+}
+
+.pro-locked-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 24, 28, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px;
+  z-index: 10;
+}
+
+.pro-locked-title {
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  color: #FFFFFF;
+}
+
+.pro-locked-desc {
+  font-size: 14px;
+  color: #CAD2D9;
+  max-width: 480px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.btn-upgrade-pro {
+  background: linear-gradient(135deg, #FFB800, #FF5500);
+  color: #000;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 20px rgba(255, 85, 0, 0.4);
+  transition: transform 0.2s;
+}
+
+.btn-upgrade-pro:hover {
+  transform: translateY(-2px);
+}
+
+.monthly-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.monthly-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.monthly-cover {
+  width: 60px;
+  height: 85px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--border-subtle);
+}
+
+.monthly-info {
+  flex: 1;
+}
+
+.monthly-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 4px;
+}
+
+.monthly-stats-row {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-top: 6px;
+}
+</style>
+</head>
+<body>
+
+<%- include('partials/nav') %>
+
+<main class="wrap">
+  <!-- Profile Subnav Tabs -->
+  <div class="subnav">
+    <a href="/u/<%= profileUser.username %>">Profile</a>
+    <a href="/u/<%= profileUser.username %>/anime">Anime</a>
+    <a href="/u/<%= profileUser.username %>/diary">Diary</a>
+    <a href="/u/<%= profileUser.username %>/watchlist">Watchlist</a>
+    <a href="/u/<%= profileUser.username %>/lists">Lists</a>
+    <a href="/u/<%= profileUser.username %>/reviews">Reviews</a>
+    <a href="/u/<%= profileUser.username %>/stats" class="active">Stats</a>
+  </div>
+
+  <!-- Header & Pro Toggle -->
+  <div class="stats-header">
+    <div class="stats-user-title">
+      <h1 class="stats-title"><%= profileUser.username %>'s Statistics</h1>
+      <% if (isPro) { %>
+        <span class="pro-text-badge" style="font-size:13px;"><%= proTier === 'patron' ? 'PATRON' : 'PRO' %></span>
+      <% } %>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <% if (isOwner) { %>
+        <button class="btn-demo-pro" onclick="toggleProDemo()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span><%= isPro ? 'Disable Pro (Demo)' : 'Enable Pro (Demo)' %></span>
+        </button>
+      <% } %>
+      <a href="/pro" class="btn-demo-pro" style="color:var(--gold); border-color:rgba(255,184,0,0.3);">
+        Explore Möno Pro
+      </a>
+    </div>
+  </div>
+
+  <!-- Timeframe Selector Tabs -->
+  <div class="timeframe-tabs">
+    <a href="/u/<%= profileUser.username %>/stats?tab=alltime" class="tab-btn <%= activeTab === 'alltime' ? 'active' : '' %>">
+      All-Time Overview (Por Vida)
+    </a>
+    <a href="/u/<%= profileUser.username %>/stats?tab=wrapped&year=<%= stats.selectedYear %>" class="tab-btn <%= activeTab === 'wrapped' ? 'active' : '' %>">
+      Year in Review / Wrapped (<%= stats.selectedYear %>)
+    </a>
+    <a href="/u/<%= profileUser.username %>/stats?tab=monthly" class="tab-btn <%= activeTab === 'monthly' ? 'active' : '' %>">
+      Monthly Deep-Dive (Por Mes) <% if (!isPro) { %><span style="font-size:10px; background:rgba(255,184,0,0.2); color:var(--gold); padding:2px 6px; border-radius:4px; margin-left:4px;">PRO</span><% } %>
+    </a>
+  </div>
+
+  <!-- ================= TAB 1: ALL-TIME OVERVIEW ================= -->
+  <% if (activeTab === 'alltime') { %>
+    <!-- Top KPI Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value"><%= stats.watchedCount %></div>
+        <div class="kpi-label">Anime Logged</div>
+        <div class="kpi-subtext">Completed & watched titles</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value"><%= stats.totalEpisodes %></div>
+        <div class="kpi-label">Episodes Watched</div>
+        <div class="kpi-subtext">Logged across history</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value"><%= stats.daysWatched %> <span style="font-size:18px; font-weight:700; color:var(--muted);">Days</span></div>
+        <div class="kpi-label">Total Time</div>
+        <div class="kpi-subtext"><%= stats.hoursWatched %> hours of screen time</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">★ <%= stats.avgScore %></div>
+        <div class="kpi-label">Average Score</div>
+        <div class="kpi-subtext">Across all rated logs</div>
+      </div>
+    </div>
+
+    <!-- Charts Row 1: Rating Distribution & Top Genres -->
+    <div class="charts-grid">
+      <!-- Rating Distribution Chart -->
+      <div class="chart-card">
+        <div class="chart-title">
+          <span>Rating Distribution</span>
+          <span style="font-size:12px; color:var(--muted); font-weight:600;"><%= stats.watchedCount %> ratings</span>
+        </div>
+        <div class="rating-bars">
+          <% stats.ratingDist.forEach(item => { %>
+            <div class="rating-col" title="<%= item.count %> anime rated <%= item.star %>★">
+              <span class="bar-count"><%= item.count > 0 ? item.count : '' %></span>
+              <div class="bar-fill" style="height: <%= item.percent %>%;"></div>
+              <span class="bar-star"><%= item.star %></span>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Top Genres -->
+      <div class="chart-card">
+        <div class="chart-title">
+          <span>Top Genres Watched</span>
+          <span style="font-size:12px; color:var(--muted); font-weight:600;">By anime count</span>
+        </div>
+        <div class="genre-list">
+          <% if (stats.topGenres && stats.topGenres.length > 0) { %>
+            <% stats.topGenres.forEach(g => { %>
+              <div class="genre-item">
+                <div class="genre-meta">
+                  <span><%= g.name %></span>
+                  <span style="color:var(--muted);"><%= g.count %> titles (<%= g.percent %>%)</span>
+                </div>
+                <div class="genre-progress">
+                  <div class="genre-fill" style="width: <%= g.percent %>%;"></div>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p style="color:var(--muted); font-size:13px; text-align:center; padding:20px;">No genre data yet.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2: Format Distribution & Top Studios -->
+    <div class="meta-bars-grid">
+      <!-- Format Breakdown -->
+      <div class="chart-card">
+        <div class="chart-title">Format Breakdown</div>
+        <div class="genre-list">
+          <div class="genre-item">
+            <div class="genre-meta">
+              <span>TV Series</span>
+              <span style="color:var(--muted);"><%= stats.formats.tv.count %> (<%= stats.formats.tv.percent %>%)</span>
+            </div>
+            <div class="genre-progress">
+              <div class="genre-fill" style="width: <%= stats.formats.tv.percent %>%;"></div>
+            </div>
+          </div>
+          <div class="genre-item">
+            <div class="genre-meta">
+              <span>Movies (Películas)</span>
+              <span style="color:var(--muted);"><%= stats.formats.movie.count %> (<%= stats.formats.movie.percent %>%)</span>
+            </div>
+            <div class="genre-progress">
+              <div class="genre-fill" style="width: <%= stats.formats.movie.percent %>%; background:linear-gradient(90deg, #8B7CFF, #A799FF);"></div>
+            </div>
+          </div>
+          <div class="genre-item">
+            <div class="genre-meta">
+              <span>OVAs / Specials</span>
+              <span style="color:var(--muted);"><%= stats.formats.special.count %> (<%= stats.formats.special.percent %>%)</span>
+            </div>
+            <div class="genre-progress">
+              <div class="genre-fill" style="width: <%= stats.formats.special.percent %>%; background:linear-gradient(90deg, #00D26A, #00F57A);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Studios -->
+      <div class="chart-card">
+        <div class="chart-title">Top Studios</div>
+        <div>
+          <% if (stats.topStudios && stats.topStudios.length > 0) { %>
+            <% stats.topStudios.forEach(st => { %>
+              <div class="studio-item">
+                <span style="font-weight:700; color:#FFFFFF;"><%= st.studio %></span>
+                <span style="color:var(--orange); font-weight:700;"><%= st.count %> anime</span>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p style="color:var(--muted); font-size:13px;">No studio data available.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Decades Breakdown -->
+      <div class="chart-card">
+        <div class="chart-title">Release Decades</div>
+        <div class="genre-list">
+          <% stats.decades.forEach(d => { %>
+            <div class="genre-item">
+              <div class="genre-meta">
+                <span><%= d.label %></span>
+                <span style="color:var(--muted);"><%= d.count %> (<%= d.percent %>%)</span>
+              </div>
+              <div class="genre-progress">
+                <div class="genre-fill" style="width: <%= d.percent %>%; background:#FF8C00;"></div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- ================= TAB 2: YEAR IN REVIEW / WRAPPED ================= -->
+  <% if (activeTab === 'wrapped') { %>
+    <div class="year-selector-row">
+      <div class="year-pills">
+        <% stats.availableYears.forEach(yr => { %>
+          <a href="/u/<%= profileUser.username %>/stats?tab=wrapped&year=<%= yr %>" class="year-pill <%= stats.selectedYear === yr ? 'active' : '' %>">
+            <%= yr %> <%= yr === '2026' ? '(In Progress)' : '' %>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Wrapped Story Launch Banner -->
+    <div class="wrapped-banner-card">
+      <div>
+        <span style="color:var(--orange); font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:1px;">Möno Wrapped · <%= stats.selectedYear %></span>
+        <h2 style="font-size:26px; font-weight:900; margin-top:4px;"><%= stats.selectedYear %> Year in Review</h2>
+        <p style="color:#CAD2D9; font-size:14px; margin-top:6px; max-width:540px;">
+          Experience your personalized Spotify-style animated story card deck with your top anime, total minutes, favorite studio, and viewer archetype!
+        </p>
+      </div>
+      <a href="/u/<%= profileUser.username %>/wrapped/<%= stats.selectedYear %>" class="btn-launch-wrapped">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Launch <%= stats.selectedYear %> Wrapped
+      </a>
+    </div>
+
+    <!-- Year KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value"><%= stats.yearAnimeCount %></div>
+        <div class="kpi-label">Anime Logged in <%= stats.selectedYear %></div>
+        <div class="kpi-subtext">Completed or watched</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value"><%= stats.yearEpisodesCount %></div>
+        <div class="kpi-label">Episodes Watched</div>
+        <div class="kpi-subtext">In <%= stats.selectedYear %></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value"><%= stats.yearHours %>h</div>
+        <div class="kpi-label">Screen Time</div>
+        <div class="kpi-subtext"><%= stats.yearMinutes.toLocaleString() %> minutes total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">★ <%= stats.yearAvgRating %></div>
+        <div class="kpi-label">Average Score</div>
+        <div class="kpi-subtext">Given in <%= stats.selectedYear %></div>
+      </div>
+    </div>
+
+    <!-- Archetype & Highlights -->
+    <div class="charts-grid">
+      <!-- Viewer Archetype Card -->
+      <div class="chart-card" style="background:linear-gradient(135deg, #181D22 0%, #201828 100%); border-color:rgba(139,124,255,0.3);">
+        <div class="chart-title">
+          <span>Your <%= stats.selectedYear %> Anime Archetype</span>
+          <span style="font-size:12px; background:rgba(139,124,255,0.2); color:var(--blue); padding:3px 8px; border-radius:4px; font-weight:800;"><%= stats.viewerArchetype.badge %></span>
+        </div>
+        <h3 style="font-size:20px; font-weight:900; color:#FFFFFF; margin-bottom:8px;"><%= stats.viewerArchetype.title %></h3>
+        <p style="font-size:14px; color:#CAD2D9; line-height:1.6; margin-bottom:16px;"><%= stats.viewerArchetype.description %></p>
+        <div style="font-size:13px; color:var(--muted);">
+          Dominant Genre: <strong style="color:#FFFFFF;"><%= stats.topGenreOfYear %></strong> · Studio: <strong style="color:#FFFFFF;"><%= stats.topStudioOfYear %></strong>
+        </div>
+      </div>
+
+      <!-- Year's Top Rated Anime -->
+      <div class="chart-card">
+        <div class="chart-title">
+          <span>Top Rated Anime of <%= stats.selectedYear %></span>
+          <span style="font-size:12px; color:var(--orange); font-weight:700;">★ 5.0 - 4.5</span>
+        </div>
+        <div class="top-anime-row">
+          <% if (stats.topAnimeOfYear && stats.topAnimeOfYear.length > 0) { %>
+            <% stats.topAnimeOfYear.forEach(a => { %>
+              <a href="/anime/<%= a.slug %>" class="year-anime-card">
+                <img src="<%= a.cover_image %>" alt="<%= a.title %>" class="year-anime-poster" loading="lazy">
+                <div style="font-size:12px; font-weight:700; color:#FFFFFF; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= a.title %></div>
+                <div style="font-size:11px; color:var(--orange); font-weight:700;">★ <%= a.rating %></div>
+              </a>
+            <% }) %>
+          <% } else { %>
+            <p style="color:var(--muted); font-size:13px;">No anime logged yet for this year.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- ================= TAB 3: MONTHLY DEEP-DIVE (PRO) ================= -->
+  <% if (activeTab === 'monthly') { %>
+    <% if (!isPro) { %>
+      <!-- Pro Locked Preview -->
+      <div class="pro-locked-container">
+        <div class="pro-locked-overlay">
+          <div style="background:rgba(255,184,0,0.15); color:var(--gold); font-size:12px; font-weight:900; padding:4px 12px; border-radius:999px; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">
+            Exclusive Möno Pro Analytics
+          </div>
+          <h2 class="pro-locked-title">Unlock Monthly Deep-Dive</h2>
+          <p class="pro-locked-desc">
+            Explore month-by-month historical anime consumption, peak marathon streaks, velocity metrics, and custom pacing breakdowns with Möno Pro.
+          </p>
+          <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+            <a href="/pro" class="btn-upgrade-pro">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Upgrade to Möno Pro ($3/mo)
+            </a>
+            <% if (isOwner) { %>
+              <button class="btn-demo-pro" onclick="toggleProDemo()">⚡ Activate Pro (Instant Demo)</button>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="pro-locked-blur">
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-value">14</div><div class="kpi-label">July 2026</div></div>
+            <div class="kpi-card"><div class="kpi-value">84</div><div class="kpi-label">Episodes</div></div>
+            <div class="kpi-card"><div class="kpi-value">34h</div><div class="kpi-label">Hours</div></div>
+          </div>
+        </div>
+      </div>
+    <% } else { %>
+      <!-- Pro Unlocked Dashboard -->
+      <div class="kpi-grid" style="margin-bottom:32px;">
+        <div class="kpi-card" style="border-color:rgba(255,184,0,0.3);">
+          <div class="kpi-value" style="color:var(--gold);"><%= stats.peakMonth ? stats.peakMonth.label : 'July 2026' %></div>
+          <div class="kpi-label">Peak Marathon Month</div>
+          <div class="kpi-subtext"><%= stats.peakMonth ? stats.peakMonth.episodes : 0 %> episodes watched in 30 days</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value"><%= stats.dailyVelocity %> <span style="font-size:16px; color:var(--muted);">eps/day</span></div>
+          <div class="kpi-label">Watching Velocity</div>
+          <div class="kpi-subtext">Average pacing across active months</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value"><%= stats.monthlyDeepDive ? stats.monthlyDeepDive.length : 0 %></div>
+          <div class="kpi-label">Active Months Recorded</div>
+          <div class="kpi-subtext">Full historical archive</div>
+        </div>
+      </div>
+
+      <div class="chart-title" style="margin-bottom:20px;">
+        <span>Historical Month-by-Month Log</span>
+        <span style="font-size:12px; color:var(--gold); font-weight:700;">★ PRO UNLOCKED</span>
+      </div>
+
+      <div class="monthly-cards-grid">
+        <% if (stats.monthlyDeepDive && stats.monthlyDeepDive.length > 0) { %>
+          <% stats.monthlyDeepDive.forEach(m => { %>
+            <div class="monthly-card">
+              <% if (m.topCover) { %>
+                <img src="<%= m.topCover %>" alt="<%= m.topTitle %>" class="monthly-cover" loading="lazy">
+              <% } else { %>
+                <div class="monthly-cover" style="background:#14181C; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:10px;">No Cover</div>
+              <% } %>
+              <div class="monthly-info">
+                <div class="monthly-title"><%= m.monthLabel %></div>
+                <div style="font-size:12px; color:#CAD2D9; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                  Top: <strong><%= m.topTitle || 'Various Titles' %></strong>
+                </div>
+                <div class="monthly-stats-row">
+                  <span><strong><%= m.animeCount %></strong> anime</span>
+                  <span><strong><%= m.episodesCount %></strong> eps</span>
+                  <span><strong><%= m.hoursCount %>h</strong></span>
+                  <span style="color:var(--orange);">★ <%= m.avgRating %></span>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p style="color:var(--muted); font-size:13px;">No monthly logs recorded yet.</p>
+        <% } %>
+      </div>
+    <% } %>
+  <% } %>
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+async function toggleProDemo() {
+  try {
+    const res = await fetch('/api/user/toggle-pro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier: 'pro' })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert(data.message);
+      window.location.reload();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+</script>
+
+</body>
+</html>

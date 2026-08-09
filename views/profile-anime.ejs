@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title><%= locals.isWatchlistPage ? profileUser.username + "'s Watchlist" : profileUser.username + "'s Anime Collection" %> — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+  --green: #00E054;
+  --purple: #8B7CFF;
+  --red: #FF4D4F;
+  --amber: #FFB800;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', -apple-system, sans-serif;
+  background-color: #14181C;
+  color: #FFFFFF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 36px auto 60px;
+  padding: 0 24px;
+  width: 100%;
+}
+
+/* SUBNAV TABS */
+.profile-subnav {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 12px;
+  margin-bottom: 28px;
+}
+.profile-subnav a {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.profile-subnav a.active, .profile-subnav a:hover {
+  color: #FFFFFF;
+}
+.profile-subnav a .subnav-badge {
+  font-size: 11px;
+  background: #181D22;
+  color: var(--muted);
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.profile-subnav a.active .subnav-badge {
+  background: rgba(255,85,0,0.15);
+  color: var(--orange);
+  border-color: rgba(255,85,0,0.3);
+}
+
+/* HEADER INFO */
+.profile-header-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.profile-title-wrap h1 {
+  font-size: 26px;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: -0.5px;
+}
+.profile-title-wrap p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* FILTER PILLS (NO BOX / NO BORDER) */
+.status-filters-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+}
+.status-filter-btn {
+  padding: 4px 0;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer;
+  transition: color 0.15s, opacity 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.status-filter-btn:hover {
+  color: #FFFFFF;
+}
+.status-filter-btn.active {
+  background: transparent !important;
+  color: #FFFFFF;
+  font-weight: 800;
+  box-shadow: none !important;
+  border: none !important;
+}
+.status-filter-btn .filter-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.status-filter-btn .filter-count {
+  font-size: 12px;
+  opacity: 0.65;
+  margin-left: 2px;
+}
+
+/* SECTION BLOCKS */
+.status-group-section {
+  margin-bottom: 48px;
+}
+.status-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.status-group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+.status-badge-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot-watching { background: var(--green); }
+.dot-completed { background: var(--blue); }
+.dot-paused { background: var(--amber); }
+.dot-dropped { background: var(--red); }
+.dot-plantowatch { background: var(--purple); }
+
+.status-group-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+/* ANIME GRID */
+.anime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 18px;
+}
+
+.anime-card {
+  position: relative;
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  text-decoration: none;
+  color: inherit;
+}
+.anime-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  border-color: rgba(255,85,0,0.4);
+}
+
+.card-cover-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2/3;
+  background: #14181C;
+  overflow: hidden;
+}
+.card-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-badge-ep {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(20,24,28,0.85);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.card-badge-rating {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(20,24,28,0.85);
+  backdrop-filter: blur(4px);
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.card-info {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #CAD2D9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.anime-card:hover .card-title {
+  color: #FFFFFF;
+}
+.card-meta {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* EMPTY STATE */
+.empty-group-box {
+  padding: 36px 20px;
+  text-align: center;
+  background: #181D22;
+  border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.empty-group-box a {
+  color: var(--orange);
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 4px;
+}
+.empty-group-box a:hover {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+    <%- include('partials/nav') %>
+
+    <div class="wrap">
+        <!-- Profile Subnavigation -->
+        <div class="profile-subnav">
+            <a href="/u/<%= profileUser.username %>">Profile</a>
+            <a href="/u/<%= profileUser.username %>/anime" class="<%= !locals.isWatchlistPage ? 'active' : '' %>">
+                Anime <span class="subnav-badge"><%= counts.total %></span>
+            </a>
+            <a href="/u/<%= profileUser.username %>/diary">Diary</a>
+            <a href="/u/<%= profileUser.username %>/watchlist" class="<%= locals.isWatchlistPage ? 'active' : '' %>">
+                Watchlist <span class="subnav-badge"><%= counts.planToWatch %></span>
+            </a>
+            <a href="/u/<%= profileUser.username %>/lists">Lists</a>
+            <a href="/u/<%= profileUser.username %>/reviews">Reviews</a>
+            <a href="/u/<%= profileUser.username %>/stats">Stats</a>
+        </div>
+
+        <!-- Header Info -->
+        <div class="profile-header-strip">
+            <div class="profile-title-wrap">
+                <% if (locals.isWatchlistPage) { %>
+                    <h1><%= profileUser.username %>'s Watchlist</h1>
+                    <p>Anime planned to watch and queued</p>
+                <% } else { %>
+                    <h1><%= profileUser.username %>'s Anime Collection</h1>
+                    <p>Tracked anime separated by status and watching progress</p>
+                <% } %>
+            </div>
+            <% if (locals.user && user.id === profileUser.id) { %>
+                <button type="button" onclick="openUniversalLog()" class="btn-log" style="font-size:13px; padding:8px 16px;">+ Track Anime</button>
+            <% } %>
+        </div>
+
+        <% if (!locals.isWatchlistPage) { %>
+            <!-- Status Filters (Instant Client Filter & Hash Jump) -->
+            <div class="status-filters-row">
+                <button type="button" class="status-filter-btn <%= activeFilter === 'all' ? 'active' : '' %>" onclick="filterStatusView('all', this)">
+                    All <span class="filter-count">(<%= counts.total %>)</span>
+                </button>
+                <button type="button" class="status-filter-btn <%= activeFilter === 'watching' ? 'active' : '' %>" onclick="filterStatusView('watching', this)">
+                    <span class="filter-dot dot-watching"></span> Watching <span class="filter-count">(<%= counts.watching %>)</span>
+                </button>
+                <button type="button" class="status-filter-btn <%= activeFilter === 'completed' ? 'active' : '' %>" onclick="filterStatusView('completed', this)">
+                    <span class="filter-dot dot-completed"></span> Completed <span class="filter-count">(<%= counts.completed %>)</span>
+                </button>
+                <button type="button" class="status-filter-btn <%= activeFilter === 'paused' ? 'active' : '' %>" onclick="filterStatusView('paused', this)">
+                    <span class="filter-dot dot-paused"></span> Paused <span class="filter-count">(<%= counts.paused %>)</span>
+                </button>
+                <button type="button" class="status-filter-btn <%= activeFilter === 'dropped' ? 'active' : '' %>" onclick="filterStatusView('dropped', this)">
+                    <span class="filter-dot dot-dropped"></span> Dropped <span class="filter-count">(<%= counts.dropped %>)</span>
+                </button>
+                <button type="button" class="status-filter-btn <%= activeFilter === 'plan_to_watch' ? 'active' : '' %>" onclick="filterStatusView('plan_to_watch', this)">
+                    <span class="filter-dot dot-plantowatch"></span> Plan to Watch <span class="filter-count">(<%= counts.planToWatch %>)</span>
+                </button>
+            </div>
+        <% } %>
+
+        <!-- SECTION 1: WATCHING / VIENDO -->
+        <% if (!locals.isWatchlistPage) { %>
+            <div class="status-group-section" id="section-watching" style="<%= (activeFilter !== 'all' && activeFilter !== 'watching') ? 'display:none;' : '' %>">
+                <div class="status-group-header">
+                    <div class="status-group-title">
+                        <span class="status-badge-dot dot-watching"></span>
+                        <span>Currently Watching / Viendo</span>
+                    </div>
+                    <span class="status-group-count"><%= watchingList.length %> Anime</span>
+                </div>
+                <% if (watchingList && watchingList.length > 0) { %>
+                    <div class="anime-grid">
+                        <% watchingList.forEach(item => { %>
+                            <a href="/anime/<%= item.slug %>" class="anime-card">
+                                <div class="card-cover-wrap">
+                                    <img src="<%= item.cover_image %>" alt="<%= item.title %>" class="card-cover-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400'">
+                                    <span class="card-badge-ep">Ep <%= item.current_episode || 1 %><%= item.episodes_count ? ' / ' + item.episodes_count : '' %></span>
+                                    <% if (item.user_rating) { %>
+                                        <span class="card-badge-rating">★ <%= parseFloat(item.user_rating).toFixed(1) %></span>
+                                    <% } %>
+                                </div>
+                                <div class="card-info">
+                                    <div class="card-title" title="<%= item.title %>"><%= item.title %></div>
+                                    <div class="card-meta">
+                                        <span><%= item.release_year || 'TV' %></span>
+                                        <span><%= item.studio || '' %></span>
+                                    </div>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="empty-group-box">
+                        No anime currently being watched. <a href="/anime">Find anime to watch &rarr;</a>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- SECTION 2: COMPLETED / COMPLETADOS -->
+            <div class="status-group-section" id="section-completed" style="<%= (activeFilter !== 'all' && activeFilter !== 'completed') ? 'display:none;' : '' %>">
+                <div class="status-group-header">
+                    <div class="status-group-title">
+                        <span class="status-badge-dot dot-completed"></span>
+                        <span>Completed / Completados</span>
+                    </div>
+                    <span class="status-group-count"><%= completedList.length %> Anime</span>
+                </div>
+                <% if (completedList && completedList.length > 0) { %>
+                    <div class="anime-grid">
+                        <% completedList.forEach(item => { %>
+                            <a href="/anime/<%= item.slug %>" class="anime-card">
+                                <div class="card-cover-wrap">
+                                    <img src="<%= item.cover_image %>" alt="<%= item.title %>" class="card-cover-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400'">
+                                    <span class="card-badge-ep">✓ <%= item.episodes_count ? item.episodes_count + ' eps' : 'Finished' %></span>
+                                    <% if (item.user_rating) { %>
+                                        <span class="card-badge-rating">★ <%= parseFloat(item.user_rating).toFixed(1) %></span>
+                                    <% } %>
+                                </div>
+                                <div class="card-info">
+                                    <div class="card-title" title="<%= item.title %>"><%= item.title %></div>
+                                    <div class="card-meta">
+                                        <span><%= item.release_year || 'TV' %></span>
+                                        <span><%= item.studio || '' %></span>
+                                    </div>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="empty-group-box">
+                        No completed anime logged yet.
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- SECTION 3: PAUSED / ON HOLD / PAUSADOS -->
+            <div class="status-group-section" id="section-paused" style="<%= (activeFilter !== 'all' && activeFilter !== 'paused') ? 'display:none;' : '' %>">
+                <div class="status-group-header">
+                    <div class="status-group-title">
+                        <span class="status-badge-dot dot-amber"></span>
+                        <span>Paused & On Hold / Pausados</span>
+                    </div>
+                    <span class="status-group-count"><%= pausedList.length %> Anime</span>
+                </div>
+                <% if (pausedList && pausedList.length > 0) { %>
+                    <div class="anime-grid">
+                        <% pausedList.forEach(item => { %>
+                            <a href="/anime/<%= item.slug %>" class="anime-card">
+                                <div class="card-cover-wrap">
+                                    <img src="<%= item.cover_image %>" alt="<%= item.title %>" class="card-cover-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400'">
+                                    <span class="card-badge-ep">Paused @ Ep <%= item.current_episode || 1 %></span>
+                                    <% if (item.user_rating) { %>
+                                        <span class="card-badge-rating">★ <%= parseFloat(item.user_rating).toFixed(1) %></span>
+                                    <% } %>
+                                </div>
+                                <div class="card-info">
+                                    <div class="card-title" title="<%= item.title %>"><%= item.title %></div>
+                                    <div class="card-meta">
+                                        <span><%= item.release_year || 'TV' %></span>
+                                        <span><%= item.studio || '' %></span>
+                                    </div>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="empty-group-box">
+                        No anime paused or on hold.
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- SECTION 4: DROPPED / DROPEADOS -->
+            <div class="status-group-section" id="section-dropped" style="<%= (activeFilter !== 'all' && activeFilter !== 'dropped') ? 'display:none;' : '' %>">
+                <div class="status-group-header">
+                    <div class="status-group-title">
+                        <span class="status-badge-dot dot-dropped"></span>
+                        <span>Dropped / Dropeados</span>
+                    </div>
+                    <span class="status-group-count"><%= droppedList.length %> Anime</span>
+                </div>
+                <% if (droppedList && droppedList.length > 0) { %>
+                    <div class="anime-grid">
+                        <% droppedList.forEach(item => { %>
+                            <a href="/anime/<%= item.slug %>" class="anime-card">
+                                <div class="card-cover-wrap">
+                                    <img src="<%= item.cover_image %>" alt="<%= item.title %>" class="card-cover-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400'">
+                                    <span class="card-badge-ep">Dropped @ Ep <%= item.current_episode || 1 %></span>
+                                    <% if (item.user_rating) { %>
+                                        <span class="card-badge-rating">★ <%= parseFloat(item.user_rating).toFixed(1) %></span>
+                                    <% } %>
+                                </div>
+                                <div class="card-info">
+                                    <div class="card-title" title="<%= item.title %>"><%= item.title %></div>
+                                    <div class="card-meta">
+                                        <span><%= item.release_year || 'TV' %></span>
+                                        <span><%= item.studio || '' %></span>
+                                    </div>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="empty-group-box">
+                        No dropped anime.
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+
+        <!-- SECTION 5: PLAN TO WATCH / WATCHLIST -->
+        <div class="status-group-section" id="section-plan_to_watch" style="<%= (!locals.isWatchlistPage && activeFilter !== 'all' && activeFilter !== 'plan_to_watch') ? 'display:none;' : '' %>">
+            <div class="status-group-header">
+                <div class="status-group-title">
+                    <span class="status-badge-dot dot-plantowatch"></span>
+                    <span><%= locals.isWatchlistPage ? 'Watchlist Anime' : 'Plan to Watch / Planeas Ver' %></span>
+                </div>
+                <span class="status-group-count"><%= planToWatchList.length %> Anime</span>
+            </div>
+            <% if (planToWatchList && planToWatchList.length > 0) { %>
+                <div class="anime-grid">
+                    <% planToWatchList.forEach(item => { %>
+                        <a href="/anime/<%= item.slug %>" class="anime-card">
+                            <div class="card-cover-wrap">
+                                <img src="<%= item.cover_image %>" alt="<%= item.title %>" class="card-cover-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400'">
+                                <span class="card-badge-ep"><%= item.episodes_count ? item.episodes_count + ' eps' : 'Planned' %></span>
+                                <% if (item.global_score) { %>
+                                    <span class="card-badge-rating">★ <%= parseFloat(item.global_score).toFixed(1) %></span>
+                                <% } %>
+                            </div>
+                            <div class="card-info">
+                                <div class="card-title" title="<%= item.title %>"><%= item.title %></div>
+                                <div class="card-meta">
+                                    <span><%= item.release_year || 'TV' %></span>
+                                    <span><%= item.studio || '' %></span>
+                                </div>
+                            </div>
+                        </a>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="empty-group-box">
+                    No anime in plan to watch. <a href="/anime">Browse anime to add &rarr;</a>
+                </div>
+            <% } %>
+        </div>
+
+    </div>
+
+    <script>
+    function filterStatusView(status, btn) {
+        document.querySelectorAll('.status-filter-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+
+        const sections = ['watching', 'completed', 'paused', 'dropped', 'plan_to_watch'];
+        sections.forEach(s => {
+            const el = document.getElementById('section-' + s);
+            if (el) {
+                if (status === 'all' || status === s) {
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            }
+        });
+    }
+    </script>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

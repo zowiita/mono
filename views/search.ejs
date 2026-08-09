@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Search <%= query ? `"${query}"` : '' %> — Untitled Anime Platform</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', sans-serif;
+  background-color: #14181C;
+  color: #FFFFFF;
+  min-height: 100vh;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.search-form {
+  position: relative;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.search-box {
+  width: 100%;
+  padding: 16px 20px 16px 52px !important;
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  color: #FFFFFF;
+  font-size: 17px;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  line-height: normal;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.search-box:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,85,0,0.2);
+}
+
+.search-icon-input {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  width: 20px;
+  height: 20px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sec-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  margin-top: 36px;
+}
+
+.sec-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
+  gap: 20px;
+}
+
+.poster-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  display: block;
+}
+
+.poster-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.6);
+  border-color: rgba(255,85,0,0.4);
+}
+
+.poster-card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  display: block;
+}
+
+.poster-info {
+  padding: 10px 12px;
+}
+
+.poster-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #CAD2D9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.poster-card:hover .poster-title {
+  color: #FFFFFF;
+}
+
+.poster-meta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* List Results Grid */
+.lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.list-card {
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.list-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  border-color: rgba(255,85,0,0.4);
+}
+
+.list-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 4px;
+}
+
+.list-card-meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="wrap">
+        <form action="/search" method="GET" class="search-form">
+            <svg class="search-icon-input" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" name="q" class="search-box" placeholder="Search any anime, series, or franchise..." value="<%= query || '' %>" autofocus>
+        </form>
+
+        <!-- Anime Results -->
+        <div class="sec-head" style="margin-top:0;">
+            <span class="sec-title"><%= query ? `${results ? results.length : 0} Anime matching "${query}"` : 'Popular Anime' %></span>
+        </div>
+
+        <div class="results-grid">
+            <% if (results && results.length > 0) { %>
+                <% results.forEach(item => { %>
+                    <a href="/anime/<%= item.slug %>" class="poster-card">
+                        <img src="<%= item.cover_image %>" alt="<%= item.title %>">
+                        <div class="poster-info">
+                            <div class="poster-title"><%= item.title %></div>
+                            <div class="poster-meta">
+                                <span><%= item.release_year %> • <%= item.type ? item.type.toUpperCase() : 'TV' %></span>
+                                <span style="color:var(--orange); font-weight:700;">★ <%= item.score || '—' %></span>
+                            </div>
+                        </div>
+                    </a>
+                <% }); %>
+            <% } else { %>
+                <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--muted); background: #181D22; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;">
+                    No anime found for "<%= query %>".
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Lists Results (if any) -->
+        <% if (locals.lists && lists.length > 0) { %>
+            <div class="sec-head">
+                <span class="sec-title"><%= lists.length %> Lists matching "<%= query %>"</span>
+            </div>
+            <div class="lists-grid">
+                <% lists.forEach(l => { %>
+                    <a href="/list/<%= l.id %>" class="list-card">
+                        <div class="list-card-title"><%= l.title %></div>
+                        <div class="list-card-meta">by <strong><%= l.username %></strong> • <%= l.item_count %> anime</div>
+                    </a>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

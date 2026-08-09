@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Official Top 10 Anime — Untitled</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+}
+
+body {
+    background-color: #14181C;
+    color: #FFFFFF;
+    font-family: 'Satoshi', sans-serif;
+    min-height: 100vh;
+}
+
+.page-wrap { padding-top: 40px; padding-bottom: 80px; max-width: 960px; margin: 0 auto; padding-left: 20px; padding-right: 20px; }
+
+.top10-header {
+    text-align: center; margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: 24px;
+}
+.top10-title { font-size: 32px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px; }
+.top10-sub { font-size: 15px; color: var(--muted); margin-top: 8px; }
+
+.rank-list {
+    display: flex; flex-direction: column; gap: 16px;
+}
+
+.rank-card {
+    display: flex; align-items: center; gap: 20px; background: #181D22;
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4); transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    text-decoration: none; color: inherit;
+}
+.rank-card:hover {
+    transform: translateY(-2px); border-color: rgba(255,85,0,0.4);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+
+.rank-number {
+    font-size: 32px; font-weight: 900; width: 50px; text-align: center;
+    color: var(--muted); flex-shrink: 0;
+}
+.rank-card:nth-child(1) .rank-number { color: var(--orange); }
+.rank-card:nth-child(2) .rank-number { color: var(--blue); }
+.rank-card:nth-child(3) .rank-number { color: #00E054; }
+
+.rank-poster {
+    width: 70px; aspect-ratio: 2/3; object-fit: cover; border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4); flex-shrink: 0; background: #14181C;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.rank-body { flex: 1; min-width: 0; }
+.rank-title { font-size: 17px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px; display: flex; align-items: baseline; gap: 8px; }
+.rank-card:hover .rank-title { color: var(--orange); }
+.rank-year { font-weight: 500; color: var(--muted); font-size: 14px; }
+.rank-meta { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+.rank-desc { font-size: 13px; color: #CAD2D9; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+.rank-score-box {
+    display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+    flex-shrink: 0; padding-left: 20px; border-left: 1px solid rgba(255,255,255,0.08); min-width: 90px;
+}
+.rank-score { font-size: 24px; font-weight: 800; color: #FFFFFF; line-height: 1; }
+.rank-stars { color: var(--orange); font-size: 13px; margin-top: 4px; }
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="wrap page-wrap">
+        <div class="top10-header">
+            <h1 class="top10-title">Official Top 10 Anime</h1>
+            <div class="top10-sub">The highest-rated masterworks of all time, ranked by community ratings and critical acclaim</div>
+        </div>
+
+        <div class="rank-list">
+            <% (locals.top10 || []).forEach((item, index) => { %>
+                <a href="/anime/<%= item.slug %>" class="rank-card">
+                    <div class="rank-number">#<%= index + 1 %></div>
+                    <img src="<%= item.cover_image %>" class="rank-poster" alt="<%= item.title %>">
+                    <div class="rank-body">
+                        <div class="rank-title">
+                            <span><%= item.title %></span>
+                            <span class="rank-year">(<%= item.release_year %>)</span>
+                        </div>
+                        <div class="rank-meta">
+                            <%= item.type ? item.type.toUpperCase() : 'TV' %> • <%= item.episodes_count || 1 %> <%= (item.episodes_count > 1) ? 'Episodes' : 'Film' %> • <%= item.studio || 'Studio Unknown' %>
+                        </div>
+                        <div class="rank-desc"><%= item.synopsis %></div>
+                    </div>
+                    <div class="rank-score-box">
+                        <div class="rank-score">★ <%= item.score ? item.score.toFixed(2) : '4.50' %></div>
+                        <div class="rank-stars">
+                            <% const fullStars = Math.round(item.score || 4.5); %>
+                            <%= '★'.repeat(fullStars) %><%= '☆'.repeat(5 - fullStars) %>
+                        </div>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

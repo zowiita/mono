@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>New List — Untitled Anime Platform</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root {
+  --bg-main: #14181C;
+  --bg-surface: #181D22;
+  --bg-card: #1C2228;
+  --orange: #FF5500;
+  --blue: #8B7CFF;
+  --ink: #FFFFFF;
+  --muted: #8C98A4;
+  --text-dim: #CAD2D9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Satoshi', sans-serif;
+  background-color: #14181C;
+  color: #FFFFFF;
+  min-height: 100vh;
+}
+
+.list-container {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+.card {
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 14px;
+  background: #14181C;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,85,0,0.2);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.search-section {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #1C2228;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.15s;
+}
+
+.search-result-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.search-result-item img {
+  width: 32px;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.selected-anime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+  min-height: 140px;
+  background: #14181C;
+  border: 2px dashed rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.anime-item-card {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  background: #181D22;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.anime-item-card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  display: block;
+}
+
+.anime-item-card .remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(20,24,28,0.85);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.1s;
+}
+
+.anime-item-card .remove-btn:hover {
+  transform: scale(1.15);
+  background: #ff4d4f;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-full, 9999px);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(255,85,0,0.35);
+}
+
+.btn-primary:hover {
+  background: #E54B00;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255,85,0,0.5);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.checkbox-group input {
+  accent-color: var(--orange);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="list-container">
+        <h1 class="page-title">Create a New Anime List</h1>
+
+        <form id="create-list-form" onsubmit="handleCreateList(event)">
+            <div class="form-grid">
+                <!-- Left Column: Title, Description & Items -->
+                <div>
+                    <div class="card" style="margin-bottom:24px;">
+                        <div class="form-group">
+                            <label for="list-title">List Title</label>
+                            <input type="text" id="list-title" class="form-control" placeholder="e.g. Masterpieces that changed my life" required>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label for="list-desc">Description (Optional)</label>
+                            <textarea id="list-desc" class="form-control" placeholder="Write notes, ranking criteria, or background for this list..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <label style="display:block; font-size:12px; font-weight:700; color:var(--muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">
+                            Add Anime to this List
+                        </label>
+                        
+                        <div class="search-section">
+                            <input type="text" id="anime-search-input" class="form-control" placeholder="Search anime by title (e.g. Evangelion, Titan, Frieren)..." oninput="handleSearch(this.value)">
+                            <div id="search-dropdown" class="search-results"></div>
+                        </div>
+
+                        <div id="selected-grid" class="selected-anime-grid">
+                            <!-- Selected anime will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Settings & Publish Button -->
+                <div>
+                    <div class="card">
+                        <label style="display:block; font-size:12px; font-weight:700; color:var(--muted); margin-bottom:16px; text-transform:uppercase; letter-spacing:0.5px;">
+                            List Settings
+                        </label>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="is-ranked">
+                            <label for="is-ranked" style="font-size:13px; font-weight:600; color:#FFFFFF; cursor:pointer;">Ranked list (numbered 1, 2, 3...)</label>
+                        </div>
+
+                        <div class="checkbox-group" style="margin-bottom:24px;">
+                            <input type="checkbox" id="is-private">
+                            <label for="is-private" style="font-size:13px; font-weight:600; color:#FFFFFF; cursor:pointer;">Private list (only visible to you)</label>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Save & Publish List</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        let selectedAnime = [];
+
+        async function handleSearch(query) {
+            const dropdown = document.getElementById('search-dropdown');
+            if (!query.trim()) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/search/anime?q=${encodeURIComponent(query)}`);
+                const items = await res.json();
+
+                if (items.length === 0) {
+                    dropdown.innerHTML = '<div style="padding:12px; font-size:13px; color:var(--muted); text-align:center;">No anime found</div>';
+                    dropdown.style.display = 'block';
+                    return;
+                }
+
+                dropdown.innerHTML = items.map(a => `
+                    <div class="search-result-item" onclick="selectAnime('${a.slug}', '${a.title.replace(/'/g, "\\'")}', '${a.cover_image}')">
+                        <img src="${a.cover_image}" alt="${a.title}">
+                        <div>
+                            <div style="font-size:14px; font-weight:700; color:#FFFFFF;">${a.title}</div>
+                            <div style="font-size:12px; color:var(--muted);">${a.release_year || ''} · ${a.studio || ''}</div>
+                        </div>
+                    </div>
+                `).join('');
+                dropdown.style.display = 'block';
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function selectAnime(slug, title, cover) {
+            if (!selectedAnime.find(a => a.slug === slug)) {
+                selectedAnime.push({ slug, title, cover });
+                renderSelected();
+            }
+            document.getElementById('anime-search-input').value = '';
+            document.getElementById('search-dropdown').style.display = 'none';
+        }
+
+        function removeAnime(slug) {
+            selectedAnime = selectedAnime.filter(a => a.slug !== slug);
+            renderSelected();
+        }
+
+        function renderSelected() {
+            const grid = document.getElementById('selected-grid');
+            if (selectedAnime.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1 / -1; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px;">No anime added yet. Search above to add!</div>';
+                return;
+            }
+
+            grid.innerHTML = selectedAnime.map(a => `
+                <div class="anime-item-card" title="${a.title}">
+                    <img src="${a.cover}" alt="${a.title}">
+                    <button type="button" class="remove-btn" onclick="removeAnime('${a.slug}')">✕</button>
+                </div>
+            `).join('');
+        }
+
+        renderSelected();
+
+        async function handleCreateList(e) {
+            e.preventDefault();
+            const title = document.getElementById('list-title').value.trim();
+            const description = document.getElementById('list-desc').value.trim();
+            const isRanked = document.getElementById('is-ranked').checked;
+            const isPrivate = document.getElementById('is-private').checked;
+
+            if (!title) {
+                alert('Please provide a title for your list');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/list/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        isRanked,
+                        isPrivate,
+                        animeSlugs: selectedAnime.map(a => a.slug)
+                    })
+                });
+
+                const data = await res.json();
+                if (res.ok && data.listId) {
+                    window.location.href = `/list/${data.listId}`;
+                } else {
+                    alert('Error creating list');
+                }
+            } catch (err) {
+                alert('Failed to save list.');
+            }
+        }
+    </script>
+</body>
+</html>
