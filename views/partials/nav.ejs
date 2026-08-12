@@ -289,8 +289,8 @@
     display: inline-block;
 }
 .nav-links a:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #FFFFFF;
+    background: transparent;
+    color: var(--orange);
 }
 .nav-end {
     flex-shrink: 0;
@@ -541,8 +541,8 @@
     transition: color 0.15s, background 0.15s;
 }
 .nav-dropdown a:hover, .nav-dropdown-item-btn:hover {
-    color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.08);
+    color: var(--orange);
+    background: transparent;
 }
 
 /* GLOBAL SEARCH COMMAND PALETTE MODAL */
@@ -1154,12 +1154,18 @@ async function loadNotificationsList() {
             if (n.type === 'follow') {
                 msg = `<strong>${n.actor_username}</strong> started following you.`;
                 link = `/u/${n.actor_username}`;
-            } else if (n.type === 'like') {
+            } else if (n.type === 'like' || n.type === 'review_like') {
                 msg = `<strong>${n.actor_username}</strong> liked your review.`;
                 link = `/review/${n.target_id}`;
-            } else if (n.type === 'comment') {
+            } else if (n.type === 'comment' || n.type === 'review_comment') {
                 msg = `<strong>${n.actor_username}</strong> commented on your review.`;
                 link = `/review/${n.target_id}`;
+            } else if (n.type === 'list_like') {
+                msg = `<strong>${n.actor_username}</strong> liked your list.`;
+                link = `/list/${n.target_id}`;
+            } else if (n.type === 'list_comment') {
+                msg = `<strong>${n.actor_username}</strong> commented on your list.`;
+                link = `/list/${n.target_id}`;
             }
 
             const av = n.actor_avatar ? `<img src="${n.actor_avatar}" class="notif-avatar">` : `<div class="notif-avatar">${n.actor_username.charAt(0).toUpperCase()}</div>`;

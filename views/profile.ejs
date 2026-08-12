@@ -90,8 +90,17 @@
     <div class="ph-actions">
       <% if (user && user.id === profileUser.id) { %>
           <a href="/settings" class="ph-btn" style="text-decoration:none;display:inline-block;">Edit profile</a>
+      <% } else if (user) { %>
+          <button class="ph-btn" id="btn-follow-top" onclick="toggleFollow('<%= profileUser.username %>')" style="transition:all 0.15s; border:1px solid var(--orange); background:<%= stats.isFollowing ? '#fff' : 'var(--orange)' %>; color:<%= stats.isFollowing ? 'var(--orange)' : '#fff' %>;"
+              <% if (stats.isFollowing) { %>
+                  onmouseover="this.innerText='Unfollow'; this.style.color='#ff4d4d'; this.style.borderColor='#ff4d4d';"
+                  onmouseout="this.innerText='✓ Following'; this.style.color='var(--orange)'; this.style.borderColor='var(--orange)';"
+              <% } %>
+          >
+              <%= stats.isFollowing ? '✓ Following' : '+ Follow' %>
+          </button>
       <% } else { %>
-          <button class="ph-btn">Follow</button>
+          <a href="/login" class="ph-btn" style="text-decoration:none;display:inline-block;">Follow</a>
       <% } %>
     </div>
   </div>
@@ -111,13 +120,7 @@
     <div class="st-item"><span class="st-num" id="followers-cnt"><%= locals.stats ? stats.followersCount : 0 %></span><span class="st-lbl">Followers</span></div>
     <div class="st-item"><span class="st-num"><%= locals.stats ? stats.followingCount : 0 %></span><span class="st-lbl">Following</span></div>
   </div>
-  <% if (locals.user && user.id !== profileUser.id) { %>
-    <div style="margin-top:12px;">
-      <button id="btn-follow" onclick="toggleFollow('<%= profileUser.username %>')" style="padding:6px 18px; border-radius:6px; font-family:'Satoshi', sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.15s; border:1px solid var(--orange); background:<%= stats.isFollowing ? '#fff' : 'var(--orange)' %>; color:<%= stats.isFollowing ? 'var(--orange)' : '#fff' %>;">
-        <%= stats.isFollowing ? '✓ Following' : '+ Follow' %>
-      </button>
-    </div>
-  <% } %>
+
 </div>
 <div class="pg">
 <div class="col-l">
@@ -186,7 +189,9 @@
 
   <div class="sb-sec">
     <div class="sb-title">Watchlist <span class="sb-cnt" style="opacity:.6"><%= locals.stats ? stats.watchlistCount : 0 %></span></div>
-    <div class="empty-msg">Your watchlist is active.<br><a href="/anime" class="empty-msg-btn">Browse catalog</a></div>
+    <% if (locals.user && user.id === profileUser.id) { %>
+        <div class="empty-msg">Your watchlist is active.<br><a href="/anime" class="empty-msg-btn">Browse catalog</a></div>
+    <% } %>
   </div>
 </div>
 <div class="col-r">
@@ -389,12 +394,20 @@
             const res = await fetch(`/api/user/${username}/follow`, { method: 'POST' });
             const data = await res.json();
             if (data.success) {
-                const btn = document.getElementById('btn-follow');
+                const btn = document.getElementById('btn-follow-top');
                 if (btn) {
                     btn.innerText = data.isFollowing ? '✓ Following' : '+ Follow';
-                    btn.style.background = data.isFollowing ? 'transparent' : 'var(--orange)';
-                    btn.style.borderColor = 'var(--orange)';
+                    btn.style.background = data.isFollowing ? '#fff' : 'var(--orange)';
                     btn.style.color = data.isFollowing ? 'var(--orange)' : '#fff';
+                    
+                    if (data.isFollowing) {
+                        btn.onmouseover = () => { btn.innerText = 'Unfollow'; btn.style.color = '#ff4d4d'; btn.style.borderColor = '#ff4d4d'; };
+                        btn.onmouseout = () => { btn.innerText = '✓ Following'; btn.style.color = 'var(--orange)'; btn.style.borderColor = 'var(--orange)'; };
+                    } else {
+                        btn.onmouseover = null;
+                        btn.onmouseout = null;
+                        btn.style.borderColor = 'transparent';
+                    }
                 }
                 const cnt = document.getElementById('followers-cnt');
                 if (cnt) cnt.innerText = data.followersCount;

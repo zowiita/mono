@@ -66,12 +66,41 @@ app.get('/', (req, res) => {
         FROM logs l
         JOIN users u ON l.user_id = u.id
         JOIN anime a ON l.anime_id = a.id
+        WHERE l.review_text IS NOT NULL AND l.review_text != ''
         ORDER BY l.created_at DESC
         LIMIT 6
     `).all();
-    const heroAnime = db.prepare('SELECT * FROM anime ORDER BY score DESC LIMIT 1').get();
+    
+    const popularLists = db.prepare(`
+        SELECT l.*, u.username, u.avatar_url,
+        (SELECT COUNT(*) FROM list_items WHERE list_id = l.id) AS item_count
+        FROM lists l
+        JOIN users u ON l.user_id = u.id
+        WHERE l.is_private = 0
+        ORDER BY l.created_at DESC
+        LIMIT 3
+    `).all();
 
-    res.render('index', { popularAnime, topMovies, seasonalAnime, recentLoggedGrid, recentLogs, heroAnime });
+    // Attach sample posters for each list
+    const getListPosters = db.prepare(`
+        SELECT a.cover_image
+        FROM list_items li 
+        JOIN anime a ON li.anime_id = a.id 
+        WHERE li.list_id = ? 
+        ORDER BY li.position ASC 
+        LIMIT 4
+    `);
+    popularLists.forEach(l => {
+        l.posters = getListPosters.all(l.id);
+    });
+
+    const heroAnime = db.prepare('SELECT * FROM anime ORDER BY score DESC LIMIT 1').get();
+    if (heroAnime) {
+        // Force the Frieren GIF as the background banner
+        heroAnime.banner_image = 'https://media1.tenor.com/m/3hO1l5mX2YQAAAAC/frieren-frieren-beyond-journeys-end.gif';
+    }
+
+    res.render('index', { popularAnime, topMovies, seasonalAnime, recentLoggedGrid, recentLogs, popularLists, heroAnime });
 });
 
 // AUTHENTICATION
@@ -1128,6 +1157,10 @@ app.post('/api/list/:id/like', (req, res) => {
         } else {
             db.prepare('INSERT INTO list_likes (user_id, list_id) VALUES (?, ?)').run(userId, listId);
             liked = true;
+            const listOwner = db.prepare('SELECT user_id FROM lists WHERE id = ?').get(listId);
+            if (listOwner && listOwner.user_id !== userId) {
+                db.prepare('INSERT INTO notifications (user_id, actor_id, type, target_id) VALUES (?, ?, ?, ?)').run(listOwner.user_id, userId, 'list_like', listId);
+            }
         }
 
         const likeCount = db.prepare('SELECT COUNT(*) as count FROM list_likes WHERE list_id = ?').get(listId).count;
@@ -1208,13 +1241,17 @@ app.post('/api/list/:id/comment', (req, res) => {
     if (!content) return res.status(400).json({ error: 'Comment text cannot be empty' });
 
     try {
-        const list = db.prepare('SELECT id FROM lists WHERE id = ?').get(listId);
+        const list = db.prepare('SELECT id, user_id FROM lists WHERE id = ?').get(listId);
         if (!list) return res.status(404).json({ error: 'List not found' });
 
         const commentRes = db.prepare(`
             INSERT INTO list_comments (list_id, user_id, content)
             VALUES (?, ?, ?)
         `).run(listId, userId, content);
+
+        if (list.user_id !== userId) {
+            db.prepare('INSERT INTO notifications (user_id, actor_id, type, target_id) VALUES (?, ?, ?, ?)').run(list.user_id, userId, 'list_comment', listId);
+        }
 
         const commentId = commentRes.lastInsertRowid;
         const user = db.prepare('SELECT username, avatar_url FROM users WHERE id = ?').get(userId);

@@ -161,7 +161,7 @@
 <%- include('partials/nav') %>
 <main class="main">
 <section class="sec" style="margin-top:48px;"><div class="wrap">
-<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Popular Right Now</h2></div><div class="sec-right"><div class="tog" id="tp"><button class="on" onclick="tog(this,'tp')">This Season</button><button onclick="tog(this,'tp')">All Time</button></div><a href="/series?sort=popular" class="see-all">See all &rarr;</a></div></div>
+<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Popular Right Now</h2></div><a href="/series?sort=popular" class="see-all">See all &rarr;</a></div>
 <div class="strip">
 <% if (locals.popularAnime && popularAnime.length > 0) { %>
     <% popularAnime.forEach((anime, idx) => { %>
@@ -207,12 +207,11 @@
 <% } %>
 <section class="sec"><div class="wrap">
 <div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">New Trailers</h2></div><a href="/trailers" class="see-all">See all &rarr;</a></div>
-<div class="strip">
-<article class="tc"><div class="tc-thumb"><div class="tc-fill v1"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">TRAILER</span></div><span class="tc-dur">1:32</span></div><div class="tc-info"><p class="tc-title">Frieren: Beyond Journey's End</p><p class="tc-meta">Madhouse · Fall 2023</p></div></article>
-<article class="tc"><div class="tc-thumb"><div class="tc-fill v2"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">TRAILER</span></div><span class="tc-dur">2:01</span></div><div class="tc-info"><p class="tc-title">Attack on Titan: The Final Chapters</p><p class="tc-meta">MAPPA · 2023</p></div></article>
-<article class="tc"><div class="tc-thumb"><div class="tc-fill v3"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">TEASER</span></div><span class="tc-dur">0:45</span></div><div class="tc-info"><p class="tc-title">Vinland Saga Season 3</p><p class="tc-meta">MAPPA · Coming 2025</p></div></article>
-<article class="tc"><div class="tc-thumb"><div class="tc-fill v4"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">TRAILER</span></div><span class="tc-dur">1:48</span></div><div class="tc-info"><p class="tc-title">Delicious in Dungeon S2</p><p class="tc-meta">Trigger · 2025</p></div></article>
-<article class="tc"><div class="tc-thumb"><div class="tc-fill v5"></div><div class="tc-dark"><div class="tc-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--blue)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="tc-top"><span class="bdg bdg-dark">PV</span></div><span class="tc-dur">1:14</span></div><div class="tc-info"><p class="tc-title">Dandadan Season 2</p><p class="tc-meta">Science SARU · Announced</p></div></article>
+<div style="display:flex; gap:16px; overflow-x:auto; padding-bottom:12px;">
+    <iframe width="270" height="152" src="https://www.youtube.com/embed/OibODJQzsnA" title="Frieren Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:var(--r-md); flex-shrink:0;"></iframe>
+    <iframe width="270" height="152" src="https://www.youtube.com/embed/MGRm4IzK1SQ" title="Attack on Titan Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:var(--r-md); flex-shrink:0;"></iframe>
+    <iframe width="270" height="152" src="https://www.youtube.com/embed/qN6e-tF8D0M" title="Vinland Saga Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:var(--r-md); flex-shrink:0;"></iframe>
+    <iframe width="270" height="152" src="https://www.youtube.com/embed/hXbN2H3ZksU" title="Dandadan Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:var(--r-md); flex-shrink:0;"></iframe>
 </div>
 </div></section>
 <section class="sec"><div class="wrap">
@@ -260,69 +259,77 @@
 <section class="sec"><div class="wrap">
 <div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">From People You Follow</h2></div><a href="/anime" class="see-all">See all &rarr;</a></div>
 <div class="rfeed">
-<article class="rc">
-<div class="rc-th"><a href="/anime/frieren-beyond-journeys-end"><img src="/images/frieren_cover_1785281175713.png" alt="Frieren" loading="lazy"></a></div>
-<div class="rc-body">
-<div class="rc-meta"><div class="rc-av av1">M</div><span class="rc-user">maisie.watches</span></div><h3 class="rc-title"><a href="/anime/frieren-beyond-journeys-end" style="color:inherit;">Frieren: Beyond Journey's End</a> <span class="rc-yr">2023</span></h3><div class="rc-stars"><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="rc-score">5.0</span></div>
-<p class="rc-txt">There is something quietly devastating about a story that measures time in centuries. Frieren does not mourn loudly — it lets grief accumulate the way sediment does, slowly and imperceptibly, until you realize the weight of it.</p>
-<div class="rc-foot"><button class="rc-like lkd"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Liked</span> 142 likes</button><span class="rc-comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 18</span></div>
-</div></article>
-<article class="rc">
-<div class="rc-th"><a href="/anime/vinland-saga"><img src="/images/vinland_cover_1785281226165.png" alt="Vinland Saga" loading="lazy"></a></div>
-<div class="rc-body">
-<div class="rc-meta"><div class="rc-av av2">R</div><span class="rc-user">reelhouse_rina</span></div><h3 class="rc-title"><a href="/anime/vinland-saga" style="color:inherit;">Vinland Saga Season 2</a> <span class="rc-yr">2023</span></h3><div class="rc-stars"><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si se" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="rc-score">4.0</span></div>
-<p class="rc-txt">Season 2 asks you to sit with boredom on purpose — one of the bravest structural choices in modern anime. Watching Thorfinn work a farm field is profoundly moving.</p>
-<div class="rc-foot"><button class="rc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Like review</span> 87 likes</button><span class="rc-comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 11</span></div>
-</div></article>
-<article class="rc">
-<div class="rc-th"><a href="/anime/attack-on-titan"><img src="/images/aot_cover_1785281191397.png" alt="Attack on Titan" loading="lazy"></a></div>
-<div class="rc-body">
-<div class="rc-meta"><div class="rc-av av3">T</div><span class="rc-user">tankobonista</span></div><h3 class="rc-title"><a href="/anime/attack-on-titan" style="color:inherit;">Attack on Titan</a> <span class="rc-yr">2013</span></h3><div class="rc-stars"><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="rc-score">5.0</span></div>
-<p class="rc-txt">A monument to narrative pacing and high-stakes drama. The foreshadowing across four seasons pays off with immaculate precision.</p>
-<div class="rc-foot"><button class="rc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Like review</span> 63 likes</button><span class="rc-comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 7</span></div>
-</div></article>
-<article class="rc">
-<div class="rc-th"><a href="/anime/neon-genesis-evangelion"><img src="/images/nge_cover_1785281259269.png" alt="Evangelion" loading="lazy"></a></div>
-<div class="rc-body">
-<div class="rc-meta"><div class="rc-av av4">J</div><span class="rc-user">joshuacaine</span></div><h3 class="rc-title"><a href="/anime/neon-genesis-evangelion" style="color:inherit;">Neon Genesis Evangelion</a> <span class="rc-yr">1995</span></h3><div class="rc-stars"><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg class="si sf" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="rc-score">5.0</span></div>
-<p class="rc-txt">The masterwork that reshaped the entire anime industry. An intense psychological journey into the depths of human vulnerability.</p>
-<div class="rc-foot"><button class="rc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Like review</span> 204 likes</button><span class="rc-comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 45</span></div>
-</div></article>
+<% if (locals.recentLogs && recentLogs.length > 0) { %>
+    <% recentLogs.forEach(log => { %>
+        <article class="rc">
+            <div class="rc-th">
+                <a href="/anime/<%= log.anime_slug %>">
+                    <img src="<%= log.cover_image %>" alt="<%= log.anime_title %>" loading="lazy">
+                </a>
+            </div>
+            <div class="rc-body">
+                <div class="rc-meta">
+                    <% if (log.avatar_url) { %>
+                        <img src="<%= log.avatar_url %>" class="rc-av" style="object-fit:cover;">
+                    <% } else { %>
+                        <div class="rc-av av1"><%= log.username.charAt(0).toUpperCase() %></div>
+                    <% } %>
+                    <span class="rc-user"><%= log.username %></span>
+                </div>
+                <h3 class="rc-title">
+                    <a href="/anime/<%= log.anime_slug %>" style="color:inherit;"><%= log.anime_title %></a>
+                    <span class="rc-yr"><%= log.release_year %></span>
+                </h3>
+                <div class="rc-stars">
+                    <span class="rc-score" style="margin-left:0;">★ <%= log.rating ? log.rating.toFixed(1) : '-' %></span>
+                </div>
+                <p class="rc-txt"><%= log.review_text %></p>
+                <div class="rc-foot">
+                    <button class="rc-like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span>Like</span></button>
+                </div>
+            </div>
+        </article>
+    <% }); %>
+<% } else { %>
+    <p style="color:var(--muted); font-size:13px;">No recent reviews from people you follow.</p>
+<% } %>
 </div>
 </div></section>
 <section class="sec"><div class="wrap">
 <div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Popular Lists</h2></div><a href="/lists" class="see-all">Browse all &rarr;</a></div>
 <div class="lgrid">
-<article class="lc">
-<div class="lc-coll">
-<div class="lc-cell"><img src="/images/frieren_cover_1785281175713.png" alt="Frieren" loading="lazy"></div>
-<div class="lc-cell"><img src="/images/aot_cover_1785281191397.png" alt="AoT" loading="lazy"></div>
-<div class="lc-cell"><img src="/images/vinland_cover_1785281226165.png" alt="Vinland" loading="lazy"></div>
-<div class="lc-cell"><img src="/images/nge_cover_1785281259269.png" alt="Evangelion" loading="lazy"></div>
-<div class="lc-cell"><img src="/images/violet_cover_1785281209933.png" alt="Violet" loading="lazy"></div>
-</div>
-<h3 class="lc-title">The Essential Anime Masterpieces</h3><div class="lc-auth"><div class="lc-av av1">M</div><span class="lc-an">animelogger</span></div><div class="lc-stats"><span class="lc-stat"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>34 titles</span><span class="lc-stat"><svg class="lk" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>2.4k</span></div>
-</article>
-<article class="lc">
-<div class="lc-coll">
-<div class="lc-cell"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg" alt="One Piece" loading="lazy"></div>
-<div class="lc-cell"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5114-1m0XvggCyv1b.jpg" alt="FMAB" loading="lazy"></div>
-<div class="lc-cell"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1535-kUgkcrfOrkUM.jpg" alt="Death Note" loading="lazy"></div>
-<div class="lc-cell"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx9253-159Nf4d96ZqX.jpg" alt="Steins Gate" loading="lazy"></div>
-<div class="lc-cell"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-nkWLhAepd8yv.jpg" alt="HxH" loading="lazy"></div>
-</div>
-<h3 class="lc-title">Great Entry Points for Beginners</h3><div class="lc-auth"><div class="lc-av av2">R</div><span class="lc-an">reelhouse_rina</span></div><div class="lc-stats"><span class="lc-stat"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>12 titles</span><span class="lc-stat"><svg class="lk" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>1.8k</span></div>
-</article>
-<article class="lc">
-<div class="lc-coll">
-<div class="lc-cell"><img src="/images/nge_cover_1785281259269.png" alt="NGE" loading="lazy"></div>
-<div class="lc-cell"><img src="/images/violet_cover_1785281209933.png" alt="Violet" loading="lazy"></div>
-<div class="lc-cell"><img src="/images/frieren_cover_1785281175713.png" alt="Frieren" loading="lazy"></div>
-<div class="lc-cell"><img src="/images/aot_cover_1785281191397.png" alt="AoT" loading="lazy"></div>
-<div class="lc-cell"><img src="/images/vinland_cover_1785281226165.png" alt="Vinland" loading="lazy"></div>
-</div>
-<h3 class="lc-title">Films & Shows That Stay With You Forever</h3><div class="lc-auth"><div class="lc-av av3">T</div><span class="lc-an">tankobonista</span></div><div class="lc-stats"><span class="lc-stat"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>19 titles</span><span class="lc-stat"><svg class="lk" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>1.1k</span></div>
-</article>
+<% if (locals.popularLists && popularLists.length > 0) { %>
+    <% popularLists.forEach(list => { %>
+        <article class="lc" onclick="window.location.href='/list/<%= list.id %>'">
+            <div class="lc-coll">
+                <% if (list.posters && list.posters.length > 0) { %>
+                    <% list.posters.forEach(poster => { %>
+                        <div class="lc-cell"><img src="<%= poster.cover_image %>" alt="Cover" loading="lazy"></div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="lc-cell" style="background:#1C2228; display:flex; align-items:center; justify-content:center;"><span style="color:var(--muted); font-size:10px;">Empty</span></div>
+                <% } %>
+            </div>
+            <h3 class="lc-title"><%= list.title %></h3>
+            <div class="lc-auth">
+                <% if (list.avatar_url) { %>
+                    <img src="<%= list.avatar_url %>" class="lc-av" style="object-fit:cover;">
+                <% } else { %>
+                    <div class="lc-av av1"><%= list.username.charAt(0).toUpperCase() %></div>
+                <% } %>
+                <span class="lc-an"><%= list.username %></span>
+            </div>
+            <div class="lc-stats">
+                <span class="lc-stat">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    <%= list.item_count %> titles
+                </span>
+            </div>
+        </article>
+    <% }); %>
+<% } else { %>
+    <p style="color:var(--muted); font-size:13px;">No popular lists found.</p>
+<% } %>
 </div>
 </div></section>
 <section class="sec"><div class="wrap">

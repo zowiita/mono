@@ -1,0 +1,51 @@
+<!-- Ambient Background Glows -->
+<div class="ambient-bg">
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+</div>
+
+<style>
+.ambient-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+.ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.12; /* Very subtle so it doesn't look overwhelming */
+}
+.glow-1 {
+    width: 600px;
+    height: 600px;
+    background: var(--orange, #FF5500);
+    top: -150px;
+    right: -100px;
+}
+.glow-2 {
+    width: 500px;
+    height: 500px;
+    background: var(--blue, #280DC2);
+    bottom: -100px;
+    left: -150px;
+}
+@media (max-width: 768px) {
+    .ambient-glow {
+        filter: blur(100px);
+    }
+    .glow-1 {
+        width: 300px;
+        height: 300px;
+    }
+    .glow-2 {
+        width: 300px;
+        height: 300px;
+    }
+}
+</style>
