@@ -229,40 +229,13 @@
 
     .hero-backdrop-img {
       width: 100%;
-      max-width: 1350px;
+      max-width: 1400px;
       height: 100%;
       object-fit: cover;
-      object-position: center 25%;
-      mask-image: radial-gradient(
-        ellipse 90% 70% at 50% 42%,
-        black 40%,
-        rgba(0, 0, 0, 0.85) 60%,
-        rgba(0, 0, 0, 0.3) 80%,
-        transparent 98%
-      ),
-      linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.6) 0%,
-        black 20%,
-        black 65%,
-        transparent 100%
-      );
-      -webkit-mask-image: radial-gradient(
-        ellipse 90% 70% at 50% 42%,
-        black 40%,
-        rgba(0, 0, 0, 0.85) 60%,
-        rgba(0, 0, 0, 0.3) 80%,
-        transparent 98%
-      ),
-      linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.6) 0%,
-        black 20%,
-        black 65%,
-        transparent 100%
-      );
-      mask-composite: intersect;
-      -webkit-mask-composite: source-in;
+      object-position: center 30%;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0) 95%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0) 95%);
+      opacity: 0.65;
     }
 
     /* Floating Animated Circles in Hero Stage */
@@ -492,13 +465,13 @@
     .feature-box {
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 24px;
-      padding: 32px;
+      border-radius: 20px;
+      padding: 24px;
       display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      text-align: center;
+      flex-direction: row;
+      gap: 16px;
+      align-items: flex-start;
+      text-align: left;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
@@ -515,17 +488,17 @@
     .feature-box:hover {
       background: rgba(255, 255, 255, 0.04);
       border-color: rgba(255, 85, 0, 0.3);
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 40px rgba(255, 85, 0, 0.1);
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4), 0 0 30px rgba(255, 85, 0, 0.1);
     }
     .feature-box:hover::after {
       opacity: 1;
     }
 
     .feature-icon-wrap {
-      width: 54px;
-      height: 54px;
-      border-radius: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       background: rgba(255, 85, 0, 0.1);
       border: 1px solid rgba(255, 85, 0, 0.2);
       color: var(--mono-orange);
@@ -608,7 +581,7 @@
     }
 
     /* =============================================================
-       CREATIVE SWEET SPOT & COMPARISON (REDESIGNED)
+       CREATIVE SWEET SPOT & COMPARISON (PINTEREST STYLE)
        ============================================================= */
     .creative-comparison-wrap {
       padding: 110px 0;
@@ -616,62 +589,63 @@
       position: relative;
       overflow: hidden;
     }
-    .creative-comparison-wrap::before {
-      content: "";
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(255,85,0,0.08), transparent 70%);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
+
+    .pinterest-masonry {
+      column-count: 3;
+      column-gap: 24px;
+      margin-top: 48px;
+    }
+    @media (max-width: 960px) {
+      .pinterest-masonry { column-count: 2; }
+    }
+    @media (max-width: 600px) {
+      .pinterest-masonry { column-count: 1; }
     }
 
-    .comp-stage {
-      display: grid;
-      grid-template-columns: 1fr 1.35fr 1fr;
-      gap: 24px;
-      align-items: stretch;
-      margin-top: 54px;
-    }
-
-    .stage-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      border-radius: 24px;
-      padding: 32px 28px;
+    .pin-card {
+      break-inside: avoid;
+      margin-bottom: 24px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      overflow: hidden;
       position: relative;
-      backdrop-filter: blur(10px);
-      transition: transform 0.3s;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
     }
-    .stage-card:hover {
-      transform: translateY(-5px);
+    .pin-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.6);
+      border-color: rgba(255, 85, 0, 0.3);
     }
-
-    .stage-card-mono {
-      background: linear-gradient(145deg, rgba(30,30,34,0.95) 0%, rgba(20,20,24,0.95) 100%);
-      border: 1.5px solid rgba(255, 85, 0, 0.4);
-      box-shadow: 0 24px 60px rgba(0,0,0,0.8), 0 0 60px rgba(255,85,0,0.15);
-      transform: scale(1.05);
-      z-index: 2;
-      padding: 40px 32px;
+    .pin-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .stage-card-mono:hover {
-      transform: scale(1.07);
+    .pin-content {
+      padding: 20px;
     }
-
-    .live-rating-pulse-box {
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-top: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      backdrop-filter: blur(5px);
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    .pin-tag {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--mono-orange);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    .pin-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .pin-desc {
+      font-size: 13px;
+      color: #8C98A4;
+      line-height: 1.5;
     }
 
     /* =============================================================
@@ -946,18 +920,18 @@
         <!-- 1. Eye Track -->
         <div class="feature-box reveal-scale delay-1">
           <div class="feature-icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
           <div class="feature-box-content">
             <h4>Track every masterwork</h4>
-            <p>Keep track of every anime you’ve ever completed, log current seasons without clutter, or start fresh.</p>
+            <p>Keep track of every anime you’ve ever completed, log current seasons without clutter.</p>
           </div>
         </div>
 
         <!-- 2. Heart Like -->
         <div class="feature-box reveal-scale delay-2">
           <div class="feature-icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </div>
           <div class="feature-box-content">
             <h4>Show love for great taste</h4>
@@ -968,44 +942,44 @@
         <!-- 3. Review / Lines -->
         <div class="feature-box reveal-scale delay-3">
           <div class="feature-icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
           <div class="feature-box-content">
             <h4>Write thoughtful reviews</h4>
-            <p>Share your perspectives with spoiler-protection and read authentic thoughts from other viewers.</p>
+            <p>Share your perspectives with spoiler-protection and read authentic thoughts.</p>
           </div>
         </div>
 
         <!-- 4. Star Half-Ratings -->
         <div class="feature-box reveal-scale delay-1">
           <div class="feature-icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </div>
           <div class="feature-box-content">
             <h4>Rate with high precision</h4>
-            <p>Rate each show on a precision five-star scale (0.5 to 5.0) to capture every nuance accurately.</p>
+            <p>Rate each show on a precision five-star scale to capture every nuance accurately.</p>
           </div>
         </div>
 
         <!-- 5. Diary & Stats -->
         <div class="feature-box reveal-scale delay-2">
           <div class="feature-icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
           <div class="feature-box-content">
             <h4>Keep a personal diary</h4>
-            <p>Keep a chronological diary of your watching journey, log rewatches, and explore deep stats.</p>
+            <p>Keep a chronological diary of your watching journey, log rewatches, and stats.</p>
           </div>
         </div>
 
         <!-- 6. Lists & Top 4 -->
         <div class="feature-box reveal-scale delay-3">
           <div class="feature-icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           </div>
           <div class="feature-box-content">
             <h4>Compile aesthetic lists</h4>
-            <p>Curate visual lists on any niche aesthetic and pin your 4 all-time favorites to your profile.</p>
+            <p>Curate visual lists on any niche aesthetic and pin your 4 all-time favorites.</p>
           </div>
         </div>
 
@@ -1028,51 +1002,57 @@
         </p>
       </div>
 
-      <div class="comp-stage">
+      <div class="pinterest-masonry">
         
-        <!-- Side 1: Legacy Trackers -->
-        <div class="stage-card reveal-scale delay-1">
-          <span style="display:inline-block; font-size:11px; font-weight:800; color:#717B85; text-transform:uppercase; margin-bottom:12px;">Legacy Databases</span>
-          <h4 style="font-size: 17px; font-weight: 800; color: #FFFFFF; margin-bottom: 14px;">Cluttered & Outdated</h4>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; color: #8C98A4;">
-            <li><span style="color:#FF4B4B; margin-right:6px;">✕</span> Heavy ads & 2008 forum layouts</li>
-            <li><span style="color:#FF4B4B; margin-right:6px;">✕</span> Rigid 1–10 scores causing rating fatigue</li>
-            <li><span style="color:#FF4B4B; margin-right:6px;">✕</span> No aesthetic curation or visual zines</li>
-          </ul>
-        </div>
-
-        <!-- Center: MÖNO Highlight -->
-        <div class="stage-card stage-card-mono reveal-scale delay-2">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <span style="font-size:11.5px; font-weight:900; background:var(--mono-orange); color:#FFFFFF; padding:6px 14px; border-radius:99px; text-transform:uppercase; letter-spacing:0.5px;">The MÖNO Flow</span>
-            <span style="color:#FF5500; font-size:20px; filter: drop-shadow(0 0 10px rgba(255,85,0,0.8));">✦</span>
-          </div>
-          <h3 style="font-size: 26px; font-weight: 900; color: #FFFFFF; margin-bottom: 14px; letter-spacing: -0.5px;">Tactile, Modern & Ad-Free</h3>
-          <p style="font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 24px;">
-            Everything designed for the aesthetic and rhythm of anime. Half-star precision, spoiler-safe notes, and zero algorithmic clutter.
-          </p>
-
-          <!-- Interactive Rating Demo -->
-          <div class="live-rating-pulse-box">
-            <div>
-              <div style="font-size: 11px; font-weight: 800; color: #8C98A4; text-transform: uppercase; margin-bottom:2px;">Precision Rating</div>
-              <div style="font-size: 18px; font-weight: 900; color: #FFFFFF;">4.5 / 5.0 <span style="color:var(--mono-orange);">★</span></div>
-            </div>
-            <div style="display: flex; gap: 4px; font-size: 24px; color: var(--mono-orange); filter: drop-shadow(0 0 8px rgba(255,85,0,0.5));">
-              <span>★</span><span>★</span><span>★</span><span>★</span><span style="opacity: 0.4;">★</span>
-            </div>
+        <!-- Pin 1 -->
+        <div class="pin-card reveal-scale delay-1">
+          <img class="pin-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx31-3zRThtzQH62E.png" alt="Neon Genesis Evangelion">
+          <div class="pin-content">
+            <span class="pin-tag">The Diary</span>
+            <h3 class="pin-title">Log Your Evolution</h3>
+            <p class="pin-desc">Chronicle your watch history in an elegant timeline.</p>
           </div>
         </div>
 
-        <!-- Side 3: Generalist Film Apps -->
-        <div class="stage-card reveal-scale delay-3">
-          <span style="display:inline-block; font-size:11px; font-weight:800; color:#717B85; text-transform:uppercase; margin-bottom:12px;">Generalist Film Apps</span>
-          <h4 style="font-size: 17px; font-weight: 800; color: #FFFFFF; margin-bottom: 14px;">Missing Anime Nuance</h4>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; color: #8C98A4;">
-            <li><span style="color:#FF4B4B; margin-right:6px;">✕</span> Broken multi-seasons and split cours</li>
-            <li><span style="color:#FF4B4B; margin-right:6px;">✕</span> No episode tracking or airing schedule</li>
-            <li><span style="color:#FF4B4B; margin-right:6px;">✕</span> Missing OVAs, classic shorts & directors</li>
-          </ul>
+        <!-- Pin 2 -->
+        <div class="pin-card reveal-scale delay-2">
+          <div style="background:var(--mono-orange); padding:30px; text-align:center;">
+            <div style="font-size:32px; font-weight:900; color:#FFFFFF; letter-spacing:-1px;">4.5 ★</div>
+          </div>
+          <div class="pin-content">
+            <span class="pin-tag">The Archive</span>
+            <h3 class="pin-title">Precision Ratings</h3>
+            <p class="pin-desc">Half-star ratings for nuanced reviews and accurate scoring.</p>
+          </div>
+        </div>
+
+        <!-- Pin 3 -->
+        <div class="pin-card reveal-scale delay-3">
+          <img class="pin-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg" alt="Frieren">
+          <div class="pin-content">
+            <span class="pin-tag">Aesthetic Lists</span>
+            <h3 class="pin-title">Curated Collections</h3>
+            <p class="pin-desc">Showcase your taste with highly visual list layouts.</p>
+          </div>
+        </div>
+
+        <!-- Pin 4 -->
+        <div class="pin-card reveal-scale delay-1">
+          <div class="pin-content">
+            <span class="pin-tag">Social Engine</span>
+            <h3 class="pin-title">Ad-Free & Authentic</h3>
+            <p class="pin-desc">No algorithms or cluttered ads. Just pure anime discussion.</p>
+          </div>
+        </div>
+
+        <!-- Pin 5 -->
+        <div class="pin-card reveal-scale delay-2">
+          <img class="pin-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101348-2fhDFPCuMNiz.jpg" alt="Vinland Saga">
+          <div class="pin-content">
+            <span class="pin-tag">Reviews</span>
+            <h3 class="pin-title">Spoiler-Safe Insights</h3>
+            <p class="pin-desc">Read and write deep analytical reviews safely.</p>
+          </div>
         </div>
 
       </div>
@@ -1086,7 +1066,7 @@
       <div style="text-align: center; max-width: 600px; margin: 0 auto 48px;">
         <div class="section-eyebrow">THE CANON</div>
         <h2 style="font-size: clamp(28px, 3.4vw, 42px); font-weight: 900; letter-spacing: -1.2px; color: #FFFFFF; margin-bottom: 10px;">
-          Top 50 All-Time Masterpieces
+          Top <span style="color:var(--mono-orange);">50</span> All-Time Masterpieces
         </h2>
         <p style="font-size: 14px; color: #8C98A4;">
           The highest-rated animated achievements as ranked by the global community.
@@ -1098,7 +1078,7 @@
         <!-- Row 1 (1 - 5) -->
         <div class="top-item-card">
           <span class="top-rank-badge">#1</span>
-          <img src="/images/frieren_cover_1785281175713.png" alt="Frieren" loading="lazy">
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg" alt="Frieren" loading="lazy">
           <div class="top-meta-info">
             <div class="top-title-text">Frieren: Beyond Journey's End</div>
             <div class="top-score-text">4.9 ★ · 2023</div>
@@ -1125,7 +1105,7 @@
 
         <div class="top-item-card">
           <span class="top-rank-badge">#4</span>
-          <img src="/images/aot_cover_1785281191397.png" alt="Attack on Titan" loading="lazy">
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-buvcRTBx4NSm.jpg" alt="Attack on Titan" loading="lazy">
           <div class="top-meta-info">
             <div class="top-title-text">Attack on Titan</div>
             <div class="top-score-text">4.9 ★ · 2013</div>
@@ -1134,7 +1114,7 @@
 
         <div class="top-item-card">
           <span class="top-rank-badge">#5</span>
-          <img src="/images/nge_cover_1785281259269.png" alt="Evangelion" loading="lazy">
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx31-3zRThtzQH62E.png" alt="Evangelion" loading="lazy">
           <div class="top-meta-info">
             <div class="top-title-text">Neon Genesis Evangelion</div>
             <div class="top-score-text">4.9 ★ · 1995</div>
@@ -1144,7 +1124,7 @@
         <!-- Row 2 (6 - 10) -->
         <div class="top-item-card">
           <span class="top-rank-badge">#6</span>
-          <img src="/images/vinland_cover_1785281226165.png" alt="Vinland Saga" loading="lazy">
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101348-2fhDFPCuMNiz.jpg" alt="Vinland Saga" loading="lazy">
           <div class="top-meta-info">
             <div class="top-title-text">Vinland Saga</div>
             <div class="top-score-text">4.8 ★ · 2019</div>
@@ -1171,7 +1151,7 @@
 
         <div class="top-item-card">
           <span class="top-rank-badge">#9</span>
-          <img src="/images/violet_cover_1785281209933.png" alt="Violet Evergarden" loading="lazy">
+          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21827-ubzq619ZA2E9.png" alt="Violet Evergarden" loading="lazy">
           <div class="top-meta-info">
             <div class="top-title-text">Violet Evergarden</div>
             <div class="top-score-text">4.7 ★ · 2018</div>
