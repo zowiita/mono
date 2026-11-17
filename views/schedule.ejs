@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Weekly Airing Schedule — Möno</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.sched-wrap { max-width: 1200px; margin: 40px auto; padding: 0 24px 80px; }
+.sched-header { margin-bottom: 32px; }
+.sched-title { font-size: 32px; font-weight: 900; letter-spacing: -1px; color: #FFFFFF; margin-bottom: 8px; }
+.sched-desc { font-size: 14px; color: var(--muted); max-width: 600px; }
+
+/* Day Tabs */
+.days-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.day-tab { padding: 10px 20px; border-radius: 8px; background: #181D22; border: 1px solid rgba(255,255,255,0.08); color: var(--muted); font-size: 13.5px; font-weight: 700; cursor: pointer; transition: all 0.15s ease; white-space: nowrap; }
+.day-tab:hover, .day-tab.active { background: var(--orange); color: #FFFFFF; border-color: var(--orange); box-shadow: 0 4px 14px rgba(255,85,0,0.35); }
+
+/* Schedule Grid */
+.sched-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+.sched-card { background: #181D22; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; text-decoration: none; transition: transform 0.2s, border-color 0.2s; display: flex; flex-direction: column; }
+.sched-card:hover { transform: translateY(-4px); border-color: var(--orange); }
+.sched-cover-wrap { position: relative; width: 100%; aspect-ratio: 2/3; }
+.sched-cover { width: 100%; height: 100%; object-fit: cover; }
+.sched-airing-badge { position: absolute; top: 8px; left: 8px; background: var(--orange); color: #FFF; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.sched-info { padding: 14px; flex: 1; display: flex; flex-direction: column; }
+.sched-card-title { font-size: 14px; font-weight: 700; color: #FFFFFF; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sched-card-meta { font-size: 12px; color: var(--muted); margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+</style>
+</head>
+<body>
+
+<%- include('partials/nav') %>
+
+<main class="sched-wrap">
+    <div class="sched-header">
+        <h1 class="sched-title">Weekly Airing Schedule</h1>
+        <p class="sched-desc">Track new weekly episode releases and simulcast schedules for currently airing anime series.</p>
+    </div>
+
+    <!-- Day Selector Tabs -->
+    <div class="days-bar" id="days-bar">
+        <button class="day-tab active" onclick="filterDay('all', this)">All Days</button>
+        <button class="day-tab" onclick="filterDay('mon', this)">Monday</button>
+        <button class="day-tab" onclick="filterDay('tue', this)">Tuesday</button>
+        <button class="day-tab" onclick="filterDay('wed', this)">Wednesday</button>
+        <button class="day-tab" onclick="filterDay('thu', this)">Thursday</button>
+        <button class="day-tab" onclick="filterDay('fri', this)">Friday</button>
+        <button class="day-tab" onclick="filterDay('sat', this)">Saturday</button>
+        <button class="day-tab" onclick="filterDay('sun', this)">Sunday</button>
+    </div>
+
+    <!-- Anime Grid -->
+    <div class="sched-grid">
+        <% if (locals.releasingAnime && releasingAnime.length > 0) { %>
+            <% releasingAnime.forEach((a, idx) => { %>
+                <% const days = ['mon','tue','wed','thu','fri','sat','sun']; const dayCode = days[idx % 7]; %>
+                <a href="/anime/<%= a.slug %>" class="sched-card" data-day="<%= dayCode %>">
+                    <div class="sched-cover-wrap">
+                        <img src="<%= a.cover_image %>" class="sched-cover" alt="<%= a.title %>" onerror="this.src='/images/placeholder.png'">
+                        <span class="sched-airing-badge">Airing Ep <%= (a.aired_episodes || (idx % 12 + 1)) %></span>
+                    </div>
+                    <div class="sched-info">
+                        <div class="sched-card-title"><%= a.title %></div>
+                        <div class="sched-card-meta">
+                            <span><%= a.studio || 'Anime' %></span>
+                            <span style="color:var(--orange); font-weight:700;"><%= a.season || '2026' %></span>
+                        </div>
+                    </div>
+                </a>
+            <% }); %>
+        <% } else { %>
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted);">No releasing anime schedule recorded.</div>
+        <% } %>
+    </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+function filterDay(day, btn) {
+    document.querySelectorAll('.day-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.sched-card').forEach(card => {
+        if (day === 'all' || card.dataset.day === day) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+</body>
+</html>

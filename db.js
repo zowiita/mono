@@ -303,6 +303,12 @@ const initDb = () => {
         if (!userTableInfo.some(c => c.name === 'profile_theme')) {
             db.exec("ALTER TABLE users ADD COLUMN profile_theme TEXT DEFAULT 'default'");
         }
+        if (!userTableInfo.some(c => c.name === 'reset_token')) {
+            db.exec("ALTER TABLE users ADD COLUMN reset_token TEXT");
+        }
+        if (!userTableInfo.some(c => c.name === 'reset_expires')) {
+            db.exec("ALTER TABLE users ADD COLUMN reset_expires DATETIME");
+        }
     } catch (e) {
         console.error('Migration error:', e);
     }

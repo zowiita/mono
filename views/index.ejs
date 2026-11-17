@@ -10,7 +10,7 @@
 <style>
 /* INDEX DASHBOARD DARK STYLES */
 .bdg{display:inline-flex;align-items:center;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border-radius:3px;line-height:1;}
-.bdg-tv{background:rgba(40,13,194,0.3);color:#8B7CFF;border:1px solid rgba(139,124,255,0.3);}
+.bdg-tv{background:rgba(40,13,194,0.3);color:#00B4D8;border:1px solid rgba(139,124,255,0.3);}
 .bdg-film{background:rgba(255,85,0,0.25);color:#FF8540;border:1px solid rgba(255,133,64,0.3);}
 .bdg-new{background:var(--orange);color:#fff;}
 .bdg-dark{background:rgba(0,0,0,.75);color:#fff;backdrop-filter:blur(4px);}
@@ -205,15 +205,7 @@
 </div>
 </div></section>
 <% } %>
-<section class="sec"><div class="wrap">
-<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">New Trailers</h2></div><a href="/trailers" class="see-all">See all &rarr;</a></div>
-<div style="display:flex; gap:16px; overflow-x:auto; padding-bottom:12px;">
-    <iframe width="270" height="152" src="https://www.youtube.com/embed/OibODJQzsnA" title="Frieren Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:var(--r-md); flex-shrink:0;"></iframe>
-    <iframe width="270" height="152" src="https://www.youtube.com/embed/MGRm4IzK1SQ" title="Attack on Titan Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:var(--r-md); flex-shrink:0;"></iframe>
-    <iframe width="270" height="152" src="https://www.youtube.com/embed/qN6e-tF8D0M" title="Vinland Saga Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:var(--r-md); flex-shrink:0;"></iframe>
-    <iframe width="270" height="152" src="https://www.youtube.com/embed/hXbN2H3ZksU" title="Dandadan Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:var(--r-md); flex-shrink:0;"></iframe>
-</div>
-</div></section>
+
 <section class="sec"><div class="wrap">
 <div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">This Season</h2></div><div class="sec-right"><div class="tog" id="ts"><button class="on" onclick="tog(this,'ts')">Weekly</button><button onclick="tog(this,'ts')">Full Season</button></div></div></div>
 <div class="sg">
@@ -243,7 +235,7 @@
 </div></section>
 <section class="sec"><div class="wrap">
 <div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Recently Logged</h2></div><a href="/activity" class="see-all">See all &rarr;</a></div>
-<div class="rl-live"><span class="rl-pulse"></span><span class="rl-txt">Live &nbsp;—&nbsp;</span><span class="rl-cnt" id="cnt">2,847</span><span class="rl-txt">&nbsp;entries logged in the last hour</span></div>
+
 <div class="rl-grid">
 <% if (locals.recentLoggedGrid && recentLoggedGrid.length > 0) { %>
     <% recentLoggedGrid.forEach((item, idx) => { %>
@@ -332,41 +324,288 @@
 <% } %>
 </div>
 </div></section>
-<section class="sec"><div class="wrap">
-<div class="sec-head"><div class="sec-label"><span class="sec-bar"></span><h2 class="sec-title">Anime News & Updates</h2></div><a href="/news" class="see-all">Read more &rarr;</a></div>
-<div class="nws-grid">
-<article class="nc">
-<div class="nc-img"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg" alt="Frieren" loading="lazy"></div>
-<div class="nc-cat">Feature</div>
-<h3 class="nc-title">The Quiet Mastery of Frieren: Why we still need contemplative pacing in 2024</h3>
-<div class="nc-date">Oct 12, 2024</div>
-</article>
-<article class="nc">
-<div class="nc-img"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx31-3zRThtzQH62E.png" alt="Evangelion" loading="lazy"></div>
-<div class="nc-cat">Industry</div>
-<h3 class="nc-title">Studio Khara & Production IG: Retrospective on three decades of visionary anime</h3>
-<div class="nc-date">Oct 10, 2024</div>
-</article>
-<article class="nc">
-<div class="nc-img"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101348-2fhDFPCuMNiz.jpg" alt="Vinland Saga" loading="lazy"></div>
-<div class="nc-cat">Review</div>
-<h3 class="nc-title">Looking back at Vinland Saga: A profound exploration of peace and redemption</h3>
-<div class="nc-date">Oct 08, 2024</div>
-</article>
-<article class="nc">
-<div class="nc-img"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-buvcRTBx4NSm.jpg" alt="Masterworks" loading="lazy"></div>
-<div class="nc-cat">Announcement</div>
-<h3 class="nc-title">Studio Trigger & MAPPA confirm upcoming global cinematic masterwork line-up</h3>
-<div class="nc-date">Oct 05, 2024</div>
-</article>
-</div>
-</div></section>
+<!-- DYNAMIC ORANGE BUBBLE CTA SECTION (180 TURN) -->
+<section class="sec" style="margin-top: 64px; margin-bottom: 32px;">
+    <div class="wrap">
+        <div class="landing-cta-box">
+            <!-- Animated Solid Orange Floating Bubbles (Full Opacity) -->
+            <div class="cta-bubble-bg">
+                <div class="orange-bubble b1"></div>
+                <div class="orange-bubble b2"></div>
+                <div class="orange-bubble b3"></div>
+                <div class="orange-bubble b4"></div>
+                <div class="orange-bubble b5"></div>
+            </div>
+
+            <!-- Content Overlay -->
+            <div class="cta-content-inner">
+                <div class="cta-badge">
+                    <span class="cta-dot"></span>
+                    <span>JOIN MÖNO TODAY</span>
+                </div>
+
+                <h2 class="cta-headline">
+                    The social archive for anime fans.<br>
+                    <span>Track, review & curate your universe.</span>
+                </h2>
+
+                <p class="cta-subtext">
+                    Log every episode, rate your favorite seasons, build custom top lists, and connect with anime enthusiasts around the globe.
+                </p>
+
+                <div class="cta-actions">
+                    <a href="/signup" class="cta-btn-primary">
+                        <span>Create Free Account</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <a href="/anime" class="cta-btn-secondary">
+                        <span>Browse Catalog</span>
+                    </a>
+                </div>
+
+                <!-- Highlights bar -->
+                <div class="cta-highlights">
+                    <div class="hl-item"><span class="hl-check">✓</span> 100% Free Forever</div>
+                    <div class="hl-item"><span class="hl-check">✓</span> Custom Top 5 Favorites</div>
+                    <div class="hl-item"><span class="hl-check">✓</span> Airing Schedule & Activity Feed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.landing-cta-box {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    background: #14181C;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    padding: 72px 40px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+/* Background Animated Bubbles Container */
+.cta-bubble-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Solid Orange Circles / Bubbles with Full Opacity */
+.orange-bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: #FF5500;
+    opacity: 1 !important;
+    box-shadow: 0 12px 36px rgba(255, 85, 0, 0.5), inset 0 -4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Bubble 1: Top Left Large */
+.orange-bubble.b1 {
+    width: 130px;
+    height: 130px;
+    top: -30px;
+    left: -20px;
+    animation: floatMove1 7s ease-in-out infinite alternate;
+}
+
+/* Bubble 2: Bottom Right Huge */
+.orange-bubble.b2 {
+    width: 160px;
+    height: 160px;
+    bottom: -40px;
+    right: -30px;
+    animation: floatMove2 9s ease-in-out infinite alternate;
+}
+
+/* Bubble 3: Top Right Medium */
+.orange-bubble.b3 {
+    width: 90px;
+    height: 90px;
+    top: 20px;
+    right: 12%;
+    animation: floatMove3 6s ease-in-out infinite alternate;
+}
+
+/* Bubble 4: Bottom Left Medium */
+.orange-bubble.b4 {
+    width: 100px;
+    height: 100px;
+    bottom: 15px;
+    left: 10%;
+    animation: floatMove4 8s ease-in-out infinite alternate;
+}
+
+/* Bubble 5: Center Floating Pulse Bubble */
+.orange-bubble.b5 {
+    width: 75px;
+    height: 75px;
+    top: 45%;
+    left: 48%;
+    transform: translate(-50%, -50%);
+    animation: floatPulseCenter 5.5s ease-in-out infinite alternate;
+}
+
+/* Keyframe Animations for Living, Morphing & Floating Orange Bubbles */
+@keyframes floatMove1 {
+    0% { transform: translateY(0px) scale(1) rotate(0deg); }
+    50% { transform: translateY(28px) scale(1.22) rotate(10deg); }
+    100% { transform: translateY(-18px) scale(0.9) rotate(-10deg); }
+}
+
+@keyframes floatMove2 {
+    0% { transform: translateY(0px) scale(1) rotate(0deg); }
+    50% { transform: translateY(-32px) scale(1.25) rotate(-15deg); }
+    100% { transform: translateY(22px) scale(0.92) rotate(15deg); }
+}
+
+@keyframes floatMove3 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-22px, 32px) scale(1.28); }
+    100% { transform: translate(18px, -18px) scale(0.85); }
+}
+
+@keyframes floatMove4 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(32px, -28px) scale(1.22); }
+    100% { transform: translate(-18px, 18px) scale(0.88); }
+}
+
+@keyframes floatPulseCenter {
+    0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.9; }
+    50% { transform: translate(-50%, -62%) scale(1.4); opacity: 1; }
+    100% { transform: translate(-50%, -38%) scale(0.95); opacity: 0.95; }
+}
+
+/* Content Container Over Bubbles */
+.cta-content-inner {
+    position: relative;
+    z-index: 10;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.cta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: rgba(255, 85, 0, 0.15);
+    border: 1px solid rgba(255, 85, 0, 0.3);
+    color: #FF5500;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.cta-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FF5500;
+    box-shadow: 0 0 8px #FF5500;
+    animation: blinkDot 1.5s ease-in-out infinite;
+}
+
+@keyframes blinkDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+.cta-headline {
+    font-size: 38px;
+    font-weight: 900;
+    color: #FFFFFF;
+    line-height: 1.2;
+    margin: 0 0 16px 0;
+    letter-spacing: -0.5px;
+}
+.cta-headline span {
+    color: var(--orange);
+}
+
+.cta-subtext {
+    font-size: 15px;
+    line-height: 1.65;
+    color: #CAD2D9;
+    margin: 0 0 32px 0;
+}
+
+.cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+}
+
+.cta-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 30px;
+    background: #FF5500;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(255, 85, 0, 0.4);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cta-btn-primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 32px rgba(255, 85, 0, 0.6);
+    background: #E54B00;
+}
+
+.cta-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 28px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.cta-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.cta-highlights {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    font-weight: 600;
+    color: #9E9E9E;
+}
+
+.hl-check {
+    color: #FF5500;
+    font-weight: 800;
+}
+</style>
 </main>
 <%- include('partials/footer') %>
 <script>
 function tog(btn,id){document.getElementById(id).querySelectorAll("button").forEach(b=>b.classList.remove("on"));btn.classList.add("on");}
 document.querySelectorAll(".ep-btn").forEach(b=>{b.addEventListener("click",function(e){e.stopPropagation();const card=this.closest(".ep");card.classList.add("wd");const cov=card.querySelector(".ep-cov");cov.style.position="relative";const chk=document.createElement("div");chk.className="ep-chk";chk.innerHTML='<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>';cov.appendChild(chk);this.remove();});});
 document.querySelectorAll(".rc-like").forEach(b=>{b.addEventListener("click",function(){const wasLiked=this.classList.contains("lkd");this.classList.toggle("lkd");const span=this.querySelector("span");if(span)span.textContent=wasLiked?"Like review":"Liked";});});
-const cnt=document.getElementById("cnt");if(cnt){setInterval(()=>{const n=parseInt(cnt.textContent.replace(/,/g,""));cnt.textContent=(n+Math.floor(Math.random()*4+1)).toLocaleString();},3800);}
 </script>
 </body></html>

@@ -298,7 +298,7 @@
                 </form>
 
                 <div class="section-title">
-                    <span>Explore Anime (<%= locals.items ? items.length : 0 %> titles)</span>
+                    <span>Explore (<%= locals.totalCount != null ? totalCount : (locals.items ? items.length : 0) %> titles)</span><% if (locals.totalPages && totalPages > 1) { %><span style="font-size:12px; font-weight:600; color:var(--muted); text-transform:none;">Page <%= page %> of <%= totalPages %></span><% } %>
                 </div>
                 
                 <div class="popular-grid">
@@ -322,6 +322,41 @@
                         </div>
                     <% } %>
                 </div>
+
+                <% if (locals.totalPages && totalPages > 1) { %>
+                    <% 
+                        const buildQuery = (p) => {
+                            const params = [];
+                            if (locals.activeGenre) params.push('genre=' + encodeURIComponent(activeGenre));
+                            if (locals.activeSeason) params.push('season=' + encodeURIComponent(activeSeason));
+                            if (locals.activeYear) params.push('year=' + encodeURIComponent(activeYear));
+                            if (locals.activeSort) params.push('sort=' + encodeURIComponent(activeSort));
+                            if (locals.searchQuery) params.push('q=' + encodeURIComponent(searchQuery));
+                            params.push('page=' + p);
+                            return '?' + params.join('&');
+                        };
+                    %>
+                    <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:32px; margin-bottom:24px; flex-wrap:wrap;">
+                        <% if (page > 1) { %>
+                            <a href="<%= buildQuery(page - 1) %>" style="padding:8px 14px; background:#181A1C; border:1px solid rgba(255,255,255,0.12); border-radius:6px; color:#FFF; font-size:13px; font-weight:700; text-decoration:none; transition:border-color 0.15s;">← Prev</a>
+                        <% } %>
+                        
+                        <% 
+                            let startP = Math.max(1, page - 2);
+                            let endP = Math.min(totalPages, page + 2);
+                        %>
+                        <% for(let p = startP; p <= endP; p++) { %>
+                            <a href="<%= buildQuery(p) %>" style="padding:8px 12px; min-width:36px; text-align:center; background:<%= p === page ? 'var(--orange, #E5386B)' : '#181A1C' %>; border:1px solid <%= p === page ? 'var(--orange, #E5386B)' : 'rgba(255,255,255,0.12)' %>; border-radius:6px; color:#FFF; font-size:13px; font-weight:700; text-decoration:none;">
+                                <%= p %>
+                            </a>
+                        <% } %>
+
+                        <% if (page < totalPages) { %>
+                            <a href="<%= buildQuery(page + 1) %>" style="padding:8px 14px; background:#181A1C; border:1px solid rgba(255,255,255,0.12); border-radius:6px; color:#FFF; font-size:13px; font-weight:700; text-decoration:none; transition:border-color 0.15s;">Next →</a>
+                        <% } %>
+                    </div>
+                <% } %>
+
             </div>
 
             <!-- Right: Sidebar -->

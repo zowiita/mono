@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/png" href="/images/favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
@@ -9,19 +10,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   
+  <link rel="stylesheet" href="/css/style.css">
   <style>
     /* =============================================================
-       LETTERBOXD CINEMATIC DARK PALETTE & TOKENS (#222224 / #14181C)
+       LETTERBOXD CINEMATIC DARK PALETTE & TOKENS (#222224 / #111315)
        ============================================================= */
     :root {
-      --lb-bg: #222224;
-      --lb-surface: #181D22;
+      --lb-bg: #111315;
+      --lb-surface: #221E1A;
       --lb-card-bg: #1B2026;
       --lb-border: rgba(255, 255, 255, 0.08);
       --lb-border-hover: rgba(255, 255, 255, 0.25);
       
-      --mono-orange: #FF5500;
-      --mono-orange-glow: rgba(255, 85, 0, 0.35);
+      --mono-orange: #E5386B;
+      --mono-orange-glow: rgba(229, 56, 107, 0.4);
       --mono-cobalt: #280DC2;
       --mono-cobalt-light: #4A35EE;
       
@@ -154,18 +156,18 @@
     }
 
     .mono-nav-item.highlight-link {
-      background: rgba(255, 85, 0, 0.15);
+      background: rgba(229, 56, 107, 0.15);
       color: #FF7728;
       padding: 6px 14px;
       border-radius: var(--r-full);
-      border: 1px solid rgba(255, 85, 0, 0.35);
+      border: 1px solid rgba(229, 56, 107, 0.35);
       transition: all 0.2s ease;
     }
     .mono-nav-item.highlight-link:hover {
-      background: var(--mono-orange);
+      background: #E5386B;
       color: #FFFFFF;
-      border-color: var(--mono-orange);
-      box-shadow: 0 0 14px rgba(255, 85, 0, 0.4);
+      border-color: #E5386B;
+      box-shadow: 0 0 30px rgba(229, 56, 107, 0.45);
     }
 
     .mono-nav-search {
@@ -188,7 +190,7 @@
       background: rgba(255, 255, 255, 0.16);
       width: 180px;
       outline: none;
-      border-color: var(--mono-orange);
+      border-color: #E5386B;
     }
     .mono-nav-search svg {
       position: absolute;
@@ -251,14 +253,14 @@
     .orb-1 {
       width: 320px;
       height: 320px;
-      background: radial-gradient(circle, #FF5500, transparent 70%);
+      background: transparent;
       top: 15%;
       left: 10%;
     }
     .orb-2 {
       width: 380px;
       height: 380px;
-      background: radial-gradient(circle, #280DC2, transparent 70%);
+      background: transparent;
       top: 25%;
       right: 8%;
       animation-duration: 16s;
@@ -293,21 +295,21 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: var(--mono-orange);
+      background: #E5386B;
       color: #FFFFFF;
       font-size: 16px;
       font-weight: 800;
       padding: 15px 42px;
       border-radius: var(--r-full);
       text-decoration: none;
-      box-shadow: 0 8px 28px rgba(255, 85, 0, 0.42), 0 2px 6px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 28px rgba(229, 56, 107, 0.42), 0 2px 6px rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.2);
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .letterboxd-btn:hover {
       background: #E54B00;
       transform: translateY(-2px);
-      box-shadow: 0 12px 34px rgba(255, 85, 0, 0.6);
+      box-shadow: 0 12px 34px rgba(229, 56, 107, 0.6);
     }
 
     /* =============================================================
@@ -334,7 +336,7 @@
       border-radius: 50%;
       display: inline-block;
       vertical-align: middle;
-      box-shadow: 0 2px 8px rgba(255, 85, 0, 0.4);
+      box-shadow: 0 2px 8px rgba(229, 56, 107, 0.4);
       transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .trending-eyebrow-container:hover .mono-circle-badge-img {
@@ -372,7 +374,7 @@
       position: relative;
       border-radius: 8px;
       overflow: hidden;
-      background: #1C2228;
+      background: #1C1E20;
       border: 1.5px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
       aspect-ratio: 2 / 3;
@@ -380,8 +382,8 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .trending-item-card:hover .trending-poster-box {
-      border-color: var(--mono-orange);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 18px rgba(255, 85, 0, 0.35);
+      border-color: #E5386B;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 18px rgba(229, 56, 107, 0.35);
     }
 
     .trending-poster-box img {
@@ -440,7 +442,7 @@
       content: "";
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(ellipse at 50% -20%, rgba(255,85,0,0.06), transparent 60%);
+      background: radial-gradient(ellipse at 50% -20%, rgba(229, 56, 107,0.06), transparent 60%);
       pointer-events: none;
     }
 
@@ -449,7 +451,7 @@
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: var(--mono-orange);
+      color: #E5386B;
       margin-bottom: 36px;
       text-align: center;
     }
@@ -487,9 +489,9 @@
     }
     .feature-box:hover {
       background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(255, 85, 0, 0.3);
+      border-color: rgba(229, 56, 107, 0.3);
       transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.4), 0 0 30px rgba(255, 85, 0, 0.1);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4), 0 0 30px rgba(229, 56, 107, 0.1);
     }
     .feature-box:hover::after {
       opacity: 1;
@@ -499,9 +501,9 @@
       width: 42px;
       height: 42px;
       border-radius: 12px;
-      background: rgba(255, 85, 0, 0.1);
-      border: 1px solid rgba(255, 85, 0, 0.2);
-      color: var(--mono-orange);
+      background: rgba(229, 56, 107, 0.1);
+      border: 1px solid rgba(229, 56, 107, 0.2);
+      color: #E5386B;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -509,10 +511,10 @@
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .feature-box:hover .feature-icon-wrap {
-      background: var(--mono-orange);
+      background: #E5386B;
       color: #FFFFFF;
       transform: scale(1.15) rotate(5deg);
-      box-shadow: 0 10px 20px rgba(255, 85, 0, 0.4);
+      box-shadow: 0 10px 20px rgba(229, 56, 107, 0.4);
     }
 
     .section-eyebrow {
@@ -542,18 +544,18 @@
     }
     .feature-box:hover {
       background: #26262B;
-      border-color: var(--mono-orange);
+      border-color: #E5386B;
       transform: translateY(-4px);
-      box-shadow: 0 14px 30px -6px rgba(0, 0, 0, 0.6), 0 0 18px rgba(255, 85, 0, 0.2);
+      box-shadow: 0 14px 30px -6px rgba(0, 0, 0, 0.6), 0 0 18px rgba(229, 56, 107, 0.2);
     }
 
     .feature-icon-wrap {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      background: rgba(255, 85, 0, 0.12);
-      border: 1px solid rgba(255, 85, 0, 0.25);
-      color: var(--mono-orange);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(229, 56, 107, 0.12);
+      border: 1px solid rgba(229, 56, 107, 0.25);
+      color: #E5386B;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -561,7 +563,7 @@
       transition: all 0.2s ease;
     }
     .feature-box:hover .feature-icon-wrap {
-      background: var(--mono-orange);
+      background: #E5386B;
       color: #FFFFFF;
       transform: scale(1.08) rotate(4deg);
     }
@@ -591,36 +593,37 @@
     }
 
     .bento-archive-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: 240px;
-      gap: 20px;
+      column-count: 3;
+      column-gap: 20px;
       margin-top: 48px;
     }
     @media (max-width: 960px) {
-      .bento-archive-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px; }
+      .bento-archive-grid { column-count: 2; }
     }
     @media (max-width: 600px) {
-      .bento-archive-grid { grid-template-columns: 1fr; grid-auto-rows: 200px; }
-      .bento-archive-card.large, .bento-archive-card.wide, .bento-archive-card.tall { grid-column: span 1; grid-row: span 1; }
+      .bento-archive-grid { column-count: 1; }
     }
 
     .bento-archive-card {
       position: relative;
-      border-radius: 24px;
+      border-radius: 20px;
       overflow: hidden;
       background: #101012;
       border: 1px solid rgba(255,255,255,0.06);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+      margin-bottom: 20px;
+      display: inline-block;
+      width: 100%;
     }
     .bento-archive-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      border-color: rgba(255, 85, 0, 0.4);
+      border-color: rgba(229, 56, 107, 0.4);
     }
-    .bento-archive-card.large { grid-column: span 2; grid-row: span 2; }
-    .bento-archive-card.wide { grid-column: span 2; grid-row: span 1; }
-    .bento-archive-card.tall { grid-column: span 1; grid-row: span 2; }
+    .bento-archive-card.tall { aspect-ratio: 2 / 3; }
+    .bento-archive-card.square { aspect-ratio: 1 / 1; }
+    .bento-archive-card.wide { aspect-ratio: 4 / 3; }
+    .bento-archive-card.large { aspect-ratio: 3 / 4; }
 
     .bento-bg-img {
       width: 100%;
@@ -644,7 +647,7 @@
     .bento-tag {
       font-size: 11px;
       font-weight: 900;
-      color: var(--mono-orange);
+      color: #E5386B;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       margin-bottom: 8px;
@@ -669,7 +672,7 @@
     .top-archive-section {
       padding: 88px 0 100px;
       background: #18181A;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: none;
       position: relative;
     }
 
@@ -689,7 +692,7 @@
       transition: all 0.25s ease;
     }
     .top-item-card:hover {
-      border-color: var(--mono-orange);
+      border-color: #E5386B;
       transform: translateY(-4px);
     }
     .top-item-card img {
@@ -727,7 +730,7 @@
     .top-score-text {
       font-size: 11px;
       font-weight: 800;
-      color: var(--mono-orange);
+      color: #E5386B;
     }
 
     /* Third row progressive blur */
@@ -757,8 +760,8 @@
       position: relative;
       height: 360px;
       background: #222224;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: none;
+      border-bottom: none !important;
       overflow: hidden;
     }
 
@@ -780,7 +783,8 @@
         display: none;
       }
     }
-  </style>
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+    </style>
 </head>
 <body>
 
@@ -802,14 +806,12 @@
       <div class="mono-container mono-nav-inner">
         
         <!-- Official Möno Wordmark Logo (White with Orange Dots) -->
-        <a href="/" class="mono-brand-logo-lb" style="text-decoration:none;">
-          <span class="mono-brand-logo">m<span class="umlaut-wrap">o<span class="umlaut-dots"><span></span><span></span></span></span>no</span>
+        <a href="/" class="mono-brand-logo-lb" style="text-decoration:none; display:inline-flex; align-items:center;">
+          <img src="/images/logo.png" alt="Möno" style="height: 20px; width: auto; display: block; object-fit: contain;">
         </a>
 
         <!-- Navigation Menu Links -->
         <nav class="mono-nav-menu">
-          <a href="/login" class="mono-nav-item">Sign In</a>
-          <a href="/register" class="mono-nav-item highlight-link">Create Account</a>
           <a href="/anime" class="mono-nav-item">Films</a>
           <a href="/series" class="mono-nav-item">Series</a>
           <a href="/top100" class="mono-nav-item">Top 100</a>
@@ -820,13 +822,17 @@
             <input type="text" placeholder="Search...">
           </div>
         </nav>
+        <div style="display:flex; gap:22px; align-items:center;">
+          <a href="/login" class="mono-nav-item">Sign In</a>
+          <a href="/register" class="mono-nav-item highlight-link">Create Account</a>
+        </div>
 
       </div>
     </header>
 
     <!-- Backdrop Image with Letterboxd Radial & Edge Vignette -->
     <div class="hero-backdrop-container">
-      <img src="https://s4.anilist.co/file/anilistcdn/media/anime/banner/32-q0GkEnP9nI4e.jpg" alt="Evangelion Banner" class="hero-backdrop-img">
+      <img src="https://s4.anilist.co/file/anilistcdn/media/anime/banner/n32-BH9yHJBQqeOa.jpg" alt="Evangelion Banner" class="hero-backdrop-img" style="opacity: 0.85;">
     </div>
 
     <!-- Center Direct Typography & CTA (Directly on Image) -->
@@ -850,75 +856,26 @@
       
       <!-- Eyebrow with the 2 MÖNO circle badges -->
       <div class="trending-eyebrow-container">
-        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--mono-orange); box-shadow:0 0 10px var(--mono-orange);"></span>
+        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background: #E5386B; box-shadow:0 0 10px var(--mono-orange);"></span>
         <span class="trending-eyebrow-text">The 6 most watched anime across the platform right now</span>
-        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--mono-orange); box-shadow:0 0 10px var(--mono-orange);"></span>
+        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background: #E5386B; box-shadow:0 0 10px var(--mono-orange);"></span>
       </div>
 
-      <!-- 6 Trending Season Posters -->
+      <!-- Trending Season Posters (Dynamic) -->
       <div class="trending-grid-6">
-        
-        <!-- 1. ONE PIECE -->
-        <a href="/anime/one-piece" class="trending-item-card">
-          <div class="trending-poster-box">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg" alt="ONE PIECE" loading="lazy">
-          </div>
-          <div class="trending-title-row">
-            <div class="airing-dot-blue"></div>
-            <div class="trending-anime-title">ONE PIECE</div>
-          </div>
-        </a>
-
-        <!-- 2. Mushoku Tensei Season 3 -->
-        <a href="/anime/mushoku-tensei-jobless-reincarnation" class="trending-item-card">
-          <div class="trending-poster-box">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx178789-hNXjKFzUq7mk.jpg" alt="Mushoku Tensei" loading="lazy">
-          </div>
-          <div class="trending-title-row">
-            <div class="trending-anime-title">Mushoku Tensei: Jobless Reincarnation Season 3</div>
-          </div>
-        </a>
-
-        <!-- 3. THE GHOST IN THE SHELL -->
-        <a href="/anime/ghost-in-the-shell" class="trending-item-card">
-          <div class="trending-poster-box">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx177699-hnzc1CS5ZSM2.png" alt="THE GHOST IN THE SHELL" loading="lazy">
-          </div>
-          <div class="trending-title-row">
-            <div class="trending-anime-title">THE GHOST IN THE SHELL</div>
-          </div>
-        </a>
-
-        <!-- 4. I Want to Love You Till Your Dying Day -->
-        <a href="/anime/kimi-ga-shinu-made" class="trending-item-card">
-          <div class="trending-poster-box">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx187260-WW5RBa5NINRP.jpg" alt="I Want to Love You Till Your Dying Day" loading="lazy">
-          </div>
-          <div class="trending-title-row">
-            <div class="trending-anime-title">I Want to Love You Till Your Dying Day</div>
-          </div>
-        </a>
-
-        <!-- 5. Young Ladies Don't Play Fighting Games -->
-        <a href="/anime/taiari-deshita" class="trending-item-card">
-          <div class="trending-poster-box">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx128757-Iqc6hTjEYIz4.png" alt="Young Ladies Don't Play Fighting Games" loading="lazy">
-          </div>
-          <div class="trending-title-row">
-            <div class="trending-anime-title">Young Ladies Don't Play Fighting Games</div>
-          </div>
-        </a>
-
-        <!-- 6. The Oblivious Saint Can't Contain Her Power -->
-        <a href="/anime/oblivious-saint" class="trending-item-card">
-          <div class="trending-poster-box">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx196219-imvC0rbk4VzH.jpg" alt="The Oblivious Saint" loading="lazy">
-          </div>
-          <div class="trending-title-row">
-            <div class="trending-anime-title">The Oblivious Saint Can't Contain Her Power</div>
-          </div>
-        </a>
-
+        <% if (typeof trendingAnime !== 'undefined') { %>
+          <% trendingAnime.forEach(a => { %>
+          <a href="/anime/<%= a.slug %>" class="trending-item-card">
+            <div class="trending-poster-box">
+              <img src="<%= a.cover_image %>" alt="<%= a.title %>" loading="lazy">
+            </div>
+            <div class="trending-title-row">
+              <% if (a.airing_status === 'RELEASING') { %><div class="airing-dot-blue"></div><% } %>
+              <div class="trending-anime-title"><%= a.title %></div>
+            </div>
+          </a>
+          <% }); %>
+        <% } %>
       </div>
 
     </div>
@@ -1008,7 +965,7 @@
     <div class="mono-container reveal-on-scroll">
       
       <div style="text-align: center; max-width: 900px; margin: 0 auto;">
-        <div class="section-eyebrow-center" style="margin-bottom:12px;">THE SWEET SPOT</div>
+        <div class="section-eyebrow-center" style="margin-bottom:12px;">MÖNO LISTS</div>
         <h2 style="font-size: clamp(20px, 3.2vw, 42px); font-weight: 900; letter-spacing: -1px; color: #FFFFFF; margin-bottom: 12px; white-space: nowrap;">
           The depth of an archive. The soul of a film diary.
         </h2>
@@ -1019,19 +976,19 @@
 
       <div class="bento-archive-grid">
         
-        <!-- Bento 1: Texhnolyze (Large 2x2) -->
-        <div class="bento-archive-card large reveal-scale delay-1">
-          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx26-Hj8F5YxL1YQk.png" alt="Texhnolyze">
+        <!-- Bento 1: Texhnolyze (Tall) -->
+        <div class="bento-archive-card tall reveal-scale delay-1">
+          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx26-ADSztyHBNO39.jpg" alt="Texhnolyze">
           <div class="bento-content">
             <span class="bento-tag">The Diary</span>
             <h3 class="bento-title">Log Your Evolution</h3>
-            <p class="bento-desc">Chronicle your watch history in an elegant timeline, discovering hidden gems.</p>
+            <p class="bento-desc">Chronicle your watch history in an elegant timeline.</p>
           </div>
         </div>
 
-        <!-- Bento 2: Serial Experiments Lain (Wide 2x1) -->
-        <div class="bento-archive-card wide reveal-scale delay-2">
-          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx339-RYvtHndWkI6i.png" alt="Serial Experiments Lain">
+        <!-- Bento 2: Serial Experiments Lain (Wide) -->
+        <div class="bento-archive-card tall reveal-scale delay-2">
+          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx339-xF2wp1NQuQ4r.png" alt="Serial Experiments Lain">
           <div class="bento-content">
             <span class="bento-tag">The Archive</span>
             <h3 class="bento-title" style="font-size:18px;">Precision Ratings</h3>
@@ -1039,19 +996,19 @@
           </div>
         </div>
 
-        <!-- Bento 3: Ergo Proxy (Tall 1x2) -->
-        <div class="bento-archive-card tall reveal-scale delay-3">
-          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx790-F2X0c1i1W5a4.png" alt="Ergo Proxy">
+        <!-- Bento 5: Perfect Blue (Large) -->
+        <div class="bento-archive-card large reveal-scale delay-1">
+          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx437-69NMlXKFeuse.jpg" alt="Perfect Blue">
           <div class="bento-content">
-            <span class="bento-tag">Social Engine</span>
-            <h3 class="bento-title" style="font-size:18px;">Ad-Free</h3>
-            <p class="bento-desc">No algorithms, just raw aesthetic.</p>
+            <span class="bento-tag">Community</span>
+            <h3 class="bento-title" style="font-size:18px;">Deep Discussions</h3>
+            <p class="bento-desc">Share your perspectives with cinephiles.</p>
           </div>
         </div>
 
-        <!-- Bento 4: Haibane Renmei (Normal 1x1) -->
-        <div class="bento-archive-card reveal-scale delay-1">
-          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx387-o3sD6iAOSB8M.jpg" alt="Haibane Renmei">
+        <!-- Bento 3: Haibane Renmei (Square) -->
+        <div class="bento-archive-card square reveal-scale delay-3">
+          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx387-dS4aJivu0zPB.png" alt="Haibane Renmei">
           <div class="bento-content">
             <span class="bento-tag">Lists</span>
             <h3 class="bento-title" style="font-size:18px;">Curate</h3>
@@ -1059,13 +1016,23 @@
           </div>
         </div>
 
-        <!-- Bento 5: Paranoia Agent (Normal 1x1) -->
-        <div class="bento-archive-card reveal-scale delay-2">
-          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx323-y3rF75X8w6Zq.png" alt="Paranoia Agent">
+        <!-- Bento 4: Paranoia Agent (Square) -->
+        <div class="bento-archive-card square reveal-scale delay-1">
+          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx323-ZGkUcJOn4ngy.png" alt="Paranoia Agent">
           <div class="bento-content">
             <span class="bento-tag">Reviews</span>
             <h3 class="bento-title" style="font-size:18px;">Insights</h3>
-            <p class="bento-desc">Spoiler-safe.</p>
+            <p class="bento-desc">Spoiler-safe discussions.</p>
+          </div>
+        </div>
+
+        <!-- Bento 6: FLCL (Wide) -->
+        <div class="bento-archive-card wide reveal-scale delay-2">
+          <img class="bento-bg-img" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx227-qOB9ZhVvNnqO.jpg" alt="FLCL">
+          <div class="bento-content">
+            <span class="bento-tag">Stats</span>
+            <h3 class="bento-title" style="font-size:18px;">Your Taste</h3>
+            <p class="bento-desc">Analyze your viewing habits.</p>
           </div>
         </div>
 
@@ -1080,7 +1047,7 @@
       <div style="text-align: center; max-width: 600px; margin: 0 auto 48px;">
         <div class="section-eyebrow">THE CANON</div>
         <h2 style="font-size: clamp(28px, 3.4vw, 42px); font-weight: 900; letter-spacing: -1.2px; color: #FFFFFF; margin-bottom: 10px;">
-          Top <span style="color:var(--mono-orange);">50</span> All-Time Masterpieces
+          Top <span style="color: #E5386B;">50</span> All Time Animes
         </h2>
         <p style="font-size: 14px; color: #8C98A4;">
           The highest-rated animated achievements as ranked by the global community.
@@ -1089,143 +1056,24 @@
 
       <div class="top-anime-grid-5">
         
-        <!-- Row 1 (1 - 5) -->
-        <div class="top-item-card">
-          <span class="top-rank-badge">#1</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg" alt="Frieren" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Frieren: Beyond Journey's End</div>
-            <div class="top-score-text">4.9 ★ · 2023</div>
-          </div>
-        </div>
-
-        <div class="top-item-card">
-          <span class="top-rank-badge">#2</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5114-1m0XvggCyv1b.jpg" alt="Fullmetal Alchemist" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Fullmetal Alchemist: Brotherhood</div>
-            <div class="top-score-text">4.9 ★ · 2009</div>
-          </div>
-        </div>
-
-        <div class="top-item-card">
-          <span class="top-rank-badge">#3</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx9253-159Nf4d96ZqX.jpg" alt="Steins;Gate" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Steins;Gate</div>
-            <div class="top-score-text">4.9 ★ · 2011</div>
-          </div>
-        </div>
-
-        <div class="top-item-card">
-          <span class="top-rank-badge">#4</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-buvcRTBx4NSm.jpg" alt="Attack on Titan" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Attack on Titan</div>
-            <div class="top-score-text">4.9 ★ · 2013</div>
-          </div>
-        </div>
-
-        <div class="top-item-card">
-          <span class="top-rank-badge">#5</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx31-3zRThtzQH62E.png" alt="Evangelion" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Neon Genesis Evangelion</div>
-            <div class="top-score-text">4.9 ★ · 1995</div>
-          </div>
-        </div>
-
-        <!-- Row 2 (6 - 10) -->
-        <div class="top-item-card">
-          <span class="top-rank-badge">#6</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101348-2fhDFPCuMNiz.jpg" alt="Vinland Saga" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Vinland Saga</div>
-            <div class="top-score-text">4.8 ★ · 2019</div>
-          </div>
-        </div>
-
-        <div class="top-item-card">
-          <span class="top-rank-badge">#7</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx19-gK5q098Nx5N1.png" alt="Monster" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Monster</div>
-            <div class="top-score-text">4.8 ★ · 2004</div>
-          </div>
-        </div>
-
-        <div class="top-item-card">
-          <span class="top-rank-badge">#8</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1535-kUgkcrfOrkUM.jpg" alt="Death Note" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Death Note</div>
-            <div class="top-score-text">4.8 ★ · 2006</div>
-          </div>
-        </div>
-
-        <div class="top-item-card">
-          <span class="top-rank-badge">#9</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21827-ubzq619ZA2E9.png" alt="Violet Evergarden" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Violet Evergarden</div>
-            <div class="top-score-text">4.7 ★ · 2018</div>
-          </div>
-        </div>
-
-        <div class="top-item-card">
-          <span class="top-rank-badge">#10</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-y5gsT1hoHuHw.png" alt="Hunter x Hunter" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Hunter x Hunter (2011)</div>
-            <div class="top-score-text">4.8 ★ · 2011</div>
-          </div>
-        </div>
-
-        <!-- Row 3 (11 - 15) with progressive blur -->
-        <div class="top-item-card row-blur-11">
-          <span class="top-rank-badge">#11</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx199-sWefXJvXkDOb.jpg" alt="Spirited Away" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Spirited Away</div>
-            <div class="top-score-text">4.8 ★ · 2001</div>
-          </div>
-        </div>
-
-        <div class="top-item-card row-blur-12">
-          <span class="top-rank-badge">#12</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx164-ySuGzCWVw2cL.jpg" alt="Princess Mononoke" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Princess Mononoke</div>
-            <div class="top-score-text">4.8 ★ · 1997</div>
-          </div>
-        </div>
-
-        <div class="top-item-card row-blur-13">
-          <span class="top-rank-badge">#13</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-GCsPm7waJ4kS.png" alt="Cowboy Bebop" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Cowboy Bebop</div>
-            <div class="top-score-text">4.8 ★ · 1998</div>
-          </div>
-        </div>
-
-        <div class="top-item-card row-blur-14">
-          <span class="top-rank-badge">#14</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97986-TQ7dCgbS3y5s.jpg" alt="Made in Abyss" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Made in Abyss</div>
-            <div class="top-score-text">4.7 ★ · 2017</div>
-          </div>
-        </div>
-
-        <div class="top-item-card row-blur-15">
-          <span class="top-rank-badge">#15</span>
-          <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2001-XwRnjzGeFWRQ.png" alt="Gurren Lagann" loading="lazy">
-          <div class="top-meta-info">
-            <div class="top-title-text">Gurren Lagann</div>
-            <div class="top-score-text">4.7 ★ · 2007</div>
-          </div>
-        </div>
+        <% if (typeof topAnime !== 'undefined') { %>
+          <% topAnime.forEach((a, index) => { %>
+            <% 
+              let blurClass = '';
+              if (index >= 10) {
+                blurClass = `row-blur-${index + 1}`;
+              }
+            %>
+            <div class="top-item-card <%= blurClass %>">
+              <span class="top-rank-badge">#<%= index + 1 %></span>
+              <img src="<%= a.cover_image %>" alt="<%= a.title %>" loading="lazy">
+              <div class="top-meta-info">
+                <div class="top-title-text"><%= a.title %></div>
+                <div class="top-score-text"><%= a.score ? a.score + ' ★' : '- ★' %> · <%= a.release_year || 'N/A' %></div>
+              </div>
+            </div>
+          <% }); %>
+        <% } %>
 
         <!-- FADE OVERLAY PAYWALL -->
         <div class="top-fade-paywall-overlay">
@@ -1245,19 +1093,230 @@
     </div>
   </section>
 
-  <!-- AMBIENT SCROLL PHYSICS CANVAS -->
-  <section class="ambient-physics-flow" id="physicsContainer">
-    <canvas id="physicsCanvas" class="mono-physics-canvas"></canvas>
-    <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 5; pointer-events: none;">
-      <span style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255, 255, 255, 0.4);">✦ INTERACTIVE AMBIENT TOKENS — DRAG & FLING ANY BALL ✦</span>
+  <!-- UNIQUE SEAMLESS ANIMATED ORANGE BUBBLE CTA SECTION -->
+  <section class="sec-landing-cta" style="position:relative; width:100%; padding: 110px 0 90px; overflow:hidden; background: transparent;">
+    <!-- Animated Solid Orange Floating Bubbles (Positioned Safely Inside Padding) -->
+    <div class="cta-bubble-bg">
+      <div class="orange-bubble b1"></div>
+      <div class="orange-bubble b2"></div>
+      <div class="orange-bubble b3"></div>
+      <div class="orange-bubble b4"></div>
+    </div>
+
+    <div class="mono-container" style="position:relative; z-index:10; text-align:center;">
+      <div class="cta-content-inner">
+        <div class="cta-badge">
+          <span class="cta-dot"></span>
+          <span>✦ MÖNO CINEPHILE COMMUNITY</span>
+        </div>
+
+        <h2 class="cta-headline">
+          Join the global diary for anime fans.<br>
+          <span>Track, review & curate your universe.</span>
+        </h2>
+
+        <p class="cta-subtext">
+          Keep track of what you've watched. Discover films, series & OVA gems. Create custom lists. Never lose a recommendation again.
+        </p>
+
+        <div class="cta-actions">
+          <a href="/register" class="cta-btn-primary">
+            <span>Start Your Diary →</span>
+          </a>
+          <a href="/anime" class="cta-btn-secondary">
+            <span>Explore Archive</span>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- UNIFIED FOOTER -->
-  <%- include('partials/footer') %>
+  <style>
+  .sec-landing-cta {
+      background: transparent !important; /* Same dark color as landing page background */
+  }
 
-  <!-- Scripts -->
-  <script src="/js/mono-physics.js"></script>
+  /* Background Animated Bubbles Container Across Full Section Width */
+  .cta-bubble-bg {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+  }
+
+  /* Solid Orange Circles / Bubbles with Full Opacity */
+  .orange-bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: #E5386B;
+      opacity: 1 !important;
+      box-shadow: 0 14px 40px rgba(229, 56, 107, 0.55), inset 0 -4px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Bubble 1: Top Left Large (Fixed inside section padding so it never overflows top) */
+  .orange-bubble.b1 {
+      width: 130px;
+      height: 130px;
+      top: 40px;
+      left: 4%;
+      animation: floatMove1 7.5s ease-in-out infinite alternate;
+  }
+
+  /* Bubble 2: Bottom Right Huge */
+  .orange-bubble.b2 {
+      width: 160px;
+      height: 160px;
+      bottom: 20px;
+      right: 5%;
+      animation: floatMove2 9.5s ease-in-out infinite alternate;
+  }
+
+  /* Bubble 3: Top Right Medium */
+  .orange-bubble.b3 {
+      width: 95px;
+      height: 95px;
+      top: 50px;
+      right: 9%;
+      animation: floatMove3 6.5s ease-in-out infinite alternate;
+  }
+
+  /* Bubble 4: Bottom Left Medium */
+  .orange-bubble.b4 {
+      width: 105px;
+      height: 105px;
+      bottom: 30px;
+      left: 8%;
+      animation: floatMove4 8.5s ease-in-out infinite alternate;
+  }
+
+  /* Keyframe Animations for Living, Morphing & Floating Outer Orange Bubbles */
+  @keyframes floatMove1 {
+      0% { transform: translateY(0px) scale(1) rotate(0deg); }
+      50% { transform: translateY(24px) scale(1.18) rotate(10deg); }
+      100% { transform: translateY(-16px) scale(0.9) rotate(-10deg); }
+  }
+
+  @keyframes floatMove2 {
+      0% { transform: translateY(0px) scale(1) rotate(0deg); }
+      50% { transform: translateY(-28px) scale(1.2) rotate(-15deg); }
+      100% { transform: translateY(20px) scale(0.92) rotate(15deg); }
+  }
+
+  @keyframes floatMove3 {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-20px, 28px) scale(1.22); }
+      100% { transform: translate(16px, -16px) scale(0.85); }
+  }
+
+  @keyframes floatMove4 {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(28px, -24px) scale(1.18); }
+      100% { transform: translate(-16px, 16px) scale(0.88); }
+  }
+
+  /* Content Container Over Bubbles */
+  .cta-content-inner {
+      position: relative;
+      z-index: 10;
+      max-width: 720px;
+      margin: 0 auto;
+  }
+
+  .cta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border-radius: 20px;
+      background: rgba(229, 56, 107, 0.12);
+      border: 1px solid rgba(229, 56, 107, 0.3);
+      color: #E5386B;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      margin-bottom: 22px;
+  }
+
+  .cta-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #E5386B;
+      box-shadow: 0 0 8px #E5386B;
+      animation: blinkDot 1.5s ease-in-out infinite;
+  }
+
+  @keyframes blinkDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .cta-headline {
+      font-size: clamp(32px, 4.4vw, 46px);
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.2;
+      margin: 0 0 18px 0;
+      letter-spacing: -0.8px;
+  }
+  .cta-headline span {
+      color: var(--mono-orange, #E5386B);
+  }
+
+  .cta-subtext {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #9E9E9E;
+      margin: 0 0 34px 0;
+  }
+
+  .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+  }
+
+  .cta-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 38px;
+      border-radius: 30px;
+      background: #E5386B;
+      color: #FFFFFF;
+      font-size: 15px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(229, 56, 107, 0.5);
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .cta-btn-primary:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 14px 38px rgba(229, 56, 107, 0.7);
+      background: #E54B00;
+  }
+
+  .cta-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      padding: 15px 30px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+  }
+  .cta-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+  }
+  </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Ambient Physics initialization

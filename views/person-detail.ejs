@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= staff.name.full %> — Voice Actor & Staff Archive — Möno</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .person-page-wrap {
+            max-width: 1120px;
+            margin: 40px auto 80px;
+            padding: 0 24px;
+        }
+
+        .person-hero-grid {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 36px;
+            margin-bottom: 48px;
+            background: #16181A;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .person-img-box {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+            aspect-ratio: 3 / 4;
+        }
+        .person-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .person-meta-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .person-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--blue);
+            background: rgba(139, 124, 255, 0.12);
+            border: 1px solid rgba(139, 124, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            width: fit-content;
+            margin-bottom: 14px;
+        }
+
+        .person-name-title {
+            font-size: 36px;
+            font-weight: 900;
+            color: #FFFFFF;
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+        .person-name-native {
+            font-size: 18px;
+            color: var(--muted);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .person-stats-pills {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .person-pill {
+            font-size: 12px;
+            font-weight: 700;
+            color: #CAD2D9;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .person-bio {
+            font-size: 14.5px;
+            line-height: 1.65;
+            color: #CAD2D9;
+            margin-top: 4px;
+        }
+
+        /* Roles Grid */
+        .sec-title-bar {
+            font-size: 20px;
+            font-weight: 900;
+            color: #FFFFFF;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sec-title-bar::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: var(--blue);
+            border-radius: 2px;
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .role-card {
+            display: flex;
+            background: #1C2228;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .role-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(139, 124, 255, 0.4);
+        }
+
+        .role-anime-cover {
+            width: 95px;
+            height: 135px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .role-anime-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .role-info {
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+        }
+
+        .role-anime-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #FFFFFF;
+            text-decoration: none;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+        .role-anime-title:hover {
+            color: var(--blue);
+        }
+
+        .role-meta-row {
+            font-size: 11.5px;
+            color: var(--muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .role-type-badge {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #FFF;
+        }
+
+        .char-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            text-decoration: none;
+        }
+        .char-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .char-name {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #CAD2D9;
+            transition: color 0.15s ease;
+        }
+        .char-row:hover .char-name {
+            color: var(--blue);
+        }
+
+        @media (max-width: 768px) {
+            .person-hero-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .person-img-box {
+                max-width: 200px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <%- include('partials/nav') %>
+
+    <main class="person-page-wrap">
+        
+        <!-- STAFF / PERSON HERO HEADER -->
+        <div class="person-hero-grid">
+            <div class="person-img-box">
+                <img src="<%= staff.image.large %>" alt="<%= staff.name.full %>">
+            </div>
+
+            <div class="person-meta-content">
+                <div class="person-badge">✦ VOICE ACTOR & STAFF ARCHIVE</div>
+                <h1 class="person-name-title"><%= staff.name.full %></h1>
+                <% if (staff.name.native) { %>
+                    <div class="person-name-native"><%= staff.name.native %></div>
+                <% } %>
+
+                <div class="person-stats-pills">
+                    <% if (staff.primaryOccupations && staff.primaryOccupations.length > 0) { %>
+                        <% staff.primaryOccupations.forEach(occ => { %>
+                            <div class="person-pill" style="color:var(--blue); font-weight:800; border-color:rgba(139,124,255,0.3);">
+                                <%= occ %>
+                            </div>
+                        <% }); %>
+                    <% } %>
+                    <% if (staff.favourites) { %>
+                        <div class="person-pill">
+                            ★ <%= staff.favourites.toLocaleString() %> Favourites
+                        </div>
+                    <% } %>
+                    <% if (staff.homeTown) { %>
+                        <div class="person-pill">Hometown: <%= staff.homeTown %></div>
+                    <% } %>
+                </div>
+
+                <% 
+                    const rawBio = staff.description ? staff.description.replace(/<[^>]*>?/gm, '') : 'No official biography available for this staff member.';
+                    const isLongBio = rawBio.length > 400;
+                    const shortBio = isLongBio ? rawBio.slice(0, 400) + '...' : rawBio;
+                %>
+
+                <p id="person-bio-text" class="person-bio"><%= shortBio %></p>
+                <% if (isLongBio) { %>
+                    <button type="button" id="btn-toggle-bio" onclick="toggleBio()" style="background:none; border:none; color:var(--blue); font-size:12.5px; font-weight:700; cursor:pointer; padding:6px 0 0 0; text-align:left;">Read full bio →</button>
+                    <script>
+                        const fullBioStr = <%- JSON.stringify(rawBio) %>;
+                        const shortBioStr = <%- JSON.stringify(shortBio) %>;
+                        let bioExpanded = false;
+                        function toggleBio() {
+                            const p = document.getElementById('person-bio-text');
+                            const btn = document.getElementById('btn-toggle-bio');
+                            if (!bioExpanded) {
+                                p.textContent = fullBioStr;
+                                btn.textContent = 'Show less ←';
+                                bioExpanded = true;
+                            } else {
+                                p.textContent = shortBioStr;
+                                btn.textContent = 'Read full bio →';
+                                bioExpanded = false;
+                            }
+                        }
+                    </script>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- ROLES & CREDITS -->
+        <h2 class="sec-title-bar">Voiced Roles & Anime Credits</h2>
+
+        <div class="roles-grid">
+            <% if (staff.characterMedia && staff.characterMedia.edges && staff.characterMedia.edges.length > 0) { %>
+                <% staff.characterMedia.edges.forEach(edge => { %>
+                    <% const animeNode = edge.node; %>
+                    <% const character = (edge.characters && edge.characters[0]) ? edge.characters[0] : null; %>
+                    
+                    <div class="role-card">
+                        <div class="role-anime-cover">
+                            <img src="<%= animeNode.coverImage.large %>" alt="<%= animeNode.title.english || animeNode.title.romaji %>">
+                        </div>
+
+                        <div class="role-info">
+                            <div>
+                                <a href="/anime/<%= (animeNode.title.english || animeNode.title.romaji).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') %>" class="role-anime-title">
+                                    <%= animeNode.title.english || animeNode.title.romaji %>
+                                </a>
+                                <div class="role-meta-row">
+                                    <span class="role-type-badge"><%= edge.characterRole || 'MAIN' %></span>
+                                    <span><%= (animeNode.startDate && animeNode.startDate.year) ? animeNode.startDate.year : '' %></span>
+                                </div>
+                            </div>
+
+                            <% if (character) { %>
+                                <a href="/character/<%= character.id %>" class="char-row" title="Voiced Character">
+                                    <img src="<%= character.image.medium %>" class="char-avatar" alt="<%= character.name.full %>">
+                                    <span class="char-name"><%= character.name.full %></span>
+                                </a>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p style="color:var(--muted); font-size:14px;">No voice roles or logged credits found.</p>
+            <% } %>
+        </div>
+
+    </main>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>

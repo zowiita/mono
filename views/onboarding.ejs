@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Welcome to MÖNO</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+body { font-family: "Satoshi", sans-serif; background: #14181C; color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: 20px; }
+.ob-wrap { width: 100%; max-width: 800px; text-align: center; }
+.ob-title { font-size: 36px; font-weight: 900; letter-spacing: -1px; margin-bottom: 12px; }
+.ob-desc { font-size: 16px; color: var(--muted); margin-bottom: 40px; line-height: 1.5; }
+.ob-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; margin-bottom: 40px; }
+.ob-card { position: relative; aspect-ratio: 2/3; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s; }
+.ob-card img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.2s; }
+.ob-card.selected { border-color: var(--orange); transform: scale(0.95); }
+.ob-card.selected img { opacity: 0.5; filter: grayscale(100%); }
+.ob-check { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.ob-card.selected .ob-check { opacity: 1; }
+.ob-check svg { width: 20px; height: 20px; stroke: #FFF; stroke-width: 3; fill: none; }
+.ob-btn { display: inline-flex; background: var(--orange); color: #FFF; border: none; padding: 16px 32px; border-radius: 9999px; font-size: 16px; font-weight: 800; cursor: pointer; transition: background 0.2s; opacity: 0.5; pointer-events: none; }
+.ob-btn.active { opacity: 1; pointer-events: auto; }
+.ob-btn.active:hover { background: #E54B00; }
+</style>
+</head>
+<body>
+    <div class="ob-wrap">
+        <h1 class="ob-title">Welcome to MÖNO.</h1>
+        <p class="ob-desc">Let's build your profile. Select at least <strong>3 animes</strong> you've watched.</p>
+        
+        <div class="ob-grid" id="obGrid">
+            <% popularAnimes.forEach(anime => { %>
+                <div class="ob-card" data-id="<%= anime.id %>" onclick="toggleSelection(this)">
+                    <img src="<%= anime.cover_image %>" alt="Cover">
+                    <div class="ob-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
+            <% }); %>
+        </div>
+
+        <button class="ob-btn" id="obFinishBtn" onclick="finishOnboarding()">Continue to Dashboard →</button>
+    </div>
+
+    <script>
+        let selectedIds = new Set();
+        
+        function toggleSelection(card) {
+            const id = card.getAttribute('data-id');
+            if (selectedIds.has(id)) {
+                selectedIds.delete(id);
+                card.classList.remove('selected');
+            } else {
+                selectedIds.add(id);
+                card.classList.add('selected');
+            }
+            
+            const btn = document.getElementById('obFinishBtn');
+            if (selectedIds.size >= 3) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+
+        async function finishOnboarding() {
+            if (selectedIds.size < 3) return;
+            const idsArray = Array.from(selectedIds);
+            try {
+                const res = await fetch('/api/onboarding/complete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ animeIds: idsArray })
+                });
+                if (res.ok) {
+                    window.location.href = '/';
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+</html>

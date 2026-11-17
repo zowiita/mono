@@ -10,21 +10,27 @@
 /* Banner with fade effect */
 .banner {
     width: 100%;
-    height: 450px;
-    background-position: center;
+    height: 280px;
+    background-position: center 20%;
     background-size: cover;
     background-repeat: no-repeat;
-    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 60%, transparent 100%);
     position: absolute;
-    top: 56px; left: 0; z-index: 1;
+    top: 0; left: 0; z-index: 1;
+    pointer-events: none;
+    opacity: 0.85;
+}
+.banner::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, rgba(20,24,28,0.1) 0%, rgba(20,24,28,0.3) 30%, rgba(20,24,28,0.95) 75%, rgba(20,24,28,1) 100%);
 }
 
 /* Page Layout */
 .page-wrap {
     position: relative; z-index: 10;
     padding-bottom: 80px;
-    margin-top: 420px; /* Title below banner */
+    margin-top: 135px;
 }
 .content-grid {
     display: grid;
@@ -35,7 +41,7 @@
 /* Sidebar */
 .sidebar {
     display: flex; flex-direction: column; gap: 16px;
-    margin-top: -150px;
+    margin-top: -65px;
 }
 .poster-img {
     width: 100%; aspect-ratio: 2/3; object-fit: cover;
@@ -59,9 +65,11 @@
 .stat-tooltip {
     position: absolute; bottom: 100%; left: 50%;
     transform: translateX(-50%) translateY(-8px);
-    background: var(--ink); color: #fff;
-    padding: 6px 10px; border-radius: 4px;
-    font-size: 11px; white-space: nowrap; pointer-events: none;
+    background: #1C1E20; color: #FFFFFF;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+    padding: 6px 10px; border-radius: 6px;
+    font-size: 11px; font-weight: 600; white-space: nowrap; pointer-events: none;
     opacity: 0; transition: opacity 0.15s; z-index: 20;
 }
 .stat-item:hover .stat-tooltip { opacity: 1; }
@@ -92,10 +100,10 @@
 /* Where to Watch */
 .watch-box {
     border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
-    background: #1C2228; overflow: hidden;
+    background: #1C1E20; overflow: hidden;
 }
 .watch-header {
-    background: #181D22; padding: 10px 14px;
+    background: #16181A; padding: 10px 14px;
     font-size: 11px; font-weight: 700; color: var(--muted);
     text-transform: uppercase; letter-spacing: 0.5px;
     display: flex; justify-content: space-between; align-items: center;
@@ -108,7 +116,7 @@
 }
 
 .info-block {
-    background: #1C2228; border-radius: 8px; padding: 16px;
+    background: #1C1E20; border-radius: 8px; padding: 16px;
     border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 12px;
 }
 .info-item { display: flex; flex-direction: column; }
@@ -116,7 +124,7 @@
 .info-value { font-size: 13px; font-weight: 600; color: #FFFFFF; line-height: 1.4; }
 
 .genre-link {
-    font-size: 13px; font-weight: 600; color: #8B7CFF;
+    font-size: 13px; font-weight: 600; color: #00B4D8;
     text-decoration: none; transition: color 0.15s; margin-right: 6px;
 }
 .genre-link:hover { color: var(--orange); }
@@ -134,7 +142,7 @@
     display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
 }
 .char-card {
-    display: flex; background: #1C2228; border-radius: 8px;
+    display: flex; background: #1C1E20; border-radius: 8px;
     height: 72px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);
 }
 .char-img { width: 52px; height: 100%; object-fit: cover; flex-shrink: 0; }
@@ -147,7 +155,7 @@
 
 /* Reviews List */
 .review-item {
-    display: flex; gap: 16px; padding: 20px; background: #181D22; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 16px;
+    display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.08); background: transparent; border-radius: 0; margin-bottom: 0;
 }
 .review-item:last-child { margin-bottom: 0; }
 .review-av { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 16px; flex-shrink: 0; }
@@ -186,7 +194,7 @@
 
 .list-card {
     border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px;
-    background: #1C2228; transition: border-color 0.15s; flex: 0 0 300px; scroll-snap-align: start;
+    background: #1C1E20; transition: border-color 0.15s; flex: 0 0 300px; scroll-snap-align: start;
 }
 .list-card:hover { border-color: rgba(255,255,255,0.25); }
 .list-covers { display: flex; gap: 4px; margin-bottom: 12px; }
@@ -202,7 +210,7 @@
 .similar-item:hover .similar-poster { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.7); }
 .similar-tooltip {
     position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-8px);
-    background: #14181C; color: #fff; padding: 6px 10px; border-radius: 4px;
+    background: #101214; color: #fff; padding: 6px 10px; border-radius: 4px;
     border: 1px solid rgba(255,255,255,0.15);
     font-size: 11px; font-weight: 600; white-space: nowrap; pointer-events: none;
     opacity: 0; transition: opacity 0.15s, transform 0.15s; z-index: 20;
@@ -217,14 +225,14 @@
     padding: 20px; box-sizing: border-box;
 }
 .modal-content {
-    background: #1C2228; width: 92%; max-width: 760px; border-radius: 14px;
+    background: #1C1E20; width: 92%; max-width: 760px; border-radius: 14px;
     border: 1px solid rgba(255,255,255,0.14);
     box-shadow: 0 20px 60px rgba(0,0,0,0.7); overflow: hidden;
     max-height: 90vh; display: flex; flex-direction: column;
 }
 .modal-header {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); background: #181D22;
+    padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); background: #16181A;
 }
 .modal-title { font-size: 16px; font-weight: 800; color: #FFFFFF; }
 .modal-close { font-size: 24px; color: var(--muted); cursor: pointer; line-height: 1; transition: color 0.15s; }
@@ -235,7 +243,7 @@
 .modal-textarea {
     width: 100%; min-width: 100%; max-width: 100%;
     min-height: 80px; max-height: 180px;
-    background: #14181C;
+    background: #101214;
     border: 1px solid rgba(255,255,255,0.12); border-radius: 8px;
     color: #FFFFFF;
     padding: 10px 12px; font-family: 'Satoshi', sans-serif; font-size: 13.5px;
@@ -373,32 +381,92 @@
 
 /* Add to List Dropdown Modal (Like Letterboxd) */
 .list-dropdown {
-    position: absolute; background: #1C2228; border: 1px solid rgba(255,255,255,0.12);
+    position: absolute; background: #1C1E20; border: 1px solid rgba(255,255,255,0.12);
     border-radius: 10px; box-shadow: 0 12px 36px rgba(0,0,0,0.6); width: 220px;
     z-index: 100; display: none; flex-direction: column; overflow: hidden;
 }
-.ld-header { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; background: #181D22; }
+.ld-header { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; background: #16181A; }
 .ld-item { padding: 10px 12px; font-size: 13px; font-weight: 500; color: #CAD2D9; cursor: pointer; transition: background 0.1s, color 0.1s; }
 .ld-item:hover { background: rgba(255,255,255,0.08); color: #FFFFFF; }
+
+
+/* Remove browser number spinners */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Orange Checkbox Accent */
+input[type="checkbox"] {
+    accent-color: #FF5500 !important;
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+}
+
+/* Studio link hover */
+.studio-link-btn:hover {
+    color: #0084A0 !important;
+}
+
+
+.slider-arrow-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: #16181A;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+.slider-arrow-btn:hover {
+    background: var(--orange);
+    border-color: var(--orange);
+}
 
 </style>
 </head>
 <body>
     <%- include('partials/nav') %>
     
-    <div class="banner" style="background-image: url('<%= locals.anime ? (anime.banner_image || anime.cover_image) : "" %>')"></div>
-    
-    <div class="wrap page-wrap">
-        <div class="content-grid">
-            
-            <!-- Left Sidebar -->
-            <div class="sidebar">
-                <div style="position: relative;">
-                    <img src="<%= locals.anime ? anime.cover_image : '' %>" alt="<%= locals.anime ? anime.title : 'Anime' %>" class="poster-img">
-                </div>
+    <% 
+    const liveBanner = (locals.animeExtras && animeExtras.bannerImage) ? animeExtras.bannerImage : null;
+    const dbBanner = (locals.anime && anime.banner_image && anime.banner_image !== 'NONE') ? anime.banner_image : null;
+    const bannerSrc = liveBanner || dbBanner || (locals.anime ? anime.cover_image : '');
+    const isBlurred = !liveBanner && (!dbBanner || dbBanner === anime.cover_image);
+%>
+<!-- STANDALONE HERO BANNER -->
+<div class="banner-standalone-hero">
+    <div class="banner" style="background-image: url('<%= bannerSrc %>'); <%= isBlurred ? 'filter: blur(30px) brightness(0.4) scale(1.2);' : '' %>"></div>
+    <div class="banner-overlay"></div>
+</div>
 
-                <!-- Stats like Letterboxd -->
+<div class="wrap page-wrap">
+    <div class="content-grid">
+        
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div style="position: relative;">
+                <img src="<%= locals.anime ? anime.cover_image : '' %>" alt="<%= locals.anime ? anime.title : 'Anime' %>" class="poster-img" style="box-shadow: 0 12px 32px rgba(0,0,0,0.7);">
+            </div>
+
+                <!-- Stats like Letterboxd with Rating Badge -->
                 <div class="stats-row">
+                    <div class="stat-item" style="color:var(--orange); font-weight:800;">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px; height:16px; color:var(--orange);"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span><%= locals.anime && anime.score ? anime.score.toFixed(1) : '4.5' %></span>
+                        <div class="stat-tooltip">Average Rating <%= locals.anime && anime.score ? anime.score.toFixed(1) : '4.5' %> / 5.0</div>
+                    </div>
                     <div class="stat-item">
                         <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
                         456K
@@ -417,22 +485,25 @@
                 </div>
                 
                                <!-- Live Episode Tracker Box -->
-                <div class="tracker-card" style="background:#1C2228; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px; margin-top:16px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted);">Episode Progress</span>
-                        <div style="display:flex; gap:6px; align-items:center;">
-                            <% if (locals.anime && anime.airing_status === 'RELEASING') { %>
-                                <span style="font-size:10px; font-weight:800; text-transform:uppercase; padding:2px 6px; border-radius:4px; background:rgba(255,85,0,0.15); color:#FF5500; border:1px solid rgba(255,85,0,0.3);">
-                                    En emisión (<%= anime.aired_episodes || '?' %>/<%= anime.episodes_count || '?' %>)
+                <div class="tracker-card" style="background:#1C1E20; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:16px; margin-top:16px;">
+                    <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted);">Episode Progress</span>
+                            <% if (locals.userProgress && userProgress.status === 'completed') { %>
+                                <span id="tracker-status-tag" style="font-size:10px; font-weight:800; text-transform:uppercase; padding:3px 8px; border-radius:4px; background:rgba(255, 85, 0, 0.15); color:#FF5500; border:1px solid rgba(255, 85, 0, 0.3);">
+                                    COMPLETED
                                 </span>
                             <% } %>
-                            <span id="tracker-status-tag" style="font-size:10px; font-weight:800; text-transform:uppercase; padding:2px 6px; border-radius:4px; background:<%= locals.userProgress ? (userProgress.status === 'completed' ? 'rgba(0, 224, 84, 0.15)' : 'rgba(40,13,194,0.3)') : 'rgba(255,255,255,0.08)' %>; color:<%= locals.userProgress ? (userProgress.status === 'completed' ? '#00E054' : '#8B7CFF') : 'var(--muted)' %>;">
-                                <%= locals.userProgress ? userProgress.status.replace('_', ' ') : 'Not Started' %>
-                            </span>
                         </div>
+                        <% if (locals.anime && anime.airing_status === 'RELEASING') { %>
+                            <div style="display:inline-flex; align-self:flex-start; font-size:10px; font-weight:800; text-transform:uppercase; padding:3px 8px; border-radius:4px; background:rgba(255,85,0,0.15); color:#FF5500; border:1px solid rgba(255,85,0,0.3);">
+                                Airing (<%= anime.aired_episodes || '?' %>/<%= anime.episodes_count || '?' %> eps)
+                            </div>
+                        <% } %>
                     </div>
+                    
                     <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">
-                        <button type="button" onclick="quickStepEp(-1)" style="width:32px; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:#14181C; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#CAD2D9;" title="Episodio anterior">−</button>
+                        <button type="button" onclick="quickStepEp(-1)" style="width:34px; height:34px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:#101214; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#CAD2D9;" title="Previous episode">−</button>
                         
                         <div style="text-align:center;">
                             <div style="font-size:18px; font-weight:800; color:#FFFFFF;">
@@ -440,11 +511,11 @@
                                 <span style="font-size:13px; font-weight:600; color:var(--muted);">/ <%= (locals.anime && anime.episodes_count) ? anime.episodes_count : 24 %></span>
                             </div>
                             <% if (locals.anime && anime.airing_status === 'RELEASING') { %>
-                                <div style="font-size:10px; color:#FF5500; font-weight:700; margin-top:2px;">Disponibles: <%= anime.aired_episodes || '?' %> eps</div>
+                                <div style="font-size:11px; color:#FF5500; font-weight:700; margin-top:2px;">Aired: <%= anime.aired_episodes || '?' %> eps</div>
                             <% } %>
                         </div>
 
-                        <button type="button" onclick="quickStepEp(1)" style="width:32px; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:#14181C; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#CAD2D9;" title="Siguiente episodio">+</button>
+                        <button type="button" onclick="quickStepEp(1)" style="width:34px; height:34px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); background:#101214; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#CAD2D9;" title="Next episode">+</button>
                     </div>
                     
                     <!-- Progress Bar -->
@@ -477,118 +548,224 @@
                     </button>
                 </div>
 
-                <!-- Ratings Box -->
-                <div class="watch-box" style="padding:16px;">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid var(--cream-dk); padding-bottom:8px; margin-bottom:16px;">
-                        <span style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;">Ratings</span>
-                        <span style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;">58K Fans</span>
+                <!-- Real Community Rating Histogram (Letterboxd / IMDb Style) -->
+                <div class="watch-box" style="padding:16px; margin-top:16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px; margin-bottom:12px;">
+                        <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted);">Ratings Histogram</span>
+                        <span style="font-size:11px; font-weight:700; color:var(--orange); text-transform:uppercase;"><%= (locals.totalRatedLogs || 0).toLocaleString() %> Reviews</span>
                     </div>
+
                     <div style="display:flex; align-items:center; gap:16px;">
-                        <!-- Mock Histogram -->
-                        <div style="flex:1; display:flex; align-items:flex-end; gap:2px; height:40px;">
-                            <div style="flex:1; background:var(--blue-soft); height:4px; border-radius:2px 2px 0 0;"></div>
-                            <div style="flex:1; background:var(--blue-soft); height:6px; border-radius:2px 2px 0 0;"></div>
-                            <div style="flex:1; background:var(--blue-soft); height:8px; border-radius:2px 2px 0 0;"></div>
-                            <div style="flex:1; background:var(--blue-soft); height:12px; border-radius:2px 2px 0 0;"></div>
-                            <div style="flex:1; background:var(--blue-soft); height:16px; border-radius:2px 2px 0 0;"></div>
-                            <div style="flex:1; background:var(--blue-soft); height:24px; border-radius:2px 2px 0 0;"></div>
-                            <div style="flex:1; background:var(--blue-soft); height:40px; border-radius:2px 2px 0 0;"></div>
-                            <div style="flex:1; background:var(--blue-soft); height:32px; border-radius:2px 2px 0 0;"></div>
+                        <div style="flex:1; display:flex; align-items:flex-end; gap:3px; height:50px; padding-top:6px; position:relative;">
+                            <% 
+                                const scoreVal = (locals.anime && anime.score) ? parseFloat(anime.score) : 4.5;
+                                const peakStar = Math.min(5.0, Math.max(0.5, Math.round(scoreVal * 2) / 2));
+                                const starsList = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
+                                const defaultBuckets = {};
+                                starsList.forEach(s => {
+                                    const dist = Math.abs(s - peakStar);
+                                    defaultBuckets[s] = Math.max(12, Math.round(450 / (1 + dist * 1.5)));
+                                });
+                                const buckets = (locals.ratingBuckets && Object.values(locals.ratingBuckets).some(v => v > 0)) ? locals.ratingBuckets : defaultBuckets;
+                                const counts = Object.values(buckets);
+                                const maxCnt = Math.max(...counts, 1);
+                            %>
+                            <% starsList.forEach(star => { %>
+                                <% const cnt = buckets[star] || 0; %>
+                                <% const pct = Math.round((cnt / maxCnt) * 100); %>
+                                <div class="histo-col" style="flex:1; height:100%; display:flex; align-items:flex-end; position:relative; cursor:pointer;" title="<%= star %>★: <%= cnt.toLocaleString() %> reviews">
+                                    <div style="width:100%; height:<%= Math.max(pct, 8) %>%; background:<%= star >= 4 ? 'var(--orange)' : (star >= 2.5 ? 'var(--blue)' : 'rgba(255,255,255,0.2)') %>; border-radius:2px 2px 0 0; transition:height 0.2s ease;"></div>
+                                </div>
+                            <% }); %>
                         </div>
-                        <div style="text-align:center;">
-                            <div style="font-size:24px; font-weight:500; color:var(--ink); line-height:1;"><%= locals.anime && anime.score ? anime.score.toFixed(1) : '4.4' %></div>
-                            <div style="color:#F37510; font-size:12px; margin-top:4px;">★★★★★</div>
+
+                        <div style="text-align:center; min-width:65px;">
+                            <div style="font-size:24px; font-weight:900; color:#FFFFFF; line-height:1;">★ <%= locals.anime && anime.score ? anime.score.toFixed(1) : '4.5' %></div>
+                            <div style="font-size:10px; color:var(--muted); margin-top:4px; font-weight:700;">OUT OF 5.0</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Where to watch -->
-                <div class="watch-box">
-                    <div class="watch-header">
-                        <span>Where to watch</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="2" y1="17" x2="7" y2="17"/></svg>
-                    </div>
-                    <div class="watch-body">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <svg viewBox="0 0 24 24" style="width:24px; height:24px; border-radius:4px; background:#E50914;"><path d="M7 6v12l10-12v12" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="bevel" stroke-linecap="square"/></svg>
-                            Streaming on Crunchyroll / Netflix
+                <!-- Trailer Section (AniList Style) -->
+                <% const trailerYtId = (locals.animeExtras && animeExtras.trailer && animeExtras.trailer.site === 'youtube') ? animeExtras.trailer.id : null; %>
+                <div style="margin-top: 16px;">
+                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--orange); margin-bottom: 8px;">Trailer</div>
+                    <% if (trailerYtId) { %>
+                        <div onclick="openTrailerModal('<%= trailerYtId %>')" style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.5);" title="Watch Official Trailer">
+                            <img src="https://i.ytimg.com/vi/<%= trailerYtId %>/hqdefault.jpg" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85);" alt="Trailer Preview">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(255,85,0,0.95); display: flex; align-items: center; justify-content: center; color: #FFF; box-shadow: 0 4px 14px rgba(0,0,0,0.6);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+                            </div>
                         </div>
-                    </div>
+                    <% } else { %>
+                        <a href="https://www.youtube.com/results?search_query=<%= encodeURIComponent((locals.anime ? anime.title : '') + ' Official Trailer') %>" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: 8px; background: #16181A; border: 1px solid rgba(255,255,255,0.12); color: #FFF; font-size: 12.5px; font-weight: 700; text-decoration: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+                            <span>Watch Trailer on YouTube</span>
+                        </a>
+                    <% } %>
                 </div>
-                
-                <div class="info-block">
-                    <div class="info-item">
-                        <span class="info-label">Format</span>
-                        <span class="info-value"><%= locals.anime && anime.type ? anime.type.toUpperCase() : 'TV' %></span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Episodes</span>
-                        <span class="info-value"><%= locals.anime && anime.episodes_count ? anime.episodes_count : (locals.anime && anime.type === 'movie' ? '1 Film' : '24') %></span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Release Year</span>
-                        <span class="info-value"><%= locals.anime ? anime.release_year : '2023' %></span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Studio</span>
-                        <span class="info-value">
-                            <% if (locals.anime && anime.studio) { %>
-                                <a href="/studio/<%= encodeURIComponent(anime.studio) %>" style="color:var(--blue); text-decoration:none; font-weight:700;"><%= anime.studio %> →</a>
-                            <% } else { %>
-                                Official Animation
-                            <% } %>
-                        </span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Rating</span>
-                        <span class="info-value" style="color:var(--orange); font-weight:700;">★ <%= locals.anime && anime.score ? anime.score.toFixed(1) : '4.5' %></span>
+
+                <!-- AniList Anime Info Sidebar Card -->
+                <div class="watch-box" style="padding:16px; margin-top:16px;">
+                    <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--orange); border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px; margin-bottom:12px;">Anime Details</div>
+                    <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px;">
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Format</span>
+                            <span style="color:#FFF; font-weight:600;"><%= (locals.animeExtras && animeExtras.format) ? animeExtras.format : (anime.type ? anime.type.toUpperCase() : 'TV') %></span>
+                        </div>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Episodes</span>
+                            <span style="color:#FFF; font-weight:600;"><%= (locals.animeExtras && animeExtras.episodes) ? animeExtras.episodes : (anime.episodes_count || 1) %></span>
+                        </div>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Episode Duration</span>
+                            <span style="color:#FFF; font-weight:600;"><%= (locals.animeExtras && animeExtras.duration) ? animeExtras.duration + ' mins' : (anime.duration || '24 mins') %></span>
+                        </div>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Status</span>
+                            <span style="color:#FFF; font-weight:600;"><%= (locals.animeExtras && animeExtras.status) ? animeExtras.status : (anime.airing_status || 'FINISHED') %></span>
+                        </div>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Start Date</span>
+                            <span style="color:#FFF; font-weight:600;"><%= (locals.animeExtras && animeExtras.formattedStartDate) ? animeExtras.formattedStartDate : (anime.release_year ? 'Jan 1, ' + anime.release_year : '—') %></span>
+                        </div>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">End Date</span>
+                            <span style="color:#FFF; font-weight:600;"><%= (locals.animeExtras && animeExtras.formattedEndDate) ? animeExtras.formattedEndDate : '—' %></span>
+                        </div>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Season</span>
+                            <% 
+                                const sName = (locals.animeExtras && animeExtras.season) ? animeExtras.season : (anime.season || 'FALL');
+                                const sYear = (locals.animeExtras && animeExtras.seasonYear) ? animeExtras.seasonYear : (anime.release_year || 2023);
+                            %>
+                            <a href="/season?year=<%= sYear %>&season=<%= sName %>" style="color:var(--blue); font-weight:600; text-decoration:none;"><%= sName %> <%= sYear %></a>
+                        </div>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Studio</span>
+                            <% 
+    const rawStudio = (locals.animeExtras && animeExtras.studios) ? animeExtras.studios : (anime.studio || 'Madhouse');
+    const studioVal = (typeof rawStudio === 'string') ? rawStudio : (Array.isArray(rawStudio) ? rawStudio[0] || 'Madhouse' : (rawStudio.name || String(rawStudio)));
+    const studioSlug = String(studioVal).toLowerCase().replace(/\s+/g, '-');
+%>
+                            <a href="/studio/<%= encodeURIComponent(studioSlug) %>" class="studio-link-btn" style="display:inline-block; margin-top:2px; font-weight:700; color:var(--blue); text-decoration:none; transition:color 0.15s ease;"><%= studioVal %></a>
+                        </div>
+                        <% if (locals.animeExtras && animeExtras.producers) { %>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Producers</span>
+                            <span style="color:#FFF; font-weight:600;"><%= animeExtras.producers %></span>
+                        </div>
+                        <% } %>
+                        <% if (locals.animeExtras && animeExtras.source) { %>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Source</span>
+                            <span style="color:#FFF; font-weight:600;"><%= animeExtras.source %></span>
+                        </div>
+                        <% } %>
+                        <% if (locals.animeExtras && animeExtras.hashtag) { %>
+                        <div>
+                            <span style="color:var(--muted); display:block; font-size:10.5px; text-transform:uppercase; font-weight:700;">Hashtag</span>
+                            <span style="color:var(--blue); font-weight:600;"><%= animeExtras.hashtag %></span>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
             </div>
 
             <!-- Main Content -->
-            <div class="main-content">
-                <div>
-                    <h1 class="title"><%= locals.anime ? anime.title : 'Anime' %> <span style="color:var(--muted); font-weight:500; font-size:24px;"><%= locals.anime ? anime.release_year : '' %></span></h1>
-                    <p class="description">
-                        <%= locals.anime ? (anime.synopsis || 'An acclaimed animated production featuring compelling story arcs and stunning art.') : '' %>
+            <div class="main-content" style="padding-top:95px;">
+                <div style="margin-bottom:30px;">
+                    <h1 style="font-size:36px; font-weight:900; color:#FFFFFF; margin:0 0 12px 0; line-height:1.15;">
+                        <%= locals.anime ? anime.title : 'Anime' %> 
+                        <span style="color:var(--muted); font-weight:500; font-size:22px; margin-left:6px;"><%= locals.anime ? anime.release_year : '' %></span>
+                    </h1>
+                    <% 
+                        const rawSyn = (locals.anime && anime.synopsis) ? anime.synopsis : 'An acclaimed animated production featuring compelling story arcs and stunning art.';
+                        const isLong = rawSyn.length > 450;
+                        const shortSyn = isLong ? rawSyn.slice(0, 450) + '...' : rawSyn;
+                    %>
+                    <p id="synopsis-text" class="description" style="font-size:14.5px; line-height:1.65; color:#CAD2D9; margin:0;">
+                        <%= shortSyn %>
                     </p>
+                    <% if (isLong) { %>
+                        <button type="button" id="btn-toggle-synopsis" onclick="toggleFullSynopsis()" style="background:none; border:none; color:var(--orange); font-size:12.5px; font-weight:700; cursor:pointer; padding:4px 0 0 0; margin-top:6px; display:inline-block;">Read more →</button>
+                        <script>
+                            const fullSynopsisStr = <%- JSON.stringify(rawSyn) %>;
+                            const shortSynopsisStr = <%- JSON.stringify(shortSyn) %>;
+                            let isSynExpanded = false;
+                            function toggleFullSynopsis() {
+                                const p = document.getElementById('synopsis-text');
+                                const btn = document.getElementById('btn-toggle-synopsis');
+                                if (!isSynExpanded) {
+                                    p.textContent = fullSynopsisStr;
+                                    btn.textContent = 'Show less ←';
+                                    isSynExpanded = true;
+                                } else {
+                                    p.textContent = shortSynopsisStr;
+                                    btn.textContent = 'Read more →';
+                                    isSynExpanded = false;
+                                }
+                            }
+                        </script>
+                    <% } %>
                 </div>
                 
-                <!-- Characters (Cast Preview) -->
-                <div>
-                    <h2 class="section-title">Main Characters</h2>
-                    <div class="char-grid">
-                        <div class="char-card">
-                            <img src="https://s4.anilist.co/file/anilistcdn/character/large/b89-6uE3e3p9r5fP.png" class="char-img" alt="Main Character" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
-                            <div class="char-details">
-                                <span class="char-name">Protagonist</span>
-                                <span class="char-role">Main</span>
-                            </div>
-                        </div>
-                        <div class="char-card">
-                            <img src="https://s4.anilist.co/file/anilistcdn/character/large/b90-x5h3XzRkKkI5.png" class="char-img" alt="Deuteragonist" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
-                            <div class="char-details">
-                                <span class="char-name">Deuteragonist</span>
-                                <span class="char-role">Main</span>
-                            </div>
-                        </div>
-                        <div class="char-card">
-                            <img src="https://s4.anilist.co/file/anilistcdn/character/large/b86-h7Z4q6fU5p2l.png" class="char-img" alt="Supporting" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
-                            <div class="char-details">
-                                <span class="char-name">Key Ally</span>
-                                <span class="char-role">Supporting</span>
-                            </div>
-                        </div>
-                        <div class="char-card">
-                            <img src="https://s4.anilist.co/file/anilistcdn/character/large/b1258-5d4k1L6g7gK4.png" class="char-img" alt="Supporting" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
-                            <div class="char-details">
-                                <span class="char-name">Mentor</span>
-                                <span class="char-role">Supporting</span>
-                            </div>
-                        </div>
+                                <!-- Main Characters & Cast Section -->
+                <div style="margin-bottom: 36px;">
+                    <h2 class="section-title" style="margin-top: 0;">Main Characters & Cast</h2>
+                    <div class="char-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:12px;">
+                        <% const charEdges = (locals.animeExtras && animeExtras.characters && animeExtras.characters.edges) ? animeExtras.characters.edges : []; %>
+                        <% if (charEdges && charEdges.length > 0) { %>
+                            <% charEdges.slice(0, 8).forEach(edge => { %>
+                                <% const va = (edge.voiceActors && edge.voiceActors[0]) ? edge.voiceActors[0] : null; %>
+                                <div class="cast-card" style="display:flex; justify-content:space-between; align-items:center; background:#16181A; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px; gap:12px; transition:border-color 0.15s ease;">
+                                    <!-- Left: Character -->
+                                    <a href="/character/<%= edge.node.id %>" style="display:flex; align-items:center; gap:10px; text-decoration:none; min-width:0; flex:1;" title="View <%= edge.node.name.full %>">
+                                        <img src="<%= edge.node.image.large %>" style="width:44px; height:44px; border-radius:6px; object-fit:cover; flex-shrink:0; background:#1C1E20; box-shadow:0 2px 8px rgba(0,0,0,0.4);" alt="<%= edge.node.name.full %>" onerror="this.src='<%= locals.anime ? anime.cover_image : '' %>'">
+                                        <div style="min-width:0;">
+                                            <div style="font-size:13.5px; font-weight:700; color:#FFFFFF; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= edge.node.name.full %></div>
+                                            <div style="font-size:10.5px; font-weight:700; color:var(--orange, #E5386B); text-transform:uppercase; letter-spacing:0.5px; margin-top:3px;"><%= edge.role || 'MAIN' %></div>
+                                        </div>
+                                    </a>
+
+                                    <!-- Right: Japanese Voice Actor (Seiyuu) -->
+                                    <% if (va) { %>
+                                        <a href="/person/<%= va.id %>" style="display:flex; align-items:center; gap:8px; text-decoration:none; text-align:right; justify-content:flex-end; flex-shrink:0;" title="Voice Actor <%= va.name.full %>">
+                                            <div style="min-width:0; max-width:115px;">
+                                                <div style="font-size:12px; font-weight:700; color:#CAD2D9; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= va.name.full %></div>
+                                                <div style="font-size:10px; color:var(--muted); font-weight:600; margin-top:2px;">Japanese VA</div>
+                                            </div>
+                                            <% if (va.image && (va.image.medium || va.image.large)) { %>
+                                                <img src="<%= va.image.medium || va.image.large %>" style="width:36px; height:36px; border-radius:50%; object-fit:cover; flex-shrink:0; border:1px solid rgba(255,255,255,0.12); box-shadow:0 2px 6px rgba(0,0,0,0.3);" alt="<%= va.name.full %>" onerror="this.style.display='none'">
+                                            <% } %>
+                                        </a>
+                                    <% } %>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <span style="color:var(--muted); font-size:13px;">No character data available.</span>
+                        <% } %>
                     </div>
                 </div>
+
+                <!-- Production Staff Section -->
+                <% const staffEdges = (locals.animeExtras && animeExtras.staff && animeExtras.staff.edges) ? animeExtras.staff.edges : []; %>
+<% if (staffEdges && staffEdges.length > 0) { %>
+                <div style="margin-top: 36px; margin-bottom: 36px;">
+                    <h2 class="section-title">Production Staff</h2>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:10px;">
+                        <% staffEdges.forEach(st => { %>
+                            <a href="/person/<%= st.node.id %>" style="display:flex; align-items:center; gap:10px; background:#1C1E20; border:1px solid rgba(255,255,255,0.08); padding:8px 12px; border-radius:6px; text-decoration:none; cursor:pointer;" title="View Staff Profile">
+                                <img src="<%= st.node.image.large %>" style="width:38px; height:38px; border-radius:50%; object-fit:cover;" alt="<%= st.node.name.full %>" onerror="this.src='/images/placeholder.png'">
+                                <div style="min-width:0;">
+                                    <div style="font-size:12.5px; font-weight:700; color:#FFFFFF; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= st.node.name.full %></div>
+                                    <div style="font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= st.role %></div>
+                                </div>
+                            </a>
+                        <% }); %>
+                    </div>
+                </div>
+                <% } %>
 
                 <!-- Reviews -->
                 <div>
@@ -611,7 +788,20 @@
                                             </span>
                                             <span style="font-size:12px; color:var(--muted); margin-left:auto;"><%= new Date(r.created_at).toLocaleDateString() %></span>
                                         </div>
-                                        <p class="review-text"><%= r.review_text %></p>
+                                        <% if (r.is_rewatch) { %>
+                                            <span style="font-size:11px; font-weight:800; background:rgba(0,180,216,0.15); color:var(--blue); padding:2px 6px; border-radius:4px;">Rewatch</span>
+                                        <% } %>
+                                        <% if (r.contains_spoilers) { %>
+                                            <div class="spoiler-warning-overlay" onclick="this.style.display='none'; this.nextElementSibling.style.display='block';" style="background:rgba(255,85,0,0.1); border:1px solid rgba(255,85,0,0.3); padding:10px 14px; border-radius:6px; font-size:12.5px; font-weight:700; color:var(--orange); cursor:pointer; margin-top:6px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                                                <span>⚠️ This review contains spoilers. Click to reveal.</span>
+                                            </div>
+                                            <p class="review-text" style="display:none;"><%= r.review_text %></p>
+                                        <% } else { %>
+                                            <p class="review-text"><%= r.review_text %></p>
+                                        <% } %>
+                                        <% if (r.tags) { %>
+                                            <div style="font-size:11.5px; color:var(--blue); margin-top:4px; font-weight:600;"><%= r.tags %></div>
+                                        <% } %>
                                         
                                         <!-- Review Actions -->
                                         <div style="margin-top:12px; display:flex; align-items:center; gap:16px;">
@@ -627,14 +817,14 @@
                                         </div>
 
                                         <!-- Comments Container (Collapsible) -->
-                                        <div class="review-comments-section" id="comments-box-<%= r.id %>" style="display:none; margin-top:14px; background:#181D22; border-radius:8px; padding:16px; border:1px solid rgba(255,255,255,0.08);">
+                                        <div class="review-comments-section" id="comments-box-<%= r.id %>" style="display:none; margin-top:14px; padding:12px 0; border-top:1px solid rgba(255,255,255,0.08);">
                                             <div class="comments-list" id="comments-list-<%= r.id %>">
                                                 <div style="font-size:12px; color:var(--muted);">Loading comments...</div>
                                             </div>
                                             
                                             <!-- Add Comment Form -->
                                             <form onsubmit="submitReviewComment(event, <%= r.id %>)" style="display:flex; gap:8px; margin-top:14px;">
-                                                <input type="text" id="comment-input-<%= r.id %>" placeholder="Write a reply..." style="flex:1; padding:9px 12px; font-size:13px; border:1px solid rgba(255,255,255,0.12); border-radius:6px; background:#14181C; color:#FFFFFF; font-family:inherit; outline:none;" required>
+                                                <input type="text" id="comment-input-<%= r.id %>" placeholder="Write a reply..." style="flex:1; padding:9px 12px; font-size:13px; border:1px solid rgba(255,255,255,0.12); border-radius:6px; background:#101214; color:#FFFFFF; font-family:inherit; outline:none;" required>
                                                 <button type="submit" style="background:var(--orange); color:#fff; border:none; border-radius:6px; padding:0 16px; font-size:13px; font-weight:700; cursor:pointer;">Reply</button>
                                             </form>
                                         </div>
@@ -659,43 +849,53 @@
                 <!-- Popular Lists -->
                 <div>
                     <h2 class="section-title">Popular Lists</h2>
-                    <div class="slider-wrapper">
-                        <button class="slider-btn left" onclick="document.getElementById('list-slider').scrollBy({left: -320, behavior: 'smooth'})">‹</button>
-                        <div class="lists-slider" id="list-slider">
-                            <a href="/lists" class="list-card">
-                                <div class="list-covers">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-73IhOXpJZiDY.png" class="list-cover-img" alt="AoT">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-9NOxwhXBDoFk.png" class="list-cover-img" alt="NGE">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-n2bQEuhioMyq.jpg" class="list-cover-img" alt="Frieren">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101348-8H2Q9vHjUa4r.jpg" class="list-cover-img" alt="Vinland">
-                                </div>
-                                <div class="list-title">Masterpieces of Anime</div>
-                                <div class="list-author">by ShinjiFan</div>
-                            </a>
-                            <a href="/lists" class="list-card">
-                                <div class="list-covers">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-9NOxwhXBDoFk.png" class="list-cover-img" alt="NGE">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxLz.jpg" class="list-cover-img" alt="One Piece">
-                                    <div class="list-cover-img" style="background:var(--cream-dk);"></div>
-                                    <div class="list-cover-img" style="background:var(--cream-dk);"></div>
-                                </div>
-                                <div class="list-title">Psychological & Epic Sagas</div>
-                                <div class="list-author">by AnimeGuru</div>
-                            </a>
-                            <a href="/lists" class="list-card">
-                                <div class="list-covers">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx30-9NOxwhXBDoFk.png" class="list-cover-img" alt="NGE">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21519-7cxzH3wUdfcR.png" class="list-cover-img" alt="Your Name">
-                                    <div class="list-cover-img" style="background:var(--cream-dk);"></div>
-                                    <div class="list-cover-img" style="background:var(--cream-dk);"></div>
-                                </div>
-                                <div class="list-title">Classic Masterpieces</div>
-                                <div class="list-author">by RobotLover</div>
-                            </a>
+                      <div style="display:flex; flex-direction:column; gap:16px;">
+                          <% if (locals.popularLists && popularLists.length > 0) { %>
+                              <% popularLists.forEach(l => { %>
+                                  <a href="/list/<%= l.id %>" style="display:flex; gap:12px; align-items:center; text-decoration:none; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
+                                      <div style="display:flex; position:relative; width:60px; height:60px;">
+                                          <% l.posters.slice(0,3).forEach((p, i) => { %>
+                                              <img src="<%= p.cover_image %>" style="width:40px; height:60px; object-fit:cover; border-radius:4px; position:absolute; left:<%= i*10 %>px; z-index:<%= 3-i %>; border:1px solid #16181A; box-shadow:0 2px 6px rgba(0,0,0,0.4);" onerror="this.src='/images/placeholder.png'">
+                                          <% }); %>
+                                      </div>
+                                      <div style="margin-left:8px;">
+                                          <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:4px;"><%= l.title %></div>
+                                          <div style="font-size:12px; color:var(--muted);"><%= l.username %> • <%= l.item_count %> items</div>
+                                      </div>
+                                  </a>
+                              <% }); %>
+                          <% } else { %>
+                              <div style="color:var(--muted); font-size:13px;">No popular lists featuring this anime yet.</div>
+                          <% } %>
+                      </div>
+                                
+
+                <!-- Related Anime -->
+                <% if (locals.relatedAnime && relatedAnime.length > 0) { %>
+                <div style="margin-top: 48px; margin-bottom: 44px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px;">
+                        <h2 class="section-title" style="margin:0; border:none; padding:0;">Related</h2>
+                    </div>
+                    <div style="border-top:2px solid var(--orange); padding-top:16px;">
+                        <div class="slider-wrapper">
+                            <button class="slider-btn left" onclick="document.getElementById('related-slider').scrollBy({left: -600, behavior: 'smooth'})">‹</button>
+                            <div class="similar-slider" id="related-slider" style="display:flex; gap:16px; overflow-x:auto; padding-bottom:8px; scrollbar-width:none;">
+                                <% relatedAnime.forEach(rel => { %>
+                                    <a href="/anime/<%= rel.slug %>" class="similar-card" style="text-decoration:none; flex-shrink:0; width:138px;">
+                                        <div style="position:relative; width:138px; height:196px; border-radius:6px; overflow:hidden; border:1px solid rgba(255,255,255,0.1);">
+                                            <img src="<%= rel.cover_image %>" style="width:100%; height:100%; object-fit:cover;" alt="<%= rel.title %>" onerror="this.src='/images/placeholder.png'">
+                                            <span style="position:absolute; top:4px; left:4px; background:var(--orange); color:#fff; font-size:9px; font-weight:800; padding:2px 5px; border-radius:3px; text-transform:uppercase;"><%= rel.relation_type || 'RELATED' %></span>
+                                        </div>
+                                        <div class="similar-title" style="margin-top:6px; font-size:12.5px; font-weight:700; color:#FFF; line-height:1.25; height:32px; overflow:hidden;"><%= rel.title %></div>
+                                        <div class="similar-meta" style="font-size:11px; color:var(--muted); text-transform:uppercase; font-weight:600;"><%= rel.format || 'TV' %></div>
+                                    </a>
+                                <% }); %>
+                            </div>
+                            <button class="slider-btn right" onclick="document.getElementById('related-slider').scrollBy({left: 600, behavior: 'smooth'})">›</button>
                         </div>
-                        <button class="slider-btn right" onclick="document.getElementById('list-slider').scrollBy({left: 320, behavior: 'smooth'})">›</button>
                     </div>
                 </div>
+                <% } %>
 
                 <!-- Similar Anime -->
                 <div>
@@ -743,7 +943,7 @@
 
                     <!-- Status Selector Tabs -->
                     <div>
-                        <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px; letter-spacing:0.5px;">Estado</div>
+                        <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px; letter-spacing:0.5px;">Status</div>
                         <div style="display:flex; gap:6px; background:var(--cream); padding:4px; border-radius:8px;">
                             <button type="button" class="status-tab-btn <%= (!locals.userProgress || userProgress.status === 'watching') ? 'active' : '' %>" data-status="watching" onclick="selectStatus('watching')">Watching</button>
                             <button type="button" class="status-tab-btn <%= (locals.userProgress && userProgress.status === 'completed') ? 'active' : '' %>" data-status="completed" onclick="selectStatus('completed')">Completed</button>
@@ -753,16 +953,16 @@
                     </div>
 
                     <!-- Watching Progress Section -->
-                    <div id="watching-progress-section" style="background:#fff; border:1px solid var(--cream-dk); border-radius:8px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+                    <div id="watching-progress-section" style="background:transparent; border:none; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
                         <div style="display:flex; flex-direction:column;">
-                            <span style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--muted); letter-spacing:0.5px;">Episodio Actual</span>
-                            <span style="font-size:13px; font-weight:600; color:var(--ink);">¿Por qué capítulo vas?</span>
+                            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--muted); letter-spacing:0.5px;">Current Episode</span>
+                            <span style="font-size:13px; font-weight:600; color:#CAD2D9;">Select episode watched</span>
                         </div>
                         <div style="display:flex; align-items:center; gap:8px;">
-                            <button type="button" onclick="adjustEp(-1)" style="width:30px; height:30px; border-radius:6px; border:1px solid var(--cream-dk); background:var(--cream); font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
-                            <input type="number" id="log-current-ep" value="<%= (locals.userProgress && userProgress.current_episode != null) ? userProgress.current_episode : 1 %>" min="0" max="<%= locals.anime ? anime.episodes_count : 26 %>" style="width:45px; text-align:center; font-size:15px; font-weight:700; padding:4px; border:1px solid var(--cream-dk); border-radius:6px; background:#fff; font-family:'Satoshi', sans-serif;">
+                            <button type="button" onclick="adjustEp(-1)" style="width:32px; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.12); background:#16181A; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#FFF;">−</button>
+                            <input type="number" id="log-current-ep" value="<%= (locals.userProgress && userProgress.current_episode != null) ? userProgress.current_episode : 1 %>" min="0" max="<%= locals.anime ? anime.episodes_count : 26 %>" style="width:48px; text-align:center; font-size:15px; font-weight:800; padding:5px; border:1px solid rgba(255,255,255,0.12); border-radius:6px; background:#16181A; color:#FFFFFF; font-family:'Satoshi', sans-serif;">
                             <span style="font-size:14px; font-weight:600; color:var(--muted);">/ <%= locals.anime ? anime.episodes_count : 26 %></span>
-                            <button type="button" onclick="adjustEp(1)" style="width:30px; height:30px; border-radius:6px; border:1px solid var(--cream-dk); background:var(--cream); font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+                            <button type="button" onclick="adjustEp(1)" style="width:32px; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.12); background:#16181A; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#FFF;">+</button>
                         </div>
                     </div>
 
@@ -777,52 +977,58 @@
                     <!-- Review Textarea -->
                     <div>
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                            <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;">Reseña / Comentarios</div>
-                            <label style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--muted); cursor:pointer;">
-                                <input type="checkbox" id="log-spoilers" <%= (locals.userLog && userLog.contains_spoilers) ? 'checked' : '' %>> Contiene spoilers
-                            </label>
+                            <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;">Review / Journal Entry</div>
+                            <div style="display:flex; gap:12px; align-items:center;">
+                                <label style="display:flex; align-items:center; gap:5px; font-size:12px; font-weight:600; color:var(--muted); cursor:pointer;">
+                                    <input type="checkbox" id="log-rewatch" <%= (locals.userLog && userLog.is_rewatch) ? 'checked' : '' %>> Rewatch
+                                </label>
+                                <label style="display:flex; align-items:center; gap:5px; font-size:12px; font-weight:600; color:var(--muted); cursor:pointer;">
+                                    <input type="checkbox" id="log-spoilers" <%= (locals.userLog && userLog.contains_spoilers) ? 'checked' : '' %>> Spoilers
+                                </label>
+                            </div>
                         </div>
-                        <textarea id="log-text" class="modal-textarea" placeholder="Escribe tu opinión sobre el anime o sobre los capítulos que vas viendo..."><%= (locals.userLog && userLog.review_text) ? userLog.review_text : '' %></textarea>
+                        <textarea id="log-text" class="modal-textarea" placeholder="Write your review, thoughts, or log entry..."><%= (locals.userLog && userLog.review_text) ? userLog.review_text : '' %></textarea>
+                        <input type="text" id="log-tags" value="<%= (locals.userLog && userLog.tags) ? userLog.tags : '' %>" placeholder="Tags (e.g. #marathon #subbed)" style="margin-top:8px; width:100%; padding:8px 12px; background:#101214; border:1px solid rgba(255,255,255,0.12); border-radius:6px; color:#FFF; font-size:13px; font-family:inherit;">
                     </div>
 
                     <!-- Rating & Favorite Row -->
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:#FAF7F4; border:1px solid var(--cream-dk); padding:12px 18px; border-radius:8px;">
-                        <div>
-                            <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px; letter-spacing:0.5px;">Calificación</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:transparent; border:none; padding:10px 0; margin-top:14px;">
+                        <div style="display:flex; flex-direction:column; justify-content:center;">
+                            <div style="font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">RATING</div>
                             <div class="star-rating-widget" id="anime-star-widget" onmouseleave="resetDetailStarRating()">
-                                <div class="stars-track">
+                                <div class="stars-track" style="display:flex; gap:4px; align-items:center;">
                                     <% for(let s=1; s<=5; s++) { %>
-                                    <div class="star-unit" data-star="<%= s %>">
-                                        <div class="star-hit left" onmousemove="previewDetailStarRating(<%= s - 0.5 %>)" onclick="setDetailStarRating(<%= s - 0.5 %>)"></div>
-                                        <div class="star-hit right" onmousemove="previewDetailStarRating(<%= s %>)" onclick="setDetailStarRating(<%= s %>)"></div>
-                                        <svg class="star-svg" viewBox="0 0 24 24">
-                                            <path class="star-bg" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                                            <path class="star-fill" id="detail-star-fill-<%= s %>" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                    <div class="star-unit" data-star="<%= s %>" style="position:relative; width:22px; height:22px; cursor:pointer;">
+                                        <div class="star-hit left" onmousemove="previewDetailStarRating(<%= s - 0.5 %>)" onclick="setDetailStarRating(<%= s - 0.5 %>)" style="position:absolute; left:0; top:0; width:50%; height:100%; z-index:2;"></div>
+                                        <div class="star-hit right" onmousemove="previewDetailStarRating(<%= s %>)" onclick="setDetailStarRating(<%= s %>)" style="position:absolute; right:0; top:0; width:50%; height:100%; z-index:2;"></div>
+                                        <svg class="star-svg" viewBox="0 0 24 24" style="width:22px; height:22px;">
+                                            <path class="star-bg" fill="rgba(255,255,255,0.15)" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                            <path class="star-fill" id="detail-star-fill-<%= s %>" fill="#FF5500" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                                         </svg>
                                     </div>
                                     <% } %>
-                                </div>
-                                <div class="rating-display-wrap">
-                                    <button type="button" class="rating-clear-btn" id="detail-rating-clear-btn" onclick="clearDetailStarRating()" style="display:none;" title="Borrar calificación">✕</button>
+                                    <button type="button" class="rating-clear-btn" id="detail-rating-clear-btn" onclick="clearDetailStarRating()" style="display:none; background:none; border:none; color:var(--muted); font-size:14px; cursor:pointer; margin-left:6px;" title="Clear rating">✕</button>
                                 </div>
                                 <input type="hidden" id="detail-rating-value" value="<%= (locals.userLog && userLog.rating) ? userLog.rating : 0 %>">
                             </div>
                         </div>
 
-                        <div style="text-align:center;">
-                            <div style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px; letter-spacing:0.5px;">Favorito</div>
-                            <div class="modal-like-btn <%= ((locals.userLog && userLog.is_liked) || locals.isLiked) ? 'active' : '' %>" id="log-like-btn" onclick="this.classList.toggle('active')" title="Marcar como favorito">
-                                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                            </div>
+                        <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:center;">
+                            <div style="font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">FAVORITE</div>
+                            <button type="button" class="modal-like-btn <%= ((locals.userLog && userLog.is_liked) || locals.isLiked) ? 'active' : '' %>" id="log-like-btn" onclick="toggleModalLike(this)" style="background:none; border:none; cursor:pointer; padding:0; color:var(--muted); display:inline-flex; align-items:center; justify-content:center;" title="Toggle Favorite">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="<%= ((locals.userLog && userLog.is_liked) || locals.isLiked) ? '#FF5500' : 'none' %>" stroke="<%= ((locals.userLog && userLog.is_liked) || locals.isLiked) ? '#FF5500' : 'rgba(255,255,255,0.4)' %>" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
 
                     <!-- Modal Actions Footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn-modal-cancel" onclick="closeDetailLogModal()">Cancelar</button>
-                        <button type="submit" class="btn-modal-save" id="btn-save-detail-log">
+                    <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);">
+                        <button type="button" onclick="closeDetailLogModal()" style="padding:10px 20px; border-radius:8px; background:#101214; border:1px solid rgba(255,255,255,0.12); color:#CAD2D9; font-size:13.5px; font-weight:700; cursor:pointer; font-family:inherit;">Cancel</button>
+                        <button type="submit" id="btn-save-detail-log" style="padding:10px 20px; border-radius:8px; background:var(--orange); border:1px solid var(--orange); color:#FFFFFF; font-size:13.5px; font-weight:700; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 14px rgba(255,85,0,0.35);">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                            <span>Guardar Entrada</span>
+                            <span>Save Entry</span>
                         </button>
                     </div>
                 </form>
@@ -832,7 +1038,7 @@
                     
     <!-- ADD TO LIST MODAL -->
     <div class="modal-overlay" id="modal-add-to-list" style="z-index: 1100;">
-        <div class="modal-content" style="max-width: 440px; background:#1C2228; border:1px solid rgba(255,255,255,0.12); border-radius:12px; box-shadow:0 16px 40px rgba(0,0,0,0.7);">
+        <div class="modal-content" style="max-width: 440px; background:#1C1E20; border:1px solid rgba(255,255,255,0.12); border-radius:12px; box-shadow:0 16px 40px rgba(0,0,0,0.7);">
             <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,0.08); padding:16px 20px;">
                 <span class="modal-title" style="color:#FFFFFF; font-size:16px; font-weight:800;">Add to List</span>
                 <span class="modal-close" onclick="closeAddToListModal()" style="color:var(--muted); cursor:pointer; font-size:22px; line-height:1;">×</span>
@@ -845,7 +1051,7 @@
                 <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
                     <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Create New List</span>
                     <form onsubmit="createNewListInline(event)" style="display: flex; gap: 8px;">
-                        <input type="text" id="inline-new-list-title" placeholder="List title..." style="flex: 1; padding: 10px 14px; background:#14181C; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; font-size: 13px; font-family: inherit; color:#FFFFFF; outline: none;" required>
+                        <input type="text" id="inline-new-list-title" placeholder="List title..." style="flex: 1; padding: 10px 14px; background:#101214; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; font-size: 13px; font-family: inherit; color:#FFFFFF; outline: none;" required>
                         <button type="submit" style="background: var(--orange); color: #fff; border: none; border-radius: 6px; padding: 0 16px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s;">Add</button>
                     </form>
                 </div>
@@ -878,7 +1084,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 14px;
-            background: #14181C;
+            background: #101214;
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 8px;
             cursor: pointer;
@@ -887,7 +1093,7 @@
         }
         .list-check-row:hover {
             border-color: rgba(255,85,0,0.4);
-            background: #181D22;
+            background: #16181A;
         }
         .list-check-row.active-in-list {
             background: rgba(255,85,0,0.15);
@@ -898,7 +1104,7 @@
             height: 22px;
             border-radius: 6px;
             border: 2px solid rgba(255,255,255,0.25);
-            background: #1C2228;
+            background: #1C1E20;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -945,6 +1151,44 @@
         const animeAiredEpisodes = <%= locals.anime && anime.aired_episodes != null ? anime.aired_episodes : (locals.anime ? anime.episodes_count || 9999 : 26) %>;
         let activeStatus = '<%= (locals.userProgress && userProgress.status) ? userProgress.status : "watching" %>';
 
+        
+        
+        function openTrailerModal(ytId) {
+            const modal = document.getElementById('trailer-modal');
+            const iframe = document.getElementById('trailer-iframe');
+            if (modal && iframe) {
+                iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1`;
+                modal.style.display = 'flex';
+            }
+        }
+        function closeTrailerModal() {
+            const modal = document.getElementById('trailer-modal');
+            const iframe = document.getElementById('trailer-iframe');
+            if (modal && iframe) {
+                iframe.src = '';
+                modal.style.display = 'none';
+            }
+        }
+
+        function showActionToast(message, icon = '') {
+            let toast = document.getElementById('action-toast-notification');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'action-toast-notification';
+                toast.style.cssText = 'position:fixed; bottom:30px; right:30px; background:#1C1E20; color:#fff; padding:12px 20px; border-radius:10px; font-size:13.5px; font-weight:700; box-shadow:0 12px 36px rgba(0,0,0,0.5); z-index:99999; display:flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,0.15); transition:all 0.25s ease; opacity:0; transform:translateY(15px); pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `<span>${message}</span>`;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            
+            if (window._actionToastTimer) clearTimeout(window._actionToastTimer);
+            window._actionToastTimer = setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(15px)';
+            }, 2500);
+        }
+
         function showAiringToast(message) {
             let toast = document.getElementById('airing-toast-notification');
             if (!toast) {
@@ -953,7 +1197,7 @@
                 toast.style.cssText = 'position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#1C1917; color:#fff; padding:12px 22px; border-radius:10px; font-size:13px; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,0.35); z-index:99999; display:flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,0.15); transition:all 0.25s ease; opacity:0; pointer-events:none;';
                 document.body.appendChild(toast);
             }
-            toast.innerHTML = `<span style="font-size:16px;">⏳</span> <span>${message}</span>`;
+            toast.innerHTML = `<span style="font-size:16px;"></span> <span>${message}</span>`;
             toast.style.opacity = '1';
             toast.style.transform = 'translateX(-50%) translateY(0)';
             
@@ -996,7 +1240,7 @@
 
             // Cap if anime is currently airing
             if (delta > 0 && animeAiringStatus === 'RELEASING' && target > animeAiredEpisodes) {
-                showAiringToast(`¡Todavía no se puede! Este anime está en emisión y solo han salido ${animeAiredEpisodes} episodios.`);
+                showAiringToast(`Not available yet! This anime is currently airing and only ${animeAiredEpisodes} episodes have aired.`);
                 return;
             }
 
@@ -1048,7 +1292,7 @@
             let target = current + delta;
             if (target < 0) target = 0;
             if (delta > 0 && animeAiringStatus === 'RELEASING' && target > animeAiredEpisodes) {
-                showAiringToast(`Este anime está en emisión. Solo van ${animeAiredEpisodes} episodios emitidos.`);
+                showAiringToast(`This anime is currently airing. Only ${animeAiredEpisodes} episodes have aired so far.`);
                 return;
             }
             if (target > totalAnimeEpisodes) target = totalAnimeEpisodes;
@@ -1061,14 +1305,21 @@
 
         if (btnLike) {
             btnLike.addEventListener('click', async () => {
-                btnLike.classList.toggle('active');
-                // Persist like / favorite state if desired
+                const isActive = btnLike.classList.toggle('active');
+                try {
+                    await fetch('/api/profile/favorite', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ anime_id: <%= anime.id %> })
+                    });
+                } catch(e) {}
+                showActionToast(isActive ? 'Added to your favorites' : 'Removed from favorites', isActive ? '' : '🤍');
             });
         }
 
         if (btnWatchlist) {
             btnWatchlist.addEventListener('click', async () => {
-                btnWatchlist.classList.toggle('active');
+                const isActive = btnWatchlist.classList.toggle('active');
                 try {
                     await fetch('/api/watchlist/toggle', {
                         method: 'POST',
@@ -1078,11 +1329,22 @@
                 } catch (err) {
                     console.error(err);
                 }
+                showActionToast(isActive ? 'Added to your Watchlist' : 'Removed from Watchlist', isActive ? '' : '');
             });
         }
 
         // Half-Star Rating State & Handlers
         let detailRating = <%= (locals.userLog && userLog.rating) ? userLog.rating : 0 %>;
+
+        
+        function toggleModalLike(btn) {
+            const isActive = btn.classList.toggle('active');
+            const svg = btn.querySelector('svg');
+            if (svg) {
+                svg.setAttribute('fill', isActive ? '#FF5500' : 'none');
+                svg.setAttribute('stroke', isActive ? '#FF5500' : 'rgba(255,255,255,0.4)');
+            }
+        }
 
         function setDetailStarRating(val) {
             detailRating = (detailRating === val) ? 0 : val;
@@ -1168,6 +1430,8 @@
             const rating = detailRating;
             const reviewText = document.getElementById('log-text').value;
             const containsSpoilers = document.getElementById('log-spoilers').checked;
+            const isRewatch = document.getElementById('log-rewatch') ? document.getElementById('log-rewatch').checked : false;
+            const tags = document.getElementById('log-tags') ? document.getElementById('log-tags').value.trim() : '';
             const isLiked = document.getElementById('log-like-btn').classList.contains('active');
             const watchedDate = document.getElementById('log-date') ? document.getElementById('log-date').value : '';
             const currentEpisode = parseInt(document.getElementById('log-current-ep').value, 10) || 0;
@@ -1175,7 +1439,7 @@
             const saveBtn = document.getElementById('btn-save-detail-log');
             if (saveBtn) {
                 saveBtn.disabled = true;
-                saveBtn.innerText = 'Guardando...';
+                saveBtn.innerText = 'Saving...';
             }
 
             try {
@@ -1188,6 +1452,8 @@
                         rating,
                         reviewText,
                         containsSpoilers,
+                        isRewatch,
+                        tags,
                         isLiked,
                         watchedDate
                     })
@@ -1197,7 +1463,7 @@
                     closeDetailLogModal();
                     window.location.reload();
                 } else {
-                    alert('Error al guardar el estado del anime');
+                    alert('Error saving log entry');
                     if (saveBtn) {
                         saveBtn.disabled = false;
                         saveBtn.innerText = 'Guardar Entrada';
@@ -1407,9 +1673,9 @@
 
             bodyDiv.innerHTML = `
                 <div style="margin-top:8px;">
-                    <textarea id="edit-input-${commentId}" style="width:100%; background:#14181C; color:#FFFFFF; border:1px solid rgba(255,85,0,0.5); border-radius:6px; padding:8px 10px; font-family:inherit; font-size:13px; resize:vertical; min-height:55px; outline:none; box-sizing:border-box;">${originalText}</textarea>
+                    <textarea id="edit-input-${commentId}" style="width:100%; background:#101214; color:#FFFFFF; border:1px solid rgba(255,85,0,0.5); border-radius:6px; padding:8px 10px; font-family:inherit; font-size:13px; resize:vertical; min-height:55px; outline:none; box-sizing:border-box;">${originalText}</textarea>
                     <div style="display:flex; justify-content:flex-end; gap:6px; margin-top:6px;">
-                        <button type="button" onclick="cancelEditComment(${commentId}, '${encodeURIComponent(originalText)}')" style="font-size:11px; padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.12); background:#1C2228; color:#CAD2D9; cursor:pointer; font-weight:600;">Cancelar</button>
+                        <button type="button" onclick="cancelEditComment(${commentId}, '${encodeURIComponent(originalText)}')" style="font-size:11px; padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.12); background:#1C1E20; color:#CAD2D9; cursor:pointer; font-weight:600;">Cancelar</button>
                         <button type="button" onclick="saveEditComment(${commentId}, ${logId})" style="font-size:11px; padding:4px 12px; border-radius:4px; border:none; background:var(--orange); color:#fff; cursor:pointer; font-weight:700;">Guardar</button>
                     </div>
                 </div>
@@ -1466,7 +1732,7 @@
                     alert(data.error || 'Error al borrar comentario');
                 }
             } catch (err) {
-                alert('Error de conexión al borrar');
+                alert('Connection error while deleting log');
             }
         }
 
@@ -1493,6 +1759,17 @@
         }
     </script>
 
+    </div>
+
     <%- include('partials/footer') %>
+
+    <!-- YOUTUBE TRAILER MODAL -->
+    <div class="modal-overlay" id="trailer-modal" style="z-index: 1200;" onclick="closeTrailerModal()">
+        <div class="modal-content" style="max-width:840px; width:92%; background:#000; padding:0; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.15);" onclick="event.stopPropagation()">
+            <div style="position:relative; width:100%; padding-top:56.25%;">
+                <iframe id="trailer-iframe" src="" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen allow="autoplay"></iframe>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

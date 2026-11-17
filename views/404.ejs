@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Page Not Found — Möno</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .error-container {
+            min-height: 65vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .error-code {
+            font-size: 96px;
+            font-weight: 900;
+            color: var(--orange, #E5386B);
+            line-height: 1;
+            margin-bottom: 12px;
+            letter-spacing: -2px;
+        }
+        .error-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 12px;
+        }
+        .error-desc {
+            font-size: 15px;
+            color: var(--muted, #9B9593);
+            max-width: 480px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--orange, #E5386B);
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1C1E20;
+            color: #FFFFFF;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: border-color 0.2s ease;
+        }
+        .btn-secondary:hover {
+            border-color: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="wrap error-container">
+        <div class="error-code">404</div>
+        <h1 class="error-title">Lost in the Anime Multiverse</h1>
+        <p class="error-desc">The page, character, or record you are looking for does not exist or might have been relocated.</p>
+        <div class="error-actions">
+            <a href="/" class="btn-primary">Return Home</a>
+            <a href="/anime" class="btn-secondary">Browse Anime Catalog</a>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

@@ -11,7 +11,7 @@
   --bg-surface: #181D22;
   --bg-card: #1C2228;
   --orange: #FF5500;
-  --blue: #8B7CFF;
+  --blue: #00B4D8;
   --ink: #FFFFFF;
   --muted: #8C98A4;
   --text-dim: #CAD2D9;
@@ -65,6 +65,42 @@ body {
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.list-item-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: #20262D;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  gap: 16px;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.list-item-row:hover {
+  background: #262D35;
+}
+
+.sortable-ghost {
+  opacity: 0.4;
+  background: rgba(255, 85, 0, 0.1);
+  border: 1px dashed var(--orange);
+}
+
+.drag-handle {
+  cursor: grab;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+.drag-handle:active {
+  cursor: grabbing;
+}
+.list-item-row:hover .drag-handle {
+  color: #FFF;
 }
 
 .form-control {
@@ -280,10 +316,21 @@ textarea.form-control {
         </form>
     </div>
 
-    <%- include('partials/footer') %>
-
+    <%- include('partials/footer') %>    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script>
         let selectedAnime = [];
+
+        // Initialize Sortable
+        const grid = document.getElementById('selected-grid');
+        new Sortable(grid, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            onEnd: function (evt) {
+                const newOrderSlugs = Array.from(grid.children).map(el => el.getAttribute('data-slug'));
+                selectedAnime.sort((a, b) => newOrderSlugs.indexOf(a.slug) - newOrderSlugs.indexOf(b.slug));
+                renderSelected();
+            }
+        });
 
         async function handleSearch(query) {
             const dropdown = document.getElementById('search-dropdown');
@@ -293,8 +340,10 @@ textarea.form-control {
             }
 
             try {
-                const res = await fetch(`/api/search/anime?q=${encodeURIComponent(query)}`);
-                const items = await res.json();
+                // We use global search to fetch external anime as well
+                const res = await fetch(`/api/search/global?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                const items = data.anime || [];
 
                 if (items.length === 0) {
                     dropdown.innerHTML = '<div style="padding:12px; font-size:13px; color:var(--muted); text-align:center;">No anime found</div>';
@@ -307,7 +356,7 @@ textarea.form-control {
                         <img src="${a.cover_image}" alt="${a.title}">
                         <div>
                             <div style="font-size:14px; font-weight:700; color:#FFFFFF;">${a.title}</div>
-                            <div style="font-size:12px; color:var(--muted);">${a.release_year || ''} · ${a.studio || ''}</div>
+                            <div style="font-size:12px; color:var(--muted);">${a.year || ''} · ${a.studio || ''}</div>
                         </div>
                     </div>
                 `).join('');
@@ -332,14 +381,14 @@ textarea.form-control {
         }
 
         function renderSelected() {
-            const grid = document.getElementById('selected-grid');
             if (selectedAnime.length === 0) {
                 grid.innerHTML = '<div style="grid-column: 1 / -1; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px;">No anime added yet. Search above to add!</div>';
                 return;
             }
 
-            grid.innerHTML = selectedAnime.map(a => `
-                <div class="anime-item-card" title="${a.title}">
+            grid.innerHTML = selectedAnime.map((a, index) => `
+                <div class="anime-item-card" title="${a.title}" data-slug="${a.slug}" style="cursor: grab;">
+                    <div style="position:absolute; top:4px; left:4px; background:rgba(0,0,0,0.7); color:#fff; font-size:10px; padding:2px 6px; border-radius:4px; z-index:10;">${index + 1}</div>
                     <img src="${a.cover}" alt="${a.title}">
                     <button type="button" class="remove-btn" onclick="removeAnime('${a.slug}')">✕</button>
                 </div>
@@ -380,7 +429,8 @@ textarea.form-control {
                     alert('Error creating list');
                 }
             } catch (err) {
-                alert('Failed to save list.');
+                console.error(err);
+                alert('Error creating list');
             }
         }
     </script>

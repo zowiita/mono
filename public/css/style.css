@@ -1,56 +1,38 @@
 /* ==========================================================================
-   MÖNO DARK DESIGN SYSTEM & GLOBAL TOKENS (#222224 / #14181C)
+   MÖNO DARK DESIGN SYSTEM & GLOBAL TOKENS (#222224 / #101214)
    ========================================================================== */
 
 :root {
   /* Dark Canvas & Surfaces */
-  --bg-main: #222224;
-  --bg-surface: #181D22;
-  --bg-card: #1C2228;
-  --bg-card-hover: #242B33;
-  --bg-subtle: #14181C;
-  
+  --bg-main: #111315;
+  --bg-surface: #1C1E20;
+
   /* Backward Compatibility Tokens for Legacy Templates */
-  --white: #222224;
   --cream: rgba(255, 255, 255, 0.08);
   --cream-dk: rgba(255, 255, 255, 0.14);
-  --ink: #FFFFFF;
+  --ink: #F5F2E9;
   --muted: #8C98A4;
-  
+
   /* Brand Palette */
-  --blue: #280DC2;
-  --blue-hover: #1F089E;
-  --blue-light: #4A35EE;
-  --blue-soft: rgba(40, 13, 194, 0.25);
-  --blue-mid: rgba(74, 53, 238, 0.4);
-  
-  --orange: #FF5500;
-  --orange-hover: #E54B00;
+  --blue: #E04D75;
+  --blue-hover: #C93F65;
+  --blue-soft: rgba(139, 124, 255, 0.25);
+
+  --orange: #E5386B;
+  --orange-hover: #C92E5B;
   --orange-soft: rgba(255, 85, 0, 0.2);
-  
+
   /* Typography Scale */
-  --t-xs: 11px;
-  --t-sm: 13px;
   --t-base: 15px;
-  --t-md: 16px;
-  --t-lg: 20px;
   --t-xl: 28px;
-  --t-2xl: 38px;
-  
+
   /* Radii */
-  --r-xs: 4px;
   --r-sm: 6px;
   --r-md: 10px;
-  --r-lg: 14px;
+  --r-lg: 12px;
   --r-full: 9999px;
-  
-  /* Dark Shadows (Clean, No Glowing Halos) */
-  --sh-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
-  --sh-md: 0 6px 18px rgba(0, 0, 0, 0.5);
-  --sh-lg: 0 12px 36px rgba(0, 0, 0, 0.65);
-  --sh-blue: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --sh-orange: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --blue-pro: #00B4D8;
+
+  --blue-pro: #E04D75;
 }
 
 /* Global Reset */
@@ -69,7 +51,7 @@ html {
 body {
   font-family: "Satoshi", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: var(--bg-main);
-  color: #FFFFFF;
+  color: #111315;
   font-size: var(--t-base);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
@@ -267,9 +249,6 @@ img {
 
 /* AVATAR GRADIENTS */
 .g1 { background: linear-gradient(155deg, #0d1b2a, #1b3a5c, #2a6494); }
-.g2 { background: linear-gradient(155deg, #1a0608, #4a1018, #8b2030); }
-.g3 { background: linear-gradient(155deg, #1c1008, #3d2210, #6e3c18); }
-.g4 { background: linear-gradient(155deg, #080a1c, #14183c, #1e2862); }
 .av1 { background: linear-gradient(135deg, #280DC2, #5030D8); }
 
 /* ==========================================================================
@@ -285,7 +264,7 @@ img {
   top: calc(100% + 10px);
   right: 0;
   width: 175px;
-  background: #1C2228;
+  background: #1C1E20;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
@@ -390,7 +369,7 @@ img {
 /* Dark Pills & Toggles */
 .tog {
   display: inline-flex;
-  background: #181D22;
+  background: #16181A;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   padding: 3px;
@@ -421,7 +400,7 @@ input[type="password"],
 input[type="search"],
 textarea,
 select {
-  background: #181D22;
+  background: #16181A;
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #FFFFFF;
   border-radius: 8px;
@@ -438,7 +417,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 select option {
-  background: #181D22;
+  background: #16181A;
   color: #FFFFFF;
 }
 
@@ -458,17 +437,140 @@ select option {
   line-height: 1;
 }
 
-.patron-text-badge {
-  color: #38BDF8;
-  font-size: 11.5px;
-  font-weight: 900;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  display: inline-block;
-  vertical-align: middle;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  line-height: 1;
+
+/* NEW ARTISTIC BRAND BUTTON CONTRAST OVERRIDES */
+.btn-log, .btn-primary, .btn-orange, .mono-btn-primary, button[type="submit"].btn-primary, .btn-save-primary {
+    background-color: #E5386B !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    border: none !important;
+}
+
+.btn-log:hover, .btn-primary:hover, .btn-orange:hover, .mono-btn-primary:hover, .btn-save-primary:hover {
+    background-color: #C92E5B !important;
+    color: #FFFFFF !important;
+}
+
+.btn-log:hover, .btn-primary:hover, .btn-orange:hover, .mono-btn-primary:hover {
+    background-color: #C92E5B !important;
+    color: #101214 !important;
+}
+
+/* Magenta accents for ratings, badges and icons */
+.star-rating, .rating-star, .accent-magenta, .nav-notif-badge, .notif-badge {
+    color: #E04D75 !important;
+}
+
+.badge-magenta, .btn-magenta {
+    background-color: #E04D75 !important;
+    color: #FFFFFF !important;
+}
+
+
+/* Fix + Log button icon and text colors */
+.btn-log {
+    color: #FFFFFF !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+.btn-log .plus, .btn-log svg {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+    fill: none !important;
+}
+
+
+/* =============================================================
+   ROCK-SOLID CHARACTER CARD & RATING HISTOGRAM LAYOUT FIXES
+   ============================================================= */
+.char-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 14px !important;
+}
+
+.char-card {
+    display: flex !important;
+    align-items: center !important;
+    background: #16181A !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    height: 84px !important;
+    text-decoration: none !important;
+    transition: transform 0.2s ease, border-color 0.2s ease !important;
+}
+
+.char-card:hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(229, 56, 107, 0.4) !important;
+}
+
+.char-img {
+    width: 62px !important;
+    height: 84px !important;
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+    border-radius: 8px 0 0 8px !important;
+}
+
+.char-details {
+    padding: 10px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+}
+
+.char-name {
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+    color: #FFFFFF !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.char-role {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #8C98A4 !important;
+    text-transform: uppercase !important;
+    margin-top: 2px !important;
+}
+
+.va-link {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #E5386B !important;
+    margin-top: 4px !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* HISTOGRAM VERTICAL BARS */
+.hist-bar-container {
+    display: flex !important;
+    align-items: flex-end !important;
+    gap: 4px !important;
+    height: 54px !important;
+    margin-top: 12px !important;
+    padding-top: 8px !important;
+}
+
+.hist-bar-wrap {
+    flex: 1 !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: flex-end !important;
+}
+
+.hist-bar-fill {
+    width: 100% !important;
+    border-radius: 3px 3px 0 0 !important;
+    transition: height 0.3s ease !important;
 }

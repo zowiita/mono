@@ -13,12 +13,12 @@
   --bg-surface: #181D22;
   --bg-card: #1C2228;
   --orange: #FF5500;
-  --blue: #8B7CFF;
+  --blue: #00B4D8;
   --ink: #FFFFFF;
   --muted: #8C98A4;
   --text-dim: #CAD2D9;
   --green: #00E054;
-  --purple: #8B7CFF;
+  --purple: #00B4D8;
   --red: #FF4D4F;
   --amber: #FFB800;
 }
@@ -368,7 +368,27 @@ body {
 
         <!-- SECTION 1: WATCHING / VIENDO -->
         <% if (!locals.isWatchlistPage) { %>
-            <div class="status-group-section" id="section-watching" style="<%= (activeFilter !== 'all' && activeFilter !== 'watching') ? 'display:none;' : '' %>">
+            
+        <!-- WATCHLIST FORMAT & STATUS FILTER BAR -->
+        <div class="watchlist-filter-bar" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; background:#181D22; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:12px 16px; margin-top:20px; margin-bottom:24px;">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-right:4px;">Format:</span>
+                <a href="?format=all&status=<%= locals.activeStatusFilter || 'all' %>" style="padding:4px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; <%= (!locals.activeFormatFilter || activeFormatFilter === 'all') ? 'background:var(--orange); color:#FFF;' : 'background:#14181C; color:var(--muted); border:1px solid rgba(255,255,255,0.1);' %>">All</a>
+                <a href="?format=tv&status=<%= locals.activeStatusFilter || 'all' %>" style="padding:4px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; <%= (locals.activeFormatFilter === 'tv') ? 'background:var(--orange); color:#FFF;' : 'background:#14181C; color:var(--muted); border:1px solid rgba(255,255,255,0.1);' %>">TV Series</a>
+                <a href="?format=movie&status=<%= locals.activeStatusFilter || 'all' %>" style="padding:4px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; <%= (locals.activeFormatFilter === 'movie') ? 'background:var(--orange); color:#FFF;' : 'background:#14181C; color:var(--muted); border:1px solid rgba(255,255,255,0.1);' %>">Movies</a>
+                <a href="?format=ova&status=<%= locals.activeStatusFilter || 'all' %>" style="padding:4px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; <%= (locals.activeFormatFilter === 'ova') ? 'background:var(--orange); color:#FFF;' : 'background:#14181C; color:var(--muted); border:1px solid rgba(255,255,255,0.1);' %>">OVAs / Specials</a>
+            </div>
+            
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-right:4px;">Status:</span>
+                <a href="?format=<%= locals.activeFormatFilter || 'all' %>&status=all" style="padding:4px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; <%= (!locals.activeStatusFilter || activeStatusFilter === 'all') ? 'background:var(--orange); color:#FFF;' : 'background:#14181C; color:var(--muted); border:1px solid rgba(255,255,255,0.1);' %>">All</a>
+                <a href="?format=<%= locals.activeFormatFilter || 'all' %>&status=releasing" style="padding:4px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; <%= (locals.activeStatusFilter === 'releasing') ? 'background:var(--orange); color:#FFF;' : 'background:#14181C; color:var(--muted); border:1px solid rgba(255,255,255,0.1);' %>">Airing</a>
+                <a href="?format=<%= locals.activeFormatFilter || 'all' %>&status=finished" style="padding:4px 12px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; <%= (locals.activeStatusFilter === 'finished') ? 'background:var(--orange); color:#FFF;' : 'background:#14181C; color:var(--muted); border:1px solid rgba(255,255,255,0.1);' %>">Finished</a>
+            </div>
+        </div>
+
+
+        <div class="status-group-section" id="section-watching" style="<%= (activeFilter !== 'all' && activeFilter !== 'watching') ? 'display:none;' : '' %>">
                 <div class="status-group-header">
                     <div class="status-group-title">
                         <span class="status-badge-dot dot-watching"></span>
@@ -377,7 +397,11 @@ body {
                     <span class="status-group-count"><%= watchingList.length %> Anime</span>
                 </div>
                 <% if (watchingList && watchingList.length > 0) { %>
-                    <div class="anime-grid">
+                    
+        
+
+
+        <div class="anime-grid">
                         <% watchingList.forEach(item => { %>
                             <a href="/anime/<%= item.slug %>" class="anime-card">
                                 <div class="card-cover-wrap">

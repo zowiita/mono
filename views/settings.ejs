@@ -8,7 +8,7 @@
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --blue:#8B7CFF;--blue-soft:rgba(139,124,255,0.15);--blue-mid:#A59BFF;
+  --blue:#00B4D8;--blue-soft:rgba(139,124,255,0.15);--blue-mid:#A59BFF;
   --white:#14181C;--orange:#FF5500;--orange-soft:rgba(255,85,0,0.15);
   --ink:#FFFFFF;--cream:#181D22;--cream-dk:rgba(255,255,255,0.12);--muted:#9B9593;
 }
@@ -55,6 +55,30 @@ select.form-input{appearance:none;background-image:url("data:image/svg+xml;chars
 
 .edit-btn{padding:12px 24px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;transition:background .15s,transform .15s;box-shadow:0 4px 14px rgba(255,85,0,0.3);}
 .edit-btn:hover{background:#E54B00;transform:translateY(-1px);}
+
+
+.fav-remove-icon-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 10;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.fav-remove-icon-btn:hover {
+    background: #FF5500;
+    border-color: #FF5500;
+    transform: scale(1.1);
+}
 
 /* RIGHT COLUMN (FAVORITES MANAGEMENT) */
 .fav-panel{background:#181D22;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
@@ -178,6 +202,94 @@ select.form-input{appearance:none;background-image:url("data:image/svg+xml;chars
                 </div>
                 
                 <button type="submit" class="edit-btn">Save Changes</button>
+
+                <!-- 1. RATING SYSTEM PREFERENCE -->
+                <div class="settings-card" style="background:#181D22; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:20px; margin-top:24px;">
+                    <div style="font-size:16px; font-weight:800; color:#FFF; margin-bottom:4px;">Rating System Preference</div>
+                    <div style="font-size:12.5px; color:var(--muted); margin-bottom:16px;">Choose how you want to rate and score anime across Möno.</div>
+                    
+                    <form id="preferences-form" onsubmit="handlePreferencesSubmit(event)" style="display:flex; flex-direction:column; gap:12px;">
+                        <label style="display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:600; color:#FFF; cursor:pointer;">
+                            <input type="radio" name="rating_system" value="5star" <%= (!profileUser.rating_system || profileUser.rating_system === '5star') ? 'checked' : '' %>>
+                            <span>★ 5-Star System (★½ to ★★★★★ - Letterboxd Style)</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:600; color:#FFF; cursor:pointer;">
+                            <input type="radio" name="rating_system" value="10point" <%= (profileUser.rating_system === '10point') ? 'checked' : '' %>>
+                            <span>10-Point Score (1 to 10 - MAL / IMDb Style)</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:600; color:#FFF; cursor:pointer;">
+                            <input type="radio" name="rating_system" value="100point" <%= (profileUser.rating_system === '100point') ? 'checked' : '' %>>
+                            <span>Percentage (1% to 100% - AniList Style)</span>
+                        </label>
+
+                        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; margin-top:6px;">
+                            <div style="font-size:14px; font-weight:700; color:#FFF; margin-bottom:8px;">Notification Alerts & Privacy</div>
+                            
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#CAD2D9; cursor:pointer;">
+                                    <input type="checkbox" name="notif_likes" <%= profileUser.notif_likes !== 0 ? 'checked' : '' %>>
+                                    <span>Notify when someone likes my reviews or lists</span>
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#CAD2D9; cursor:pointer;">
+                                    <input type="checkbox" name="notif_comments" <%= profileUser.notif_comments !== 0 ? 'checked' : '' %>>
+                                    <span>Notify when someone comments on my reviews or lists</span>
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#CAD2D9; cursor:pointer;">
+                                    <input type="checkbox" name="notif_follows" <%= profileUser.notif_follows !== 0 ? 'checked' : '' %>>
+                                    <span>Notify when a user starts following me</span>
+                                </label>
+                                <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#CAD2D9; cursor:pointer;">
+                                    <input type="checkbox" name="notif_airing" <%= profileUser.notif_airing !== 0 ? 'checked' : '' %>>
+                                    <span>Notify when new episodes air for anime in my Watchlist</span>
+                                </label>
+                            </div>
+
+                            <div style="margin-top:14px;">
+                                <span style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase;">Profile Privacy</span>
+                                <select name="privacy" style="display:block; width:100%; margin-top:6px; padding:8px 12px; background:#14181C; border:1px solid rgba(255,255,255,0.12); border-radius:6px; color:#FFF; font-size:13px; font-family:inherit;">
+                                    <option value="public" <%= profileUser.privacy === 'public' ? 'selected' : '' %>>Public (Everyone can see profile & diary)</option>
+                                    <option value="followers_only" <%= profileUser.privacy === 'followers_only' ? 'selected' : '' %>>Followers Only (Only followers can view)</option>
+                                    <option value="private" <%= profileUser.privacy === 'private' ? 'selected' : '' %>>Private (Only me)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" style="align-self:flex-start; margin-top:8px; padding:8px 16px; border-radius:6px; background:var(--orange); border:none; color:#FFF; font-size:13px; font-weight:700; cursor:pointer;">Save Preferences</button>
+                    </form>
+                </div>
+
+                <!-- 2. SECURITY & PASSWORD UPDATE -->
+                <div class="settings-card" style="background:#181D22; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:20px; margin-top:24px;">
+                    <div style="font-size:16px; font-weight:800; color:#FFF; margin-bottom:4px;">Security & Password</div>
+                    <div style="font-size:12.5px; color:var(--muted); margin-bottom:16px;">Update your password and manage active sessions.</div>
+
+                    <form id="password-form" onsubmit="handlePasswordSubmit(event)" style="display:flex; flex-direction:column; gap:12px;">
+                        <div>
+                            <label style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase;">Current Password</label>
+                            <input type="password" name="current_password" class="form-input" placeholder="••••••••" style="margin-top:4px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase;">New Password</label>
+                            <input type="password" name="new_password" class="form-input" placeholder="Min. 6 characters" style="margin-top:4px;">
+                        </div>
+                        <div>
+                            <label style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase;">Confirm New Password</label>
+                            <input type="password" name="confirm_password" class="form-input" placeholder="Re-type new password" style="margin-top:4px;">
+                        </div>
+                        <button type="submit" style="align-self:flex-start; margin-top:4px; padding:8px 16px; border-radius:6px; background:#14181C; border:1px solid rgba(255,255,255,0.15); color:#FFF; font-size:13px; font-weight:700; cursor:pointer;">Update Password</button>
+                    </form>
+                </div>
+
+                <!-- 3. DATA EXPORT (.CSV) -->
+                <div class="settings-card" style="background:#181D22; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:20px; margin-top:24px;">
+                    <div style="font-size:16px; font-weight:800; color:#FFF; margin-bottom:4px;">Export My Data (.CSV)</div>
+                    <div style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Download a complete backup file of all your logged anime, ratings, reviews, tags, and dates.</div>
+                    <a href="/api/settings/export" style="display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:6px; background:#14181C; border:1px solid rgba(255,255,255,0.15); color:#FFF; font-size:13px; font-weight:700; text-decoration:none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>Download History CSV</span>
+                    </a>
+                </div>
+
             </form>
         </div>
 
@@ -191,15 +303,14 @@ select.form-input{appearance:none;background-image:url("data:image/svg+xml;chars
                     <% for (let i = 1; i <= 5; i++) { %>
                         <% const fav = (locals.favorites || []).find(f => f.position === i); %>
                         <% if (fav) { %>
-                            <div class="fav-slot-box has-anime" id="slot-box-<%= i %>">
+                            <div class="fav-slot-box has-anime" id="slot-box-<%= i %>" onclick="selectSlot(<%= i %>)" style="cursor:pointer; position:relative;">
                                 <span class="fav-slot-num">#<%= i %></span>
-                                <img src="<%= fav.cover_image %>" class="fav-slot-img" alt="<%= fav.title %>" onerror="this.onerror=null; this.src='/images/frieren_cover_1785281175713.png';">
+                                <button type="button" class="fav-remove-icon-btn" onclick="event.stopPropagation(); removeFavorite(<%= i %>)" title="Remove favorite">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </button>
+                                <img src="<%= fav.cover_image %>" class="fav-slot-img" alt="<%= fav.title %>" onerror="this.onerror=null; this.src='/images/placeholder.png';">
                                 <div class="fav-slot-overlay">
                                     <span class="fav-slot-title"><%= fav.title %></span>
-                                    <div class="fav-slot-actions">
-                                        <button type="button" class="fav-slot-btn fav-slot-btn-change" onclick="selectSlot(<%= i %>)">Cambiar</button>
-                                        <button type="button" class="fav-slot-btn fav-slot-btn-remove" onclick="removeFavorite(<%= i %>)">Quitar</button>
-                                    </div>
                                 </div>
                             </div>
                         <% } else { %>

@@ -2,26 +2,78 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Character Details — Untitled</title>
+<title><%= character.name.full %> — MÖNO</title>
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 <style>
-body { font-family: "Satoshi", sans-serif; color: #FFFFFF; margin: 0; padding: 0; background: #14181C; min-height: 100vh; display: flex; flex-direction: column; }
-.wrap { flex: 1; max-width: 900px; margin: 60px auto; padding: 0 20px; text-align: center; }
-.icon-box { width: 64px; height: 64px; border-radius: 50%; background: #181D22; border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 28px; color: var(--orange); }
-h1 { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 12px; color: #FFFFFF; }
-p { font-size: 15px; color: var(--muted); max-width: 480px; margin: 0 auto 24px; line-height: 1.6; }
-.btn-back { display: inline-block; background: var(--orange); color: #fff; text-decoration: none; padding: 10px 22px; border-radius: var(--r-full, 9999px); font-weight: 700; font-size: 14px; box-shadow: 0 4px 14px rgba(255,85,0,0.35); transition: opacity 0.2s, transform 0.1s; }
-.btn-back:hover { background: #E54B00; transform: translateY(-1px); }
+body { font-family: "Satoshi", sans-serif; background: #14181C; color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; }
+.char-wrap { flex: 1; max-width: 1000px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 280px 1fr; gap: 48px; }
+@media (max-width: 768px) { .char-wrap { grid-template-columns: 1fr; } }
+.char-left { display: flex; flex-direction: column; gap: 24px; }
+.char-img { width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.char-meta-box { background: #181D22; border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); }
+.char-meta-item { margin-bottom: 12px; }
+.char-meta-item:last-child { margin-bottom: 0; }
+.char-meta-lbl { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.char-meta-val { font-size: 14px; font-weight: 600; color: #FFF; }
+.char-right { display: flex; flex-direction: column; }
+.char-name { font-size: 36px; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; color: #FFF; }
+.char-native { font-size: 16px; font-weight: 600; color: var(--muted); margin-bottom: 24px; }
+.char-desc { font-size: 15px; color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 40px; }
+.section-title { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #FFF; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.appearances { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 16px; }
+.app-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; }
+.app-img { width: 100%; aspect-ratio: 2/3; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s, border-color 0.2s; }
+.app-card:hover .app-img { transform: translateY(-4px); border-color: var(--orange); }
+.app-title { font-size: 12px; font-weight: 600; color: #FFF; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 </style>
 </head>
 <body>
     <%- include('partials/nav') %>
-    <main class="wrap">
-        <div class="icon-box"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <h1>Character Database</h1>
-        <p>Detailed character biographies, voice actor credits, and appearance histories are being curated by our community.</p>
-        <a href="/anime" class="btn-back">Browse All Anime →</a>
+    <main class="char-wrap">
+        <div class="char-left">
+            <img src="<%= character.image.large %>" alt="<%= character.name.full %>" class="char-img">
+            <div class="char-meta-box">
+                <% if (character.age) { %>
+                <div class="char-meta-item">
+                    <div class="char-meta-lbl">Age</div>
+                    <div class="char-meta-val"><%= character.age %></div>
+                </div>
+                <% } %>
+                <% if (character.gender) { %>
+                <div class="char-meta-item">
+                    <div class="char-meta-lbl">Gender</div>
+                    <div class="char-meta-val"><%= character.gender %></div>
+                </div>
+                <% } %>
+                <% if (character.bloodType) { %>
+                <div class="char-meta-item">
+                    <div class="char-meta-lbl">Blood Type</div>
+                    <div class="char-meta-val"><%= character.bloodType %></div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="char-right">
+            <h1 class="char-name"><%= character.name.full %></h1>
+            <% if (character.name.native) { %>
+                <div class="char-native"><%= character.name.native %></div>
+            <% } %>
+            
+            <div class="char-desc">
+                <%- character.description || 'No description available.' %>
+            </div>
+
+            <div class="section-title">Anime Appearances</div>
+            <div class="appearances">
+                <% character.media.nodes.forEach(anime => { %>
+                    <a href="/anime/<%= anime.slug %>" class="app-card">
+                        <img src="<%= anime.coverImage.large %>" alt="<%= anime.title.english || anime.title.romaji %>" class="app-img">
+                        <div class="app-title"><%= anime.title.english || anime.title.romaji %></div>
+                    </a>
+                <% }); %>
+            </div>
+        </div>
     </main>
     <%- include('partials/footer') %>
 </body>

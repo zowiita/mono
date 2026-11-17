@@ -1,7 +1,8 @@
+<link rel="icon" type="image/png" href="/images/favicon.png">
 <nav class="nav">
     <div class="wrap nav-in">
         <a href="/" class="logo" title="Möno Home">
-            <span class="mono-brand-logo">m<span class="umlaut-wrap">o<span class="umlaut-dots"><span></span><span></span></span></span>no</span>
+            <img src="/images/logo.png" alt="Möno" style="height: 18px; width: auto; display: block; object-fit: contain;" class="nav-brand-logo">
         </a>
         <div class="nav-mid">
             <ul class="nav-links">
@@ -50,7 +51,26 @@
                     </div>
                 </div>
 
-                <button class="btn-log" id="nav-btn-log" onclick="handleNavLog()"><span class="plus"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>Log</button>
+                <div style="position:relative;">
+                    <button class="btn-log" id="nav-btn-log" onclick="handleNavLog()">
+                        <span class="plus"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>Log
+                    </button>
+                    <div id="log-tooltip" style="display:none; position:absolute; top:130%; left:50%; transform:translateX(-50%); background:#FFF; color:#000; font-size:12px; font-weight:800; padding:6px 12px; border-radius:6px; white-space:nowrap; box-shadow:0 4px 12px rgba(0,0,0,0.5); z-index:100;">
+                        Start tracking here!
+                        <div style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); border-width:5px; border-style:solid; border-color:transparent transparent #FFF transparent;"></div>
+                    </div>
+                </div>
+                <script>
+                    if (!localStorage.getItem('mono_log_tooltip_seen')) {
+                        setTimeout(() => {
+                            const tooltip = document.getElementById('log-tooltip');
+                            if (tooltip) {
+                                tooltip.style.display = 'block';
+                                setTimeout(() => { tooltip.style.display = 'none'; localStorage.setItem('mono_log_tooltip_seen', 'true'); }, 6000);
+                            }
+                        }, 2000);
+                    }
+                </script>
                 
                 <div class="nav-dropdown-container">
                     <div class="nav-av" style="margin-left:6px;">
@@ -197,7 +217,24 @@
             <div style="margin-bottom:16px;">
                 <label style="display:block; font-size:12px; font-weight:700; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Review / Notes</label>
                 <textarea id="uni-log-review" placeholder="Add your review or notes..." style="width:100%; height:80px; padding:10px; border-radius:6px; border:1px solid var(--cream-dk); font-family:inherit; font-size:13px; resize:none; outline:none; box-sizing:border-box;"></textarea>
+                <div id="uni-save-status" style="font-size:10px; color:var(--muted); text-align:right; margin-top:4px;"></div>
             </div>
+            
+            <script>
+                const uniTextArea = document.getElementById('uni-log-review');
+                const uniSaveStatus = document.getElementById('uni-save-status');
+                
+                if (uniTextArea) {
+                    const savedDraft = localStorage.getItem('mono_uni_draft');
+                    if (savedDraft) uniTextArea.value = savedDraft;
+                    
+                    uniTextArea.addEventListener('input', () => {
+                        localStorage.setItem('mono_uni_draft', uniTextArea.value);
+                        uniSaveStatus.textContent = 'Draft saved.';
+                        setTimeout(() => uniSaveStatus.textContent = '', 2000);
+                    });
+                }
+            </script>
 
             <!-- Spoilers & Favorite -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -981,6 +1018,7 @@ async function submitUniversalLog() {
         });
 
         if (res.ok) {
+            localStorage.removeItem('mono_uni_draft');
             closeUniversalLog();
             // If on profile or anime page, reload to reflect entry
             if (window.location.pathname.startsWith('/u/') || window.location.pathname.startsWith('/anime/')) {
@@ -1029,8 +1067,13 @@ function handleGlobalSearchSubmit(e) {
     return true;
 }
 
-// Keyboard Shortcut listener (/) and (ESC)
+// Keyboard Shortcut listener (/), (ESC), and Arrow Key Navigation
+let currentSearchIndex = -1;
+
 window.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('global-search-modal');
+    const isModalOpen = modal && modal.classList.contains('open');
+
     if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
         e.preventDefault();
         openGlobalSearch();
@@ -1038,6 +1081,31 @@ window.addEventListener('keydown', (e) => {
         closeGlobalSearch();
         closeUniversalLog();
         closeNotifications();
+    } else if (isModalOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        const items = document.querySelectorAll('.search-result-item, .search-see-all-btn');
+        if (items.length === 0) return;
+        e.preventDefault();
+
+        if (e.key === 'ArrowDown') {
+            currentSearchIndex = (currentSearchIndex + 1) % items.length;
+        } else if (e.key === 'ArrowUp') {
+            currentSearchIndex = (currentSearchIndex - 1 + items.length) % items.length;
+        }
+
+        items.forEach((item, idx) => {
+            if (idx === currentSearchIndex) {
+                item.classList.add('active');
+                item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    } else if (isModalOpen && e.key === 'Enter') {
+        const items = document.querySelectorAll('.search-result-item, .search-see-all-btn');
+        if (currentSearchIndex >= 0 && items[currentSearchIndex]) {
+            e.preventDefault();
+            items[currentSearchIndex].click();
+        }
     }
 });
 
@@ -1052,6 +1120,7 @@ document.getElementById('global-search-input')?.addEventListener('input', (e) =>
 async function fetchGlobalSearchResults(q) {
     const container = document.getElementById('global-search-results');
     if (!container) return;
+    currentSearchIndex = -1;
     
     try {
         const res = await fetch(`/api/search/global?q=${encodeURIComponent(q)}`);
